@@ -32,6 +32,7 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
     coachCue: 'Scan early. Know pressure before first touch.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 50, y: 88, label: 'D' },
         { id: 'f1', team: 'away', x: 42, y: 78, label: 'F' },
@@ -103,6 +104,7 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
     coachCue: 'Protect the back door before watching the puck.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 58, y: 80, label: 'D' },
         { id: 'fwd', team: 'away', x: 56, y: 88, label: 'F' },
@@ -195,6 +197,7 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
     coachCue: 'Pass hard. Hit tape. Then move.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 48, y: 90, label: 'D' },
         { id: 'w', team: 'home', x: 18, y: 72, label: 'W' },
@@ -271,6 +274,7 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
     coachCue: 'Stick first. Always.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 48, y: 78, label: 'D' },
         { id: 'fwd', team: 'away', x: 50, y: 82, label: 'F' },
@@ -371,9 +375,11 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
     coachCue: 'Protect the house.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'you',
       players: [
         { id: 'puck-c', team: 'away', x: 18, y: 78, label: 'F' },
         { id: 'partner', team: 'home', x: 22, y: 78, label: 'D' },
+        { id: 'you', team: 'home', x: 72, y: 84, label: 'D' },
         { id: 'g', team: 'home', x: 50, y: 95, label: 'G' },
       ],
       puck: { x: 18, y: 78 },
@@ -385,6 +391,7 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
           players: {
             'puck-c': { x: 15, y: 48 },
             partner: { x: 30, y: 55 },
+            you: { x: 62, y: 42 },
             g: { x: 50, y: 94 },
           },
           puck: { x: 15, y: 48 },
@@ -392,13 +399,21 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
         },
         {
           t: 4,
-          players: { 'puck-c': { x: 12, y: 64 }, partner: { x: 25, y: 68 } },
+          players: {
+            'puck-c': { x: 12, y: 64 },
+            partner: { x: 25, y: 68 },
+            you: { x: 66, y: 62 },
+          },
           puck: { x: 12, y: 64 },
           narration: 'The carrier drives down the far wall — your partner tracks him.',
         },
         {
           t: 8,
-          players: { 'puck-c': { x: 16, y: 74 }, partner: { x: 22, y: 75 } },
+          players: {
+            'puck-c': { x: 16, y: 74 },
+            partner: { x: 22, y: 75 },
+            you: { x: 70, y: 76 },
+          },
           puck: { x: 16, y: 74 },
           narration: 'He pulls up on the half-wall, head up, surveying.',
         },
@@ -407,6 +422,7 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
           players: {
             'puck-c': { x: 18, y: 78 },
             partner: { x: 22, y: 78 },
+            you: { x: 72, y: 84 },
             g: { x: 50, y: 95 },
           },
           puck: { x: 18, y: 78 },

@@ -33,6 +33,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: 'Lead late? Glass and out. Every time.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 84, y: 75, label: 'D' },
         { id: 'f1', team: 'away', x: 74, y: 64, label: 'F' },
@@ -111,6 +112,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: 'On the kill, ice is free.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 16, y: 86, label: 'D' },
         { id: 'f1', team: 'away', x: 28, y: 76, label: 'F' },
@@ -200,6 +202,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: 'Arm up: keep it, never go back.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 55, y: 55, label: 'D' },
         { id: 'a1', team: 'away', x: 48, y: 42, label: 'F' },
@@ -280,6 +283,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: 'OT: protect the middle. Never chase.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 45, y: 58, label: 'D' },
         { id: 'f', team: 'home', x: 60, y: 52, label: 'F' },
@@ -362,6 +366,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: 'Lose the draw? Find your man first.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 38, y: 86, label: 'D' },
         { id: 'w1', team: 'away', x: 35, y: 83, label: 'F' },
@@ -466,6 +471,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: 'Box until the bobble. Then hunt.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 26, y: 80, label: 'D' },
         { id: 'q', team: 'away', x: 17, y: 71, label: 'F' },
@@ -565,6 +571,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: 'Two down: own the royal road.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd2',
       players: [
         { id: 'fs', team: 'away', x: 80, y: 70, label: 'F' },
         { id: 'bd', team: 'away', x: 38, y: 88, label: 'F' },
@@ -655,6 +662,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: 'Beat the pinch with height, not hope.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 12, y: 78, label: 'D' },
         { id: 'pd', team: 'away', x: 14, y: 62, label: 'D' },
@@ -745,6 +753,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
     coachCue: "Tied and tired? Don't feed the breakaway.",
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 18, y: 34, label: 'D' },
         { id: 'w', team: 'home', x: 22, y: 26, label: 'W' },

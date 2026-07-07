@@ -39,6 +39,11 @@ export interface RinkVisual {
   puck: { x: number; y: number };
   arrows?: Arrow[];
   highlights?: Highlight[];
+  /**
+   * Id of the home player the question puts you in the skates of
+   * ("You're the defenseman here") — rendered with a YOU tag on the rink.
+   */
+  youId?: string;
 }
 
 // ---------- Play animation ----------

@@ -51,6 +51,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'Fill the middle lane, late with speed.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 55, y: 36, label: 'D' },
         { id: 'w', team: 'home', x: 18, y: 24, label: 'W' },
@@ -146,6 +147,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'Clogged line? Chip it to space.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 58, y: 38, label: 'D' },
         { id: 'w', team: 'home', x: 25, y: 36, label: 'W' },
@@ -236,6 +238,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'Win the wall, then attack off it.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 78, y: 18, label: 'D' },
         { id: 'f1', team: 'away', x: 84, y: 24, label: 'F' },
@@ -317,6 +320,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'No support means pull up, not shoot.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 20, y: 22, label: 'D' },
         { id: 'd1', team: 'away', x: 35, y: 18, label: 'D' },
@@ -417,6 +421,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'D slides to the pass? Shoot it.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 38, y: 22, label: 'D' },
         { id: 'w', team: 'home', x: 65, y: 20, label: 'W' },
@@ -503,6 +508,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'When they puck-watch, ghost the back door.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 32, y: 30, label: 'D' },
         { id: 'w1', team: 'home', x: 80, y: 16, label: 'W' },
@@ -605,6 +611,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'Winger pulls up - drive the middle late.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 58, y: 34, label: 'D' },
         { id: 'w1', team: 'home', x: 82, y: 20, label: 'W' },
@@ -706,6 +713,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'Clean win, fresh lane - shoot it now.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 36, y: 30, label: 'D' },
         { id: 'c', team: 'home', x: 30, y: 19, label: 'C' },
@@ -799,6 +807,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'Keep the cycle alive under pressure.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 82, y: 20, label: 'D' },
         { id: 'c', team: 'home', x: 86, y: 10, label: 'C' },
@@ -902,6 +911,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: 'Partner jumps, you stay. One D home.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 62, y: 34, label: 'D' },
         { id: 'p', team: 'home', x: 55, y: 20, label: 'D' },
@@ -1005,6 +1015,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
     coachCue: "Goalie down, you're closest - go bury it.",
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 55, y: 26, label: 'D' },
         { id: 'c', team: 'home', x: 62, y: 33, label: 'C' },

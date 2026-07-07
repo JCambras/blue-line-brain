@@ -37,6 +37,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
     coachCue: "Don't shoot into shin pads.",
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 50, y: 32, label: 'D' },
         { id: 'opp', team: 'away', x: 50, y: 22, label: 'F' },
@@ -112,6 +113,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
     coachCue: 'No support = no pinch.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 80, y: 32, label: 'D' },
         { id: 'partner', team: 'home', x: 50, y: 12, label: 'D' },
@@ -187,6 +189,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
     coachCue: 'Low and on net. Shots create chaos.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 50, y: 32, label: 'D' },
         { id: 'f1', team: 'home', x: 45, y: 18, label: 'F' },

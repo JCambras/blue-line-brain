@@ -31,6 +31,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Bad pass? Kick it to your blade.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 62, y: 82, label: 'D' },
         { id: 'partner', team: 'home', x: 30, y: 84, label: 'D' },
@@ -100,6 +101,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Kill the bounce before you make the play.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 40, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 68, y: 31, label: 'D' },
@@ -169,6 +171,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Open up. Cushion the rim. Eyes up ice.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 12, y: 78, label: 'D' },
         { id: 'f1', team: 'away', x: 25, y: 70, label: 'F' },
@@ -238,6 +241,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Soft hands out front. Feet keep moving.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 55, y: 60, label: 'D' },
         { id: 'c', team: 'home', x: 45, y: 45, label: 'C' },
@@ -313,6 +317,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Stick in the lane? Go over it.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 55, y: 88, label: 'D' },
         { id: 'w', team: 'home', x: 15, y: 70, label: 'W' },
@@ -389,6 +394,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Poke when he cuts, not when you hope.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 55, y: 75, label: 'D' },
         { id: 'w', team: 'away', x: 68, y: 65, label: 'F' },
@@ -464,6 +470,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Your body is the puck\'s bodyguard.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 88, y: 80, label: 'D' },
         { id: 'f1', team: 'away', x: 84, y: 76, label: 'F' },
@@ -548,6 +555,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Chip it off the wall, skate around.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 88, y: 52, label: 'D' },
         { id: 'chk', team: 'away', x: 83, y: 45, label: 'F' },
@@ -623,6 +631,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'Goalie sees it? Take the pass, not the shot.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'shooter', team: 'away', x: 40, y: 62, label: 'D' },
         { id: 'hw', team: 'away', x: 18, y: 78, label: 'F' },
@@ -713,6 +722,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
     coachCue: 'The caller cannot see behind himself. You can.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 40, y: 85, label: 'D' },
         { id: 'partner', team: 'home', x: 55, y: 92, label: 'D' },

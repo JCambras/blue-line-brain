@@ -32,6 +32,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'Seal the wall with your body, not your stick.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 14, y: 30, label: 'D' },
         { id: 'opp', team: 'away', x: 62, y: 12, label: 'F' },
@@ -101,6 +102,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'One-timers are ready before the pass leaves.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 68, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 30, y: 30, label: 'D' },
@@ -181,6 +183,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'When the clear is coming, get moving first.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 78, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 35, y: 31, label: 'D' },
@@ -261,6 +264,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'Overloaded side? Swing it D-to-D.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 72, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 35, y: 31, label: 'D' },
@@ -348,6 +352,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'Support behind you turns the light green.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 82, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 52, y: 31, label: 'D' },
@@ -439,6 +444,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'A screened shot beats a fast shot.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 45, y: 29, label: 'D' },
         { id: 'f1', team: 'home', x: 48, y: 12, label: 'W' },
@@ -524,6 +530,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'Sliders beat themselves. Fake and step around.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 55, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 30, y: 31, label: 'D' },
@@ -619,6 +626,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'Partner goes, you slide to the middle.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 68, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 22, y: 18, label: 'D' },
@@ -706,6 +714,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'A set goalie must be made to move.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 50, y: 29, label: 'D' },
         { id: 'f1', team: 'home', x: 25, y: 18, label: 'W' },
@@ -794,6 +803,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'When the goalie cheats, go backdoor.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 42, y: 24, label: 'D' },
         { id: 'f1', team: 'home', x: 58, y: 10, label: 'W' },
@@ -879,6 +889,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
     coachCue: 'When your check loses you, go.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 70, y: 28, label: 'D' },
         { id: 'f1', team: 'home', x: 82, y: 12, label: 'W' },

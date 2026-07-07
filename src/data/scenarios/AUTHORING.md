@@ -41,6 +41,10 @@ scenario's `zone` tag, e.g. skills scenarios).
 Use `arrows` (dashed = pass/intent) and `highlights` sparingly to hint the
 tension, not the answer.
 
+`visual.youId` (required) names the home player the `setup` addresses as
+"you" - the rink renders a gold YOU tag on that player throughout the
+animation and freeze frame. It must match a `team: 'home'` player id.
+
 ## Animation (the 12-14s play sequence)
 
 - `beats[0]` has `t: 0` and sets starting positions for **all** players and

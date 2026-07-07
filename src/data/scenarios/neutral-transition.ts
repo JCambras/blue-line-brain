@@ -33,6 +33,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Regroups change sides. Use your partner.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd1',
       players: [
         { id: 'd1', team: 'home', x: 32, y: 58, label: 'D' },
         { id: 'd2', team: 'home', x: 62, y: 58, label: 'D' },
@@ -125,6 +126,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Move it early. Speed dies waiting.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 46, y: 62, label: 'D' },
         { id: 'w', team: 'home', x: 30, y: 40, label: 'W' },
@@ -216,6 +218,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Pressure at the line? Chip and go.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 26, y: 64, label: 'D' },
         { id: 'f1', team: 'away', x: 28, y: 56, label: 'F' },
@@ -309,6 +312,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'No icings on tired legs.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 56, y: 54, label: 'D' },
         { id: 'f1', team: 'away', x: 50, y: 49, label: 'F' },
@@ -408,6 +412,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Beat the trap side to side, not through it.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd1',
       players: [
         { id: 'd1', team: 'home', x: 26, y: 56, label: 'D' },
         { id: 'd2', team: 'home', x: 42, y: 66, label: 'D' },
@@ -510,6 +515,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'When they pinch, the stretch is on.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd1',
       players: [
         { id: 'd1', team: 'home', x: 44, y: 62, label: 'D' },
         { id: 'w', team: 'home', x: 72, y: 36, label: 'W' },
@@ -621,8 +627,10 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Support from behind, not beside.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'you',
       players: [
         { id: 'd2', team: 'home', x: 35, y: 50, label: 'D' },
+        { id: 'you', team: 'home', x: 68, y: 72, label: 'D' },
         { id: 'f1', team: 'away', x: 48, y: 42, label: 'F' },
         { id: 'ad', team: 'away', x: 38, y: 28, label: 'D' },
       ],
@@ -634,6 +642,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
           t: 0,
           players: {
             d2: { x: 46, y: 74 },
+            you: { x: 60, y: 84 },
             f1: { x: 52, y: 30 },
             ad: { x: 40, y: 16 },
           },
@@ -644,6 +653,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
           t: 3.5,
           players: {
             d2: { x: 42, y: 64 },
+            you: { x: 63, y: 80 },
             f1: { x: 50, y: 36 },
             ad: { x: 39, y: 20 },
           },
@@ -654,6 +664,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
           t: 7.5,
           players: {
             d2: { x: 38, y: 56 },
+            you: { x: 66, y: 76 },
             f1: { x: 49, y: 40 },
             ad: { x: 38, y: 24 },
           },
@@ -664,6 +675,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
           t: 11.5,
           players: {
             d2: { x: 35, y: 50 },
+            you: { x: 68, y: 72 },
             f1: { x: 48, y: 42 },
             ad: { x: 38, y: 28 },
           },
@@ -712,6 +724,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Know your out before the rim arrives.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 14, y: 50, label: 'D' },
         { id: 'f1', team: 'away', x: 22, y: 58, label: 'F' },
@@ -812,6 +825,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Bad change for them? Jump. Numbers do not wait.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd1',
       players: [
         { id: 'd1', team: 'home', x: 48, y: 58, label: 'D' },
         { id: 'c', team: 'home', x: 45, y: 40, label: 'C' },
@@ -915,6 +929,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Bad change? Buy time with height.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd1',
       players: [
         { id: 'd1', team: 'home', x: 55, y: 48, label: 'D' },
         { id: 'f1', team: 'away', x: 70, y: 40, label: 'F' },
@@ -1016,6 +1031,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     coachCue: 'Play fast before the trap breathes.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd1',
       players: [
         { id: 'd1', team: 'home', x: 48, y: 64, label: 'D' },
         { id: 'c', team: 'home', x: 52, y: 44, label: 'C' },

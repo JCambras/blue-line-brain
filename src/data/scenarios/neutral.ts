@@ -38,6 +38,7 @@ export const NEUTRAL_SCENARIOS: Scenario[] = [
     coachCue: 'Own the blue line.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd1',
       players: [
         { id: 'd1', team: 'home', x: 40, y: 60, label: 'D' },
         { id: 'd2', team: 'home', x: 60, y: 60, label: 'D' },
@@ -115,6 +116,7 @@ export const NEUTRAL_SCENARIOS: Scenario[] = [
     coachCue: 'Stick in lane. Give up the shot.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 50, y: 65, label: 'D' },
         { id: 'a1', team: 'away', x: 35, y: 45, label: 'F' },

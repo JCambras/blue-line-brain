@@ -31,6 +31,7 @@ export const SKILLS_SCENARIOS: Scenario[] = [
     coachCue: 'Get to your forehand fast.',
     visual: {
       rinkZone: 'offensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 60, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 30, y: 32, label: 'D' },

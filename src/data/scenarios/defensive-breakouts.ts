@@ -36,6 +36,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: "One forechecker can't take both sides.",
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 66, y: 90, label: 'D' },
         { id: 'd2', team: 'home', x: 34, y: 94, label: 'D' },
@@ -110,6 +111,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'Goalie stops it. You get a still puck.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 60, y: 88, label: 'D' },
         { id: 'g', team: 'home', x: 46, y: 96, label: 'G' },
@@ -183,6 +185,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'Shorthanded and swarmed? Glass and out.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 30, y: 90, label: 'D' },
         { id: 'f1', team: 'away', x: 38, y: 82, label: 'F' },
@@ -278,6 +281,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: "Speed can't turn. Fake and cut.",
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 72, y: 88, label: 'D' },
         { id: 'f1', team: 'away', x: 66, y: 78, label: 'F' },
@@ -351,6 +355,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'Center swings low. Use the middle.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 24, y: 84, label: 'D' },
         { id: 'c', team: 'home', x: 44, y: 80, label: 'C' },
@@ -458,6 +463,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'Chased hard? Reverse against the grain.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 56, y: 95, label: 'D' },
         { id: 'd2', team: 'home', x: 74, y: 88, label: 'D' },
@@ -559,6 +565,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'Got speed and the net? Wheel it.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 62, y: 93, label: 'D' },
         { id: 'f1', team: 'away', x: 44, y: 80, label: 'F' },
@@ -660,6 +667,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'Pinch on the wall? Rim it hard and high.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 78, y: 88, label: 'D' },
         { id: 'w', team: 'home', x: 84, y: 66, label: 'W' },
@@ -761,6 +769,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'Win the draw, get it out fast.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 18, y: 88, label: 'D' },
         { id: 'c', team: 'home', x: 30, y: 80, label: 'C' },
@@ -868,6 +877,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'They overload one side? Break out the other.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 54, y: 95, label: 'D' },
         { id: 'f1', team: 'away', x: 64, y: 86, label: 'F' },
@@ -977,6 +987,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'He overskates, you walk out.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 20, y: 90, label: 'D' },
         { id: 'f1', team: 'away', x: 13, y: 96, label: 'F' },
@@ -1090,6 +1101,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     coachCue: 'Two men deep? The middle is yours.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 54, y: 96, label: 'D' },
         { id: 'd2', team: 'home', x: 78, y: 88, label: 'D' },

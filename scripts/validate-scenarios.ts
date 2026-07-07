@@ -21,6 +21,13 @@ function checkVisual(s: Scenario) {
   if (!inRange(s.visual.puck.x) || !inRange(s.visual.puck.y)) {
     err(s.id, 'puck out of 0–100 range');
   }
+  if (!s.visual.youId) {
+    err(s.id, 'missing visual.youId (which player are you?)');
+  } else {
+    const you = s.visual.players.find((p) => p.id === s.visual.youId);
+    if (!you) err(s.id, `youId "${s.visual.youId}" matches no player`);
+    else if (you.team !== 'home') err(s.id, `youId "${s.visual.youId}" is not a home player`);
+  }
 }
 
 function checkOptions(s: Scenario) {

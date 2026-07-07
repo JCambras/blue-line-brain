@@ -32,6 +32,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'The slot scores. Guard it first.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 44, y: 76, label: 'D' },
         { id: 'c', team: 'away', x: 18, y: 74, label: 'F' },
@@ -122,6 +123,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Find your man, seal him out.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'pt', team: 'away', x: 32, y: 68, label: 'D' },
         { id: 'fwd', team: 'away', x: 50, y: 86, label: 'F' },
@@ -202,6 +204,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Angle to the wall. Erase the middle.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'f1', team: 'away', x: 24, y: 84, label: 'F' },
         { id: 'd', team: 'home', x: 34, y: 82, label: 'D' },
@@ -270,6 +273,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Stick on puck. Body on net side.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'a', team: 'away', x: 28, y: 88, label: 'F' },
         { id: 'd', team: 'home', x: 34, y: 85, label: 'D' },
@@ -353,6 +357,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Rebounds go to corners, never the slot.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 's', team: 'away', x: 33, y: 70, label: 'F' },
         { id: 'f2', team: 'away', x: 55, y: 82, label: 'F' },
@@ -440,6 +445,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Talk. Switch the cycle. Stay low.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'c1', team: 'away', x: 32, y: 84, label: 'F' },
         { id: 'c2', team: 'away', x: 15, y: 72, label: 'F' },
@@ -536,6 +542,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Never chase behind. Own the front.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'bc', team: 'away', x: 58, y: 96, label: 'F' },
         { id: 'f2', team: 'away', x: 40, y: 78, label: 'F' },
@@ -621,6 +628,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'A delayed rush means find the trailer.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'ca', team: 'away', x: 20, y: 72, label: 'F' },
         { id: 'tr', team: 'away', x: 44, y: 64, label: 'F' },
@@ -720,6 +728,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Cannot move him? Front him.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'pt', team: 'away', x: 60, y: 68, label: 'D' },
         { id: 'sc', team: 'away', x: 50, y: 85, label: 'F' },
@@ -806,6 +815,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Pin the man, let help take pucks.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'o', team: 'away', x: 15, y: 80, label: 'F' },
         { id: 'd', team: 'home', x: 21, y: 79, label: 'D' },
@@ -883,6 +893,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Check back pressure before leaving your man.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'ca', team: 'away', x: 25, y: 62, label: 'F' },
         { id: 'p', team: 'home', x: 33, y: 55, label: 'D' },
@@ -984,6 +995,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'If the lane is covered, stay home.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'pt', team: 'away', x: 55, y: 68, label: 'D' },
         { id: 'w', team: 'home', x: 53, y: 72, label: 'W' },
@@ -1083,6 +1095,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     coachCue: 'Goalie takes the post. You take the pass.',
     visual: {
       rinkZone: 'defensive',
+      youId: 'd',
       players: [
         { id: 'jc', team: 'away', x: 60, y: 95, label: 'F' },
         { id: 'bd', team: 'away', x: 40, y: 86, label: 'F' },

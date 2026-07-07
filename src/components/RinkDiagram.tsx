@@ -265,14 +265,25 @@ export function RinkDiagram({
       {/* Players */}
       {v.players.map((p) => {
         const pos = playerPos?.[p.id] ?? p;
+        const isYou = p.id === v.youId;
         return (
           <g key={p.id}>
+            {isYou && (
+              <circle
+                cx={pos.x}
+                cy={pos.y}
+                r="4.4"
+                fill="none"
+                stroke="#e6a817"
+                strokeWidth="0.8"
+              />
+            )}
             <circle
               cx={pos.x}
               cy={pos.y}
               r="3.2"
               fill={p.team === 'home' ? HOMEBLUE : AWAYRED}
-              stroke="#0a0a0a"
+              stroke={isYou ? '#fff' : '#0a0a0a'}
               strokeWidth="0.4"
             />
             {p.label && (
@@ -288,6 +299,46 @@ export function RinkDiagram({
                 {p.label}
               </text>
             )}
+            {isYou &&
+              (() => {
+                // Tag sits above the player; flip below near the top boards.
+                const below = pos.y < 12;
+                const tagY = below ? pos.y + 5.6 : pos.y - 8.8;
+                const tipY = below ? pos.y + 5.6 : pos.y - 5.6;
+                return (
+                  <g pointerEvents="none">
+                    <path
+                      d={
+                        below
+                          ? `M ${pos.x - 1.4} ${tipY} L ${pos.x + 1.4} ${tipY} L ${pos.x} ${tipY - 1.4} Z`
+                          : `M ${pos.x - 1.4} ${tipY} L ${pos.x + 1.4} ${tipY} L ${pos.x} ${tipY + 1.4} Z`
+                      }
+                      fill="#e6a817"
+                    />
+                    <rect
+                      x={pos.x - 4.6}
+                      y={tagY}
+                      width="9.2"
+                      height="3.4"
+                      rx="1.2"
+                      fill="#e6a817"
+                      stroke="#0a0a0a"
+                      strokeWidth="0.25"
+                    />
+                    <text
+                      x={pos.x}
+                      y={tagY + 2.5}
+                      textAnchor="middle"
+                      fontSize="2.6"
+                      fill="#0a0a0a"
+                      fontWeight="800"
+                      fontFamily="ui-monospace, monospace"
+                    >
+                      YOU
+                    </text>
+                  </g>
+                );
+              })()}
           </g>
         );
       })}

@@ -33,6 +33,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Inside-out. Let the wall finish the check.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'f', team: 'away', x: 20, y: 42, label: 'F' },
         { id: 'd', team: 'home', x: 32, y: 55, label: 'D' },
@@ -103,6 +104,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Blade on the ice, in his lane.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'f', team: 'away', x: 44, y: 42, label: 'F' },
         { id: 'd', team: 'home', x: 48, y: 58, label: 'D' },
@@ -174,6 +176,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Force the dump, then win the race.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'f', team: 'away', x: 48, y: 45, label: 'F' },
         { id: 'd', team: 'home', x: 55, y: 55, label: 'D' },
@@ -244,6 +247,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Turn, take inside ice, win the race.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'f', team: 'away', x: 18, y: 48, label: 'F' },
         { id: 'd', team: 'home', x: 35, y: 52, label: 'D' },
@@ -322,6 +326,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Beat him to the pivot, not the puck.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'f', team: 'away', x: 30, y: 40, label: 'F' },
         { id: 'd', team: 'home', x: 42, y: 54, label: 'D' },
@@ -400,6 +405,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Partner takes puck. You take the middle.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'a1', team: 'away', x: 22, y: 44, label: 'F' },
         { id: 'a2', team: 'away', x: 50, y: 46, label: 'F' },
@@ -512,6 +518,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Sag goal-side. Nobody gets behind you.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd2',
       players: [
         { id: 'bd', team: 'away', x: 40, y: 12, label: 'D' },
         { id: 'st', team: 'away', x: 70, y: 62, label: 'F' },
@@ -611,6 +618,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Bobbled puck plus backup equals attack.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'f1', team: 'away', x: 45, y: 48, label: 'F' },
         { id: 'c', team: 'home', x: 40, y: 38, label: 'C' },
@@ -708,6 +716,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Defend the puck, not the decoy.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'a1', team: 'away', x: 40, y: 52, label: 'F' },
         { id: 'a2', team: 'away', x: 50, y: 40, label: 'F' },
@@ -808,6 +817,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Defend lanes, not jerseys.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'a1', team: 'away', x: 38, y: 46, label: 'F' },
         { id: 'a2', team: 'away', x: 58, y: 44, label: 'F' },
@@ -909,6 +919,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Puck contained? The driver is yours.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'a1', team: 'away', x: 15, y: 52, label: 'F' },
         { id: 'a2', team: 'away', x: 48, y: 44, label: 'F' },
@@ -1009,6 +1020,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     coachCue: 'Backpressure means attack, not retreat.',
     visual: {
       rinkZone: 'neutral',
+      youId: 'd',
       players: [
         { id: 'a1', team: 'away', x: 35, y: 44, label: 'F' },
         { id: 'w', team: 'home', x: 39, y: 38, label: 'W' },
