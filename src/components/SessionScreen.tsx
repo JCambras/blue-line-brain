@@ -76,8 +76,11 @@ export function SessionScreen({
     setPhase('anim');
   };
 
-  // Shuffle the answer options once per question so the right read moves
-  // around; origIdx keeps feedback pointed at the real option in the data.
+  // Shuffle the answer options once per question so the correct read moves
+  // around the board and can't be spammed by position. `origIdx` keeps each
+  // option pointed back at its slot in the source data, so the verdict/feedback
+  // and its pre-rendered narration clip (`<id>.opt.<origIdx>`) stay correct no
+  // matter where the option is shown.
   const displayOptions = useMemo(() => {
     if (!scenario.options) return [];
     const indexed = scenario.options.map((opt, origIdx) => ({ opt, origIdx }));
@@ -132,12 +135,12 @@ export function SessionScreen({
           }
           setRevealed(i + 1);
           setReadingIdx(i);
-          // Option clips are pre-rendered per ORIGINAL option position (keys
-          // <id>.opt.<origIdx>, spoken letter/lead baked in), so play the
-          // shuffled option's clip by origIdx: the coach always reads the text
-          // the highlighted button shows, though the spoken letter can differ
-          // from the on-screen one after a shuffle.
-          await narrationAudio.playAndWait(`${scenario.id}.opt.${displayOptions[i].origIdx}`);
+          // Play the pre-rendered clip for THIS option by its original data
+          // index, so the coach reads the option the highlighted button shows
+          // even though the display order is shuffled.
+          await narrationAudio.playAndWait(
+            `${scenario.id}.opt.${displayOptions[i].origIdx}`
+          );
         }
       }
       if (!cancelled) {
