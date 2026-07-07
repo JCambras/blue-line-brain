@@ -39,11 +39,8 @@ export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
   const correctOption = scenario.options?.find((o) => o.correct);
   const correctTap = scenario.tapTargets?.find((t) => t.correct);
 
-  const verdictText = correct
-    ? 'CORRECT'
-    : optionIdx == null && tapIdx == null
-      ? 'TIME'
-      : 'NOT QUITE';
+  const timedOut = !correct && optionIdx == null && tapIdx == null;
+  const verdictText = correct ? 'CORRECT' : timedOut ? 'TOO SLOW' : 'NOT QUITE';
 
   return (
     <div className="blb-feedback">
@@ -103,19 +100,24 @@ export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
           </>
         )}
         {!opt && !tap && (
-          <div className="blb-feedback-explain">
-            Time ran out. Speed is the skill — train the read until it's automatic.
+          <>
+            <div className="blb-feedback-explain">
+              The clock beat you before you made a read. At AAA speed the play
+              won't wait - keep drilling this one until the answer is automatic.
+            </div>
             {correctOption && (
-              <div style={{ marginTop: 8 }}>
-                <strong>Right read:</strong> {correctOption.text}
+              <div className="blb-feedback-correct">
+                <strong>Right read:</strong> {correctOption.text} -{' '}
+                {correctOption.feedback}
               </div>
             )}
             {correctTap && (
-              <div style={{ marginTop: 8 }}>
-                <strong>Right spot:</strong> {correctTap.label}
+              <div className="blb-feedback-correct">
+                <strong>Right spot:</strong>{' '}
+                {correctTap.label ?? 'the highlighted area'} - {correctTap.feedback}
               </div>
             )}
-          </div>
+          </>
         )}
 
         <div className="blb-coach-cue">
