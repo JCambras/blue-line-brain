@@ -22,9 +22,11 @@ scenario's `zone` tag, e.g. skills scenarios).
 ## Decision (MCQ)
 
 - `rookie` scenarios have exactly **3** options; `varsity` and `elite` have
-  exactly **4** (matches `DIFFICULTY_CONFIG.choices` - the UI truncates extras).
+  exactly **4** (matches `DIFFICULTY_CONFIG.choices` - the UI always keeps the
+  correct option and randomly drops extra wrong ones).
 - Exactly **one** option is `correct: true`.
-- Vary which position (A/B/C/D) holds the correct answer across scenarios.
+- The UI shuffles option order per question, so the on-screen A/B/C/D slot
+  never depends on data order - write options in whatever order reads best.
 - Every wrong option gets `feedback` (what goes wrong, 1-2 punchy sentences)
   and `trap` (why the option is tempting - the best distractors are mistakes
   real players actually make).

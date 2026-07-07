@@ -19,10 +19,6 @@ import { LACROSSE_FINISH_SCENARIOS } from './lacrosse-finish.ts';
 import { LACROSSE_RIDE_SCENARIOS } from './lacrosse-ride.ts';
 import { LACROSSE_TAP_SCENARIOS } from './lacrosse-taps.ts';
 
-/**
- * Difficulty config: timer (seconds) and number of MCQ choices.
- * Timer is mandatory at every level — speed is the skill.
- */
 /** Boss Battle rules — single source of truth for question count and win line. */
 export const BOSS_RULES = { questions: 10, toWin: 8 };
 
@@ -49,6 +45,10 @@ export function categoryLabel(category: string): string {
   );
 }
 
+/**
+ * Difficulty config: timer (seconds) and number of MCQ choices.
+ * Timer is mandatory at every level — speed is the skill.
+ */
 export const DIFFICULTY_CONFIG: Record<
   Difficulty,
   { timer: number; choices: number; label: string; cssVar: string }
