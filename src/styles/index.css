@@ -777,6 +777,12 @@ body {
   line-height: 1;
   text-align: center;
 }
+.blb-results-sub {
+  margin: -8px 0 0;
+  text-align: center;
+  font-size: 15px;
+  color: rgba(8, 17, 31, 0.65);
+}
 .blb-results-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
