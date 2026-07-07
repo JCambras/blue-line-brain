@@ -9,6 +9,14 @@ interface RinkDiagramProps {
   puckPos?: { x: number; y: number };
   /** Hide arrows/highlights/tap targets — the freeze-frame hints — during animation. */
   hideAnnotations?: boolean;
+  /** Recent puck positions (oldest → newest) rendered as a fading trail. */
+  puckTrail?: { x: number; y: number }[];
+  /** Recent positions per moving player, rendered as skating streaks. */
+  playerTrails?: Record<string, { x: number; y: number }[]>;
+  /** Player currently carrying the puck — gets a possession ring. */
+  carrierId?: string | null;
+  /** Expanding whistle rings at the puck when the play freezes. */
+  freezePulse?: boolean;
 }
 
 const ICE = '#eaf2ff';
@@ -17,6 +25,43 @@ const BLUE = '#2256a8';
 const HOMEBLUE = '#1f4ed8';
 const AWAYRED = '#c43030';
 
+/** Fading segments between consecutive trail points, newest = strongest. */
+function Trail({
+  points,
+  color,
+  maxWidth,
+  maxOpacity,
+}: {
+  points: { x: number; y: number }[];
+  color: string;
+  maxWidth: number;
+  maxOpacity: number;
+}) {
+  if (points.length < 2) return null;
+  const n = points.length - 1;
+  return (
+    <g pointerEvents="none">
+      {points.slice(1).map((p, i) => {
+        const a = points[i];
+        const u = (i + 1) / n;
+        return (
+          <line
+            key={i}
+            x1={a.x}
+            y1={a.y}
+            x2={p.x}
+            y2={p.y}
+            stroke={color}
+            strokeWidth={maxWidth * u}
+            strokeOpacity={maxOpacity * u}
+            strokeLinecap="round"
+          />
+        );
+      })}
+    </g>
+  );
+}
+
 export function RinkDiagram({
   scenario,
   onTap,
@@ -24,6 +69,10 @@ export function RinkDiagram({
   playerPos,
   puckPos,
   hideAnnotations,
+  puckTrail,
+  playerTrails,
+  carrierId,
+  freezePulse,
 }: RinkDiagramProps) {
   const v = scenario.visual;
   const puck = puckPos ?? v.puck;
@@ -164,6 +213,55 @@ export function RinkDiagram({
           );
         })}
 
+      {/* Skating streaks behind moving players */}
+      {playerTrails &&
+        v.players.map((p) => {
+          const pts = playerTrails[p.id];
+          if (!pts) return null;
+          return (
+            <Trail
+              key={`pt-${p.id}`}
+              points={pts}
+              color={p.team === 'home' ? HOMEBLUE : AWAYRED}
+              maxWidth={4.2}
+              maxOpacity={0.16}
+            />
+          );
+        })}
+
+      {/* Puck trail */}
+      {puckTrail && (
+        <Trail points={puckTrail} color="#0a0a0a" maxWidth={1.2} maxOpacity={0.4} />
+      )}
+
+      {/* Possession ring around the puck carrier */}
+      {carrierId &&
+        (() => {
+          const c = v.players.find((p) => p.id === carrierId);
+          if (!c) return null;
+          const pos = playerPos?.[carrierId] ?? c;
+          return (
+            <g pointerEvents="none">
+              <circle
+                cx={pos.x}
+                cy={pos.y}
+                r="4.6"
+                fill="rgba(255, 200, 60, 0.18)"
+                stroke="none"
+              />
+              <circle
+                cx={pos.x}
+                cy={pos.y}
+                r="4.6"
+                fill="none"
+                stroke="#e6a817"
+                strokeWidth="0.5"
+                strokeDasharray="1.6 1.1"
+              />
+            </g>
+          );
+        })()}
+
       {/* Players */}
       {v.players.map((p) => {
         const pos = playerPos?.[p.id] ?? p;
@@ -203,6 +301,19 @@ export function RinkDiagram({
         stroke="#fff"
         strokeWidth="0.3"
       />
+
+      {/* Whistle rings when the play freezes at the decision point */}
+      {freezePulse && (
+        <g pointerEvents="none">
+          <circle className="blb-pulse-ring" cx={puck.x} cy={puck.y} r="3" />
+          <circle
+            className="blb-pulse-ring blb-pulse-ring-late"
+            cx={puck.x}
+            cy={puck.y}
+            r="3"
+          />
+        </g>
+      )}
     </svg>
   );
 }
