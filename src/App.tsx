@@ -12,6 +12,7 @@ import { LEVELS, levelFromXP } from '@/data/levels';
 import { loadState, saveState, clearState, todayKey, yesterdayKey } from '@/lib/storage';
 import { pickScenarios, weakestCategory, accuracyForDifficulty } from '@/lib/picker';
 import { sfx } from '@/lib/sfx';
+import { narrator } from '@/lib/narrator';
 
 import { Scoreboard } from '@/components/Scoreboard';
 import { ProgressStrip } from '@/components/ProgressStrip';
@@ -27,10 +28,16 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>({ kind: 'home' });
   const [showOnboard, setShowOnboard] = useState(false);
 
+  // Voices load asynchronously — warm them up once.
+  useEffect(() => {
+    narrator.init();
+  }, []);
+
   // Persist state
   useEffect(() => {
     saveState(state);
     sfx.enabled = state.soundOn;
+    narrator.enabled = state.soundOn;
   }, [state]);
 
   // First-run onboarding

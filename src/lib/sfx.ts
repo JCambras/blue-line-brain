@@ -69,6 +69,38 @@ class Sfx {
     this.beep(800, 90, 'square');
     setTimeout(() => this.beep(1200, 180, 'square'), 90);
   }
+
+  /** Referee pea-whistle: high square tone with a fast trill. */
+  whistle(): void {
+    if (!this.enabled) return;
+    const ctx = this.ensure();
+    if (!ctx) return;
+
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    o.type = 'square';
+    o.frequency.value = 2350;
+    lfo.type = 'sine';
+    lfo.frequency.value = 28; // the pea rattle
+    lfoGain.gain.value = 0.025;
+    lfo.connect(lfoGain);
+    lfoGain.connect(g.gain);
+    o.connect(g);
+    g.connect(ctx.destination);
+
+    const now = ctx.currentTime;
+    const dur = 0.45;
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(0.05, now + 0.02);
+    g.gain.setValueAtTime(0.05, now + dur - 0.1);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    o.start(now);
+    lfo.start(now);
+    o.stop(now + dur);
+    lfo.stop(now + dur);
+  }
 }
 
 export const sfx = new Sfx();

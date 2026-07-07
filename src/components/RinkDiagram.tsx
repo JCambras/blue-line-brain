@@ -4,6 +4,19 @@ interface RinkDiagramProps {
   scenario: Scenario;
   onTap?: (target: TapTarget) => void;
   tapResult?: { targetIdx: number; correct: boolean } | null;
+  /** Live position overrides by player id, used while the play animation runs. */
+  playerPos?: Record<string, { x: number; y: number }>;
+  puckPos?: { x: number; y: number };
+  /** Hide arrows/highlights/tap targets — the freeze-frame hints — during animation. */
+  hideAnnotations?: boolean;
+  /** Recent puck positions (oldest → newest) rendered as a fading trail. */
+  puckTrail?: { x: number; y: number }[];
+  /** Recent positions per moving player, rendered as skating streaks. */
+  playerTrails?: Record<string, { x: number; y: number }[]>;
+  /** Player currently carrying the puck — gets a possession ring. */
+  carrierId?: string | null;
+  /** Expanding whistle rings at the puck when the play freezes. */
+  freezePulse?: boolean;
 }
 
 const ICE = '#eaf2ff';
@@ -12,8 +25,57 @@ const BLUE = '#2256a8';
 const HOMEBLUE = '#1f4ed8';
 const AWAYRED = '#c43030';
 
-export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
+/** Fading segments between consecutive trail points, newest = strongest. */
+function Trail({
+  points,
+  color,
+  maxWidth,
+  maxOpacity,
+}: {
+  points: { x: number; y: number }[];
+  color: string;
+  maxWidth: number;
+  maxOpacity: number;
+}) {
+  if (points.length < 2) return null;
+  const n = points.length - 1;
+  return (
+    <g pointerEvents="none">
+      {points.slice(1).map((p, i) => {
+        const a = points[i];
+        const u = (i + 1) / n;
+        return (
+          <line
+            key={i}
+            x1={a.x}
+            y1={a.y}
+            x2={p.x}
+            y2={p.y}
+            stroke={color}
+            strokeWidth={maxWidth * u}
+            strokeOpacity={maxOpacity * u}
+            strokeLinecap="round"
+          />
+        );
+      })}
+    </g>
+  );
+}
+
+export function RinkDiagram({
+  scenario,
+  onTap,
+  tapResult,
+  playerPos,
+  puckPos,
+  hideAnnotations,
+  puckTrail,
+  playerTrails,
+  carrierId,
+  freezePulse,
+}: RinkDiagramProps) {
   const v = scenario.visual;
+  const puck = puckPos ?? v.puck;
 
   return (
     <svg
@@ -77,7 +139,8 @@ export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
       <rect x="46" y="94" width="8" height="2.5" fill="none" stroke={RED} strokeWidth="0.3" />
 
       {/* Highlights (focus zones) */}
-      {v.highlights?.map((h, i) => (
+      {!hideAnnotations &&
+        v.highlights?.map((h, i) => (
         <circle
           key={`h-${i}`}
           cx={h.x}
@@ -104,8 +167,9 @@ export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
           <path d="M0,0 L10,5 L0,10 z" fill="#0a0a0a" />
         </marker>
       </defs>
-      {v.arrows?.map((a, i) => (
-        <line
+      {!hideAnnotations &&
+        v.arrows?.map((a, i) => (
+          <line
           key={`a-${i}`}
           x1={a.fromX}
           y1={a.fromY}
@@ -120,6 +184,7 @@ export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
 
       {/* Tap targets (only in tap mode) */}
       {scenario.kind === 'tap' &&
+        !hideAnnotations &&
         scenario.tapTargets?.map((t, i) => {
           const isResult = tapResult?.targetIdx === i;
           const showResultColor = isResult
@@ -148,42 +213,158 @@ export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
           );
         })}
 
+      {/* Skating streaks behind moving players */}
+      {playerTrails &&
+        v.players.map((p) => {
+          const pts = playerTrails[p.id];
+          if (!pts) return null;
+          return (
+            <Trail
+              key={`pt-${p.id}`}
+              points={pts}
+              color={p.team === 'home' ? HOMEBLUE : AWAYRED}
+              maxWidth={4.2}
+              maxOpacity={0.16}
+            />
+          );
+        })}
+
+      {/* Puck trail */}
+      {puckTrail && (
+        <Trail points={puckTrail} color="#0a0a0a" maxWidth={1.2} maxOpacity={0.4} />
+      )}
+
+      {/* Possession ring around the puck carrier */}
+      {carrierId &&
+        (() => {
+          const c = v.players.find((p) => p.id === carrierId);
+          if (!c) return null;
+          const pos = playerPos?.[carrierId] ?? c;
+          return (
+            <g pointerEvents="none">
+              <circle
+                cx={pos.x}
+                cy={pos.y}
+                r="4.6"
+                fill="rgba(255, 200, 60, 0.18)"
+                stroke="none"
+              />
+              <circle
+                cx={pos.x}
+                cy={pos.y}
+                r="4.6"
+                fill="none"
+                stroke="#e6a817"
+                strokeWidth="0.5"
+                strokeDasharray="1.6 1.1"
+              />
+            </g>
+          );
+        })()}
+
       {/* Players */}
-      {v.players.map((p) => (
-        <g key={p.id}>
-          <circle
-            cx={p.x}
-            cy={p.y}
-            r="3.2"
-            fill={p.team === 'home' ? HOMEBLUE : AWAYRED}
-            stroke="#0a0a0a"
-            strokeWidth="0.4"
-          />
-          {p.label && (
-            <text
-              x={p.x}
-              y={p.y + 1.2}
-              textAnchor="middle"
-              fontSize="3.2"
-              fill="#fff"
-              fontWeight="700"
-              fontFamily="ui-monospace, monospace"
-            >
-              {p.label}
-            </text>
-          )}
-        </g>
-      ))}
+      {v.players.map((p) => {
+        const pos = playerPos?.[p.id] ?? p;
+        const isYou = p.id === v.youId;
+        return (
+          <g key={p.id}>
+            {isYou && (
+              <circle
+                cx={pos.x}
+                cy={pos.y}
+                r="4.4"
+                fill="none"
+                stroke="#e6a817"
+                strokeWidth="0.8"
+              />
+            )}
+            <circle
+              cx={pos.x}
+              cy={pos.y}
+              r="3.2"
+              fill={p.team === 'home' ? HOMEBLUE : AWAYRED}
+              stroke={isYou ? '#fff' : '#0a0a0a'}
+              strokeWidth="0.4"
+            />
+            {p.label && (
+              <text
+                x={pos.x}
+                y={pos.y + 1.2}
+                textAnchor="middle"
+                fontSize="3.2"
+                fill="#fff"
+                fontWeight="700"
+                fontFamily="ui-monospace, monospace"
+              >
+                {p.label}
+              </text>
+            )}
+            {isYou &&
+              (() => {
+                // Tag sits above the player; flip below near the top boards.
+                const below = pos.y < 12;
+                const tagY = below ? pos.y + 5.6 : pos.y - 8.8;
+                const tipY = below ? pos.y + 5.6 : pos.y - 5.6;
+                return (
+                  <g pointerEvents="none">
+                    <path
+                      d={
+                        below
+                          ? `M ${pos.x - 1.4} ${tipY} L ${pos.x + 1.4} ${tipY} L ${pos.x} ${tipY - 1.4} Z`
+                          : `M ${pos.x - 1.4} ${tipY} L ${pos.x + 1.4} ${tipY} L ${pos.x} ${tipY + 1.4} Z`
+                      }
+                      fill="#e6a817"
+                    />
+                    <rect
+                      x={pos.x - 4.6}
+                      y={tagY}
+                      width="9.2"
+                      height="3.4"
+                      rx="1.2"
+                      fill="#e6a817"
+                      stroke="#0a0a0a"
+                      strokeWidth="0.25"
+                    />
+                    <text
+                      x={pos.x}
+                      y={tagY + 2.5}
+                      textAnchor="middle"
+                      fontSize="2.6"
+                      fill="#0a0a0a"
+                      fontWeight="800"
+                      fontFamily="ui-monospace, monospace"
+                    >
+                      YOU
+                    </text>
+                  </g>
+                );
+              })()}
+          </g>
+        );
+      })}
 
       {/* Puck */}
       <circle
-        cx={v.puck.x}
-        cy={v.puck.y}
+        cx={puck.x}
+        cy={puck.y}
         r="1.4"
         fill="#0a0a0a"
         stroke="#fff"
         strokeWidth="0.3"
       />
+
+      {/* Whistle rings when the play freezes at the decision point */}
+      {freezePulse && (
+        <g pointerEvents="none">
+          <circle className="blb-pulse-ring" cx={puck.x} cy={puck.y} r="3" />
+          <circle
+            className="blb-pulse-ring blb-pulse-ring-late"
+            cx={puck.x}
+            cy={puck.y}
+            r="3"
+          />
+        </g>
+      )}
     </svg>
   );
 }

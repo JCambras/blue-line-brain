@@ -1,0 +1,46 @@
+import type { Scenario, Difficulty } from '@/types';
+import { DEFENSIVE_SCENARIOS } from './defensive.ts';
+import { DEFENSIVE_BREAKOUT_SCENARIOS } from './defensive-breakouts.ts';
+import { DEFENSIVE_COVERAGE_SCENARIOS } from './defensive-coverage.ts';
+import { NEUTRAL_SCENARIOS } from './neutral.ts';
+import { NEUTRAL_RUSH_SCENARIOS } from './neutral-rush.ts';
+import { NEUTRAL_TRANSITION_SCENARIOS } from './neutral-transition.ts';
+import { OFFENSIVE_SCENARIOS } from './offensive.ts';
+import { OFFENSIVE_POINT_SCENARIOS } from './offensive-point.ts';
+import { OFFENSIVE_ATTACK_SCENARIOS } from './offensive-attack.ts';
+import { SKILLS_SCENARIOS } from './skills.ts';
+import { SKILLS_DECISION_SCENARIOS } from './skills-decisions.ts';
+import { SITUATION_SCENARIOS } from './situations.ts';
+
+/**
+ * Difficulty config: timer (seconds) and number of MCQ choices.
+ * Timer is mandatory at every level — speed is the skill.
+ */
+export const DIFFICULTY_CONFIG: Record<
+  Difficulty,
+  { timer: number; choices: number; label: string; cssVar: string }
+> = {
+  rookie: { timer: 25, choices: 3, label: 'Rookie', cssVar: 'var(--ink-rookie)' },
+  varsity: { timer: 18, choices: 4, label: 'Varsity', cssVar: 'var(--ink-varsity)' },
+  elite: { timer: 11, choices: 4, label: 'Elite', cssVar: 'var(--ink-elite)' },
+};
+
+/**
+ * Coordinate system: 0–100 normalized.
+ * y=0 is offensive end (top of rink), y=100 is defensive end (bottom).
+ * Defensive zone roughly y > 67, neutral 33–67, offensive y < 33.
+ */
+export const SCENARIOS: Scenario[] = [
+  ...DEFENSIVE_SCENARIOS,
+  ...DEFENSIVE_BREAKOUT_SCENARIOS,
+  ...DEFENSIVE_COVERAGE_SCENARIOS,
+  ...NEUTRAL_SCENARIOS,
+  ...NEUTRAL_RUSH_SCENARIOS,
+  ...NEUTRAL_TRANSITION_SCENARIOS,
+  ...OFFENSIVE_SCENARIOS,
+  ...OFFENSIVE_POINT_SCENARIOS,
+  ...OFFENSIVE_ATTACK_SCENARIOS,
+  ...SKILLS_SCENARIOS,
+  ...SKILLS_DECISION_SCENARIOS,
+  ...SITUATION_SCENARIOS,
+];

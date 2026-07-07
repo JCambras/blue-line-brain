@@ -39,6 +39,42 @@ export interface RinkVisual {
   puck: { x: number; y: number };
   arrows?: Arrow[];
   highlights?: Highlight[];
+  /**
+   * Id of the home player the question puts you in the skates of
+   * ("You're the defenseman here") — rendered with a YOU tag on the rink.
+   */
+  youId?: string;
+}
+
+// ---------- Play animation ----------
+// A scenario can open with an animated play sequence (10–15s) that ends on
+// the freeze frame defined by `visual`. Positions tween between beats.
+
+export interface AnimBeat {
+  /** Seconds from animation start at which these positions are reached. */
+  t: number;
+  /**
+   * Target positions by player id (ids from visual.players).
+   * Omitted players hold their previous spot.
+   */
+  players?: Record<string, { x: number; y: number }>;
+  puck?: { x: number; y: number };
+  /**
+   * Play-by-play line spoken (and captioned) when the timeline reaches this
+   * beat — it should describe the movement happening after this beat.
+   */
+  narration?: string;
+}
+
+export interface PlayAnimation {
+  /**
+   * The first beat (t=0) sets starting positions; players/puck not mentioned
+   * there start at their `visual` positions. The last beat must land on the
+   * `visual` positions so the freeze frame matches the static diagram.
+   */
+  beats: AnimBeat[];
+  /** Spoken at the freeze, e.g. "Let's stop it here — you're the D. What do you do?" */
+  freezeLine: string;
 }
 
 // ---------- Decision options ----------
@@ -74,6 +110,8 @@ export interface Scenario {
   /** The single thing to remember next game. */
   coachCue: string;
   visual: RinkVisual;
+  /** Optional animated play sequence that runs before the question. */
+  animation?: PlayAnimation;
 }
 
 // ---------- Persistent state ----------

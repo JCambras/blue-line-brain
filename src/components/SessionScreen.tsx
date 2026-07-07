@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import type { Scenario, TapTarget } from '@/types';
 import { DIFFICULTY_CONFIG } from '@/data/scenarios';
 import { sfx } from '@/lib/sfx';
+import { narrator } from '@/lib/narrator';
 import { RinkDiagram } from './RinkDiagram';
+import { AnimatedRink } from './AnimatedRink';
 
 interface SessionScreenProps {
   scenario: Scenario;
@@ -18,6 +20,13 @@ interface SessionScreenProps {
   onQuit: () => void;
 }
 
+/**
+ * anim   — the play sequence runs with voice-over; question hidden.
+ * reveal — frozen at the decision point; options appear and are read aloud.
+ * live   — all options out, the decision timer is running.
+ */
+type Phase = 'anim' | 'reveal' | 'live';
+
 export function SessionScreen({
   scenario,
   idx,
@@ -26,17 +35,56 @@ export function SessionScreen({
   onQuit,
 }: SessionScreenProps) {
   const cfg = DIFFICULTY_CONFIG[scenario.difficulty];
+  const [phase, setPhase] = useState<Phase>(scenario.animation ? 'anim' : 'reveal');
+  const [revealed, setRevealed] = useState(0);
+  const [readingIdx, setReadingIdx] = useState(-1);
   const [timeLeft, setTimeLeft] = useState(cfg.timer);
   const start = useRef(Date.now());
 
   // Reset when scenario changes
   useEffect(() => {
-    start.current = Date.now();
+    setPhase(scenario.animation ? 'anim' : 'reveal');
+    setRevealed(0);
+    setReadingIdx(-1);
     setTimeLeft(cfg.timer);
-  }, [scenario.id, cfg.timer]);
+    start.current = Date.now();
+  }, [scenario.id, cfg.timer]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Tick down
+  // Reveal phase: freeze line, then read each option aloud as it appears.
   useEffect(() => {
+    if (phase !== 'reveal') return;
+    let cancelled = false;
+    start.current = Date.now(); // the clock is fair from when choices appear
+    (async () => {
+      if (scenario.animation?.freezeLine) {
+        await narrator.speak(scenario.animation.freezeLine);
+      }
+      if (scenario.kind === 'mcq' && scenario.options) {
+        const n = Math.min(cfg.choices, scenario.options.length);
+        for (let i = 0; i < n; i++) {
+          if (cancelled) return;
+          setRevealed(i + 1);
+          setReadingIdx(i);
+          const letter = String.fromCharCode(65 + i);
+          const lead = i === 0 ? 'Do you, ' : i === n - 1 ? 'Or, ' : '';
+          await narrator.speak(`${lead}${letter}: ${scenario.options[i].text}`);
+        }
+      }
+      if (!cancelled) {
+        setReadingIdx(-1);
+        setRevealed(cfg.choices);
+        setPhase('live');
+      }
+    })();
+    return () => {
+      cancelled = true;
+      narrator.cancel();
+    };
+  }, [phase, scenario, cfg.choices]);
+
+  // Decision timer — only ticks once every option is out.
+  useEffect(() => {
+    if (phase !== 'live') return;
     if (timeLeft <= 0) {
       onAnswer(scenario, false, cfg.timer * 1000); // time-out = wrong
       return;
@@ -46,7 +94,7 @@ export function SessionScreen({
       setTimeLeft(timeLeft - 1);
     }, 1000);
     return () => clearTimeout(t);
-  }, [timeLeft, scenario, cfg.timer, onAnswer]);
+  }, [phase, timeLeft, scenario, cfg.timer, onAnswer]);
 
   const onMcq = (i: number) => {
     if (!scenario.options) return;
@@ -60,7 +108,8 @@ export function SessionScreen({
   };
 
   const timerPct = Math.max(0, (timeLeft / cfg.timer) * 100);
-  const urgent = timeLeft <= 5;
+  const urgent = phase === 'live' && timeLeft <= 5;
+  const animating = phase === 'anim' && !!scenario.animation;
 
   return (
     <div className="blb-session">
@@ -77,7 +126,9 @@ export function SessionScreen({
             {idx + 1}/{total}
           </span>
         </div>
-        <div className={`blb-timer ${urgent ? 'urgent' : ''}`}>{timeLeft}s</div>
+        <div className={`blb-timer ${urgent ? 'urgent' : ''}`}>
+          {phase === 'live' ? `${timeLeft}s` : '▶'}
+        </div>
       </div>
 
       <div className="blb-timer-bar">
@@ -88,28 +139,47 @@ export function SessionScreen({
       </div>
 
       <div className="blb-rink-wrap">
-        <RinkDiagram
-          scenario={scenario}
-          onTap={scenario.kind === 'tap' ? onTapTarget : undefined}
-        />
+        {animating ? (
+          <>
+            <AnimatedRink scenario={scenario} onDone={() => setPhase('reveal')} />
+            <button className="blb-skip" onClick={() => setPhase('reveal')}>
+              Skip ▸▸
+            </button>
+          </>
+        ) : (
+          <RinkDiagram
+            scenario={scenario}
+            onTap={scenario.kind === 'tap' ? onTapTarget : undefined}
+          />
+        )}
       </div>
 
       <h2 className="blb-scenario-title">{scenario.title}</h2>
-      <p className="blb-scenario-setup">{scenario.setup}</p>
+      {!animating && <p className="blb-scenario-setup">{scenario.setup}</p>}
 
-      {scenario.kind === 'mcq' && scenario.options && (
+      {scenario.kind === 'mcq' && scenario.options && !animating && (
         <div className="blb-options">
-          {scenario.options.slice(0, cfg.choices).map((opt, i) => (
-            <button key={i} className="blb-option" onClick={() => onMcq(i)}>
-              <span className="blb-option-letter">
-                {String.fromCharCode(65 + i)}
-              </span>
-              <span className="blb-option-text">{opt.text}</span>
-            </button>
-          ))}
+          {scenario.options.slice(0, cfg.choices).map((opt, i) => {
+            const shown = phase === 'live' || i < revealed;
+            return (
+              <button
+                key={i}
+                className={`blb-option ${shown ? '' : 'pending'} ${
+                  readingIdx === i ? 'reading' : ''
+                }`}
+                disabled={!shown}
+                onClick={() => onMcq(i)}
+              >
+                <span className="blb-option-letter">
+                  {String.fromCharCode(65 + i)}
+                </span>
+                <span className="blb-option-text">{opt.text}</span>
+              </button>
+            );
+          })}
         </div>
       )}
-      {scenario.kind === 'tap' && (
+      {scenario.kind === 'tap' && !animating && (
         <div className="blb-tap-hint">👆 Tap a spot on the ice</div>
       )}
     </div>
