@@ -56,9 +56,14 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
           narration: 'He rims it hard around the boards behind the net.',
         },
         {
+          t: 5.7,
+          players: { opp: { x: 67, y: 11 } },
+          puck: { x: 24, y: 5 },
+        },
+        {
           t: 7.5,
           players: { d: { x: 15, y: 31 }, opp: { x: 64, y: 12 } },
-          puck: { x: 14, y: 16 },
+          puck: { x: 11, y: 14 },
           narration: 'The rim is racing up your wall, hugging the boards the whole way.',
         },
         {
@@ -109,7 +114,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { id: 'opp', team: 'away', x: 58, y: 22, label: 'F' },
         { id: 'g', team: 'away', x: 50, y: 7, label: 'G' },
       ],
-      puck: { x: 44, y: 30 },
+      puck: { x: 49, y: 30 },
       arrows: [{ fromX: 32, fromY: 30, toX: 64, toY: 30, dashed: true }],
     },
     animation: {
@@ -138,6 +143,12 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
           narration: 'The defender bites toward him - the D-to-D lane swings open.',
         },
         {
+          t: 9.5,
+          players: { partner: { x: 31, y: 30 }, opp: { x: 58, y: 22 } },
+          puck: { x: 31, y: 30 },
+          narration: 'He looks you off one beat longer, selling the shot all the way.',
+        },
+        {
           t: 11,
           players: {
             d: { x: 68, y: 30 },
@@ -145,7 +156,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
             opp: { x: 58, y: 22 },
             g: { x: 50, y: 7 },
           },
-          puck: { x: 44, y: 30 },
+          puck: { x: 49, y: 30 },
           narration: 'The pass is on its way across to you...',
         },
         { t: 12.5 },
@@ -268,6 +279,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
       players: [
         { id: 'd', team: 'home', x: 72, y: 30, label: 'D' },
         { id: 'partner', team: 'home', x: 35, y: 31, label: 'D' },
+        { id: 'w', team: 'home', x: 88, y: 17, label: 'W' },
         { id: 'opp', team: 'away', x: 66, y: 25, label: 'F' },
         { id: 'opp2', team: 'away', x: 60, y: 18, label: 'F' },
       ],
@@ -281,6 +293,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
           players: {
             d: { x: 75, y: 33 },
             partner: { x: 38, y: 32 },
+            w: { x: 85, y: 15 },
             opp: { x: 55, y: 14 },
             opp2: { x: 52, y: 20 },
           },
@@ -289,13 +302,13 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         },
         {
           t: 4,
-          players: { opp: { x: 60, y: 17 } },
-          puck: { x: 80, y: 22 },
+          players: { w: { x: 87, y: 20 }, opp: { x: 60, y: 17 } },
+          puck: { x: 87, y: 20 },
           narration: 'He runs out of room and bumps it back to you at the point.',
         },
         {
           t: 7.5,
-          players: { d: { x: 73, y: 31 }, opp: { x: 63, y: 21 }, opp2: { x: 56, y: 19 } },
+          players: { d: { x: 73, y: 31 }, w: { x: 88, y: 18 }, opp: { x: 63, y: 21 }, opp2: { x: 56, y: 19 } },
           puck: { x: 72, y: 29 },
           narration: 'You catch it clean - and their winger sprints out at you.',
         },
@@ -304,6 +317,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
           players: {
             d: { x: 72, y: 30 },
             partner: { x: 35, y: 31 },
+            w: { x: 88, y: 17 },
             opp: { x: 66, y: 25 },
             opp2: { x: 60, y: 18 },
           },
@@ -377,14 +391,14 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         },
         {
           t: 3.5,
-          players: { opp: { x: 80, y: 13 }, c: { x: 48, y: 15 } },
+          players: { opp: { x: 85, y: 14 }, c: { x: 48, y: 15 } },
           puck: { x: 86, y: 15 },
           narration: 'Their winger scoops it up and tries to escape along the boards.',
         },
         {
           t: 7,
           players: {
-            opp: { x: 80, y: 17 },
+            opp: { x: 84, y: 19 },
             c: { x: 53, y: 18 },
             partner: { x: 51, y: 32 },
             d: { x: 82, y: 31 },
@@ -463,13 +477,13 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
             oppd: { x: 55, y: 12 },
             g: { x: 50, y: 7 },
           },
-          puck: { x: 75, y: 12 },
+          puck: { x: 72, y: 11 },
           narration: 'Your winger wins the corner battle and comes out with the puck.',
         },
         {
           t: 4,
           players: { f1: { x: 66, y: 11 }, oppd: { x: 54, y: 11 }, d: { x: 47, y: 31 } },
-          puck: { x: 60, y: 24 },
+          puck: { x: 66, y: 11 },
           narration: 'He spots you at the point and floats a touch pass up top.',
         },
         {
@@ -556,7 +570,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         {
           t: 3.5,
           players: { opp: { x: 52, y: 18 } },
-          puck: { x: 44, y: 31 },
+          puck: { x: 32, y: 32 },
           narration: 'He slides it across to you on the right side.',
         },
         {

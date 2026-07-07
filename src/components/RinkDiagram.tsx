@@ -1,4 +1,46 @@
-import type { Scenario, TapTarget } from '@/types';
+import type { Player, Scenario, TapTarget } from '@/types';
+
+/**
+ * Carried pucks are authored at the carrier's exact coordinates (see
+ * AUTHORING.md). Drawing the puck there buries it under the player disc and
+ * hides the label, so shift it to the rim - onto the carrier's stick.
+ * Loose pucks (farther than STICK_REACH from everyone) render exactly where
+ * the data puts them. Idempotent: applying it to an already-shifted position
+ * is a no-op, so callers may pre-apply it.
+ */
+const STICK_REACH = 3.6;
+
+export function puckOnStick(
+  puck: { x: number; y: number },
+  players: Player[],
+  playerPos?: Record<string, { x: number; y: number }>
+): { x: number; y: number } {
+  let carrier: Player | null = null;
+  let carrierPos = puck;
+  let nd = Infinity;
+  for (const p of players) {
+    const pos = playerPos?.[p.id] ?? p;
+    const d = Math.hypot(pos.x - puck.x, pos.y - puck.y);
+    if (d < nd) {
+      nd = d;
+      carrier = p;
+      carrierPos = pos;
+    }
+  }
+  if (!carrier || nd >= STICK_REACH) return puck;
+  // Stick direction: the authored offset when there is one, fading to
+  // "toward the net they attack" when the puck sits at the carrier's center.
+  // The blend keeps the direction continuous while a pass leaves the blade.
+  const attackY = carrier.team === 'home' ? -1 : 1;
+  const u = Math.min(1, nd / 1.2);
+  const dx = nd > 0 ? ((puck.x - carrierPos.x) / nd) * u : 0;
+  const dy = (nd > 0 ? ((puck.y - carrierPos.y) / nd) * u : 0) + attackY * (1 - u);
+  const len = Math.hypot(dx, dy) || 1;
+  return {
+    x: carrierPos.x + (dx / len) * STICK_REACH,
+    y: carrierPos.y + (dy / len) * STICK_REACH,
+  };
+}
 
 interface RinkDiagramProps {
   scenario: Scenario;
@@ -75,7 +117,7 @@ export function RinkDiagram({
   freezePulse,
 }: RinkDiagramProps) {
   const v = scenario.visual;
-  const puck = puckPos ?? v.puck;
+  const puck = puckOnStick(puckPos ?? v.puck, v.players, playerPos);
 
   return (
     <svg

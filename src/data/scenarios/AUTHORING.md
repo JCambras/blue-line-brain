@@ -51,6 +51,26 @@ animation and freeze frame. It must match a `team: 'home'` player id.
   the puck.
 - Middle beats every 3-4 seconds. Skaters move ~2-8 units/second (cinematic,
   not teleporting); a pass can jump 20-40 units between beats.
+
+## Puck placement
+
+- **Carried**: put the puck at the carrier's exact coordinates in every beat
+  he has it (the renderer draws it on his stick, at the rim of the disc).
+  Never let a carried puck trail its carrier by more than ~2 units.
+- **Passes and shots**: the puck stays at the passer through the beat whose
+  narration announces the pass, then lands at the receiver (or mid-lane, for
+  a freeze mid-flight) at the next beat. One segment, 3.5s or less - a pass
+  that drifts across two segments reads as a detached, floating puck.
+- **Loose pucks** (dumps, rims, rebounds, 50/50 races) go where the play
+  says they are - they do not need a player nearby, but the narration must
+  explain why they are loose.
+- **Rims and chips "around the boards"** must actually follow the boards:
+  keep the puck within ~10 units of the edge and add a waypoint beat (no
+  narration needed) at each corner so the straight-line tween never cuts
+  across the middle of the zone.
+- If the narration names a teammate doing something with the puck ("your
+  winger works the wall"), that player must exist in `visual.players` and be
+  at the puck.
 - The **last positioned beat** (t around 11-12.5) must land **exactly** on the
   `visual` positions - players and puck - so the freeze frame matches.
 - After it, add one bare beat `{ t: <prev + 1.5> }` (no positions, no

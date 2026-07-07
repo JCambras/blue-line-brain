@@ -280,7 +280,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
           t: 11.5,
           players: { f: { x: 18, y: 48 }, d: { x: 35, y: 52 }, d2: { x: 60, y: 58 } },
           puck: { x: 30, y: 62 },
-          narration: 'He chips it soft off the boards past your feet and jumps outside...',
+          narration: 'He chips it soft past your feet and jumps outside...',
         },
         { t: 13 },
       ],

@@ -117,8 +117,8 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         { id: 'g', team: 'home', x: 46, y: 96, label: 'G' },
         { id: 'f1', team: 'away', x: 68, y: 74, label: 'F' },
       ],
-      puck: { x: 75, y: 85 },
-      arrows: [{ fromX: 75, fromY: 85, toX: 55, toY: 97, dashed: true }],
+      puck: { x: 80, y: 89 },
+      arrows: [{ fromX: 80, fromY: 89, toX: 55, toY: 97, dashed: true }],
     },
     animation: {
       beats: [
@@ -143,7 +143,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         {
           t: 11.5,
           players: { d: { x: 60, y: 88 }, g: { x: 46, y: 96 }, f1: { x: 68, y: 74 } },
-          puck: { x: 75, y: 85 },
+          puck: { x: 80, y: 89 },
           narration: 'Your goalie is set behind the net, ready to trap it...',
         },
         { t: 13 },
