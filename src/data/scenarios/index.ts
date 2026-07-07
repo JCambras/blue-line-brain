@@ -26,6 +26,29 @@ import { LACROSSE_TAP_SCENARIOS } from './lacrosse-taps.ts';
 /** Boss Battle rules — single source of truth for question count and win line. */
 export const BOSS_RULES = { questions: 10, toWin: 8 };
 
+/** Player-facing names for scenario categories (never show raw slugs in the UI). */
+export const CATEGORY_LABELS: Record<string, string> = {
+  retrieval: 'Puck Retrievals',
+  coverage: 'D-Zone Coverage',
+  breakout: 'Breakouts',
+  gap: 'Gap Control',
+  offense: 'Offensive Blue Line',
+  skills: 'Skills',
+  'rush-defense': 'Defending the Rush',
+  positioning: 'Positioning',
+};
+
+/** Look up a category's display name, falling back to a cleaned-up slug. */
+export function categoryLabel(category: string): string {
+  return (
+    CATEGORY_LABELS[category] ??
+    category
+      .split('-')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ')
+  );
+}
+
 export const DIFFICULTY_CONFIG: Record<
   Difficulty,
   { timer: number; choices: number; label: string; cssVar: string }

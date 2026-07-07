@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import type { ModuleId, ModuleProgress, SaveState, SessionMode } from '@/types';
 import { BADGES } from '@/data/badges';
 import { MODULES, scenariosForModule, type AppModule } from '@/data/modules';
-import { BOSS_RULES } from '@/data/scenarios';
+import { BOSS_RULES, categoryLabel } from '@/data/scenarios';
 import { weakestCategory } from '@/lib/picker';
 import { todayKey } from '@/lib/storage';
 
@@ -126,7 +126,7 @@ export function HomeScreen({
           {weakest ? (
             <>
               <div className="blb-side-body">
-                Your softest category: <strong>{weakest}</strong>
+                You miss the most on: <strong>{categoryLabel(weakest)}</strong>
               </div>
               <button
                 className="blb-side-btn"
