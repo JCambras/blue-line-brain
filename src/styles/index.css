@@ -894,6 +894,17 @@ body {
   line-height: 1.55;
   max-width: 640px;
 }
+.blb-coach-note {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  max-width: 640px;
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--ice);
+  border-left: 3px solid var(--rink-blue);
+  border-radius: 6px;
+}
 .blb-coach-actions {
   display: flex;
   gap: 10px;
