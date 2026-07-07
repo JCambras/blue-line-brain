@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Scenario, TapTarget } from '@/types';
 import { DIFFICULTY_CONFIG } from '@/data/scenarios';
 import { sfx } from '@/lib/sfx';
@@ -7,6 +7,15 @@ import { OPTION_GAP_MS, OPTION_LEAD_IN_MS } from '@/lib/narrationTiming';
 import { RinkDiagram } from './RinkDiagram';
 import { FieldDiagram } from './FieldDiagram';
 import { AnimatedRink } from './AnimatedRink';
+
+function shuffle<T>(arr: T[]): T[] {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
 
 interface SessionScreenProps {
   scenario: Scenario;
@@ -67,6 +76,19 @@ export function SessionScreen({
     setPhase('anim');
   };
 
+  // Shuffle the answer options once per question so the right read moves
+  // around; origIdx keeps feedback pointed at the real option in the data.
+  const displayOptions = useMemo(() => {
+    if (!scenario.options) return [];
+    const indexed = scenario.options.map((opt, origIdx) => ({ opt, origIdx }));
+    const correct = indexed.filter((o) => o.opt.correct);
+    const wrong = shuffle(indexed.filter((o) => !o.opt.correct));
+    return shuffle([
+      ...correct,
+      ...wrong.slice(0, Math.max(0, cfg.choices - correct.length)),
+    ]);
+  }, [scenario, cfg.choices]);
+
   // Reveal phase: coach reads the freeze line, then each option as it appears.
   // Every clip is the pre-rendered ElevenLabs coach voice (keys match
   // scripts/narration-manifest.ts); missing audio just plays silent.
@@ -94,12 +116,12 @@ export function SessionScreen({
         await narrationAudio.playAndWait(`${scenario.id}.freeze`);
       }
       if (cancelled) return;
-      if (scenario.kind === 'mcq' && scenario.options) {
+      if (scenario.kind === 'mcq' && displayOptions.length > 0) {
         // Unhurried beat so the jump from the freeze prompt into the options
         // isn't rushed.
         await sleep(OPTION_LEAD_IN_MS);
         if (cancelled) return;
-        const n = Math.min(cfg.choices, scenario.options.length);
+        const n = displayOptions.length;
         for (let i = 0; i < n; i++) {
           if (cancelled) return;
           // A shorter beat between option reads so the coach doesn't run them
@@ -110,12 +132,17 @@ export function SessionScreen({
           }
           setRevealed(i + 1);
           setReadingIdx(i);
-          await narrationAudio.playAndWait(`${scenario.id}.opt.${i}`);
+          // Option clips are pre-rendered per ORIGINAL option position (keys
+          // <id>.opt.<origIdx>, spoken letter/lead baked in), so play the
+          // shuffled option's clip by origIdx: the coach always reads the text
+          // the highlighted button shows, though the spoken letter can differ
+          // from the on-screen one after a shuffle.
+          await narrationAudio.playAndWait(`${scenario.id}.opt.${displayOptions[i].origIdx}`);
         }
       }
       if (!cancelled) {
         setReadingIdx(-1);
-        setRevealed(cfg.choices);
+        setRevealed(displayOptions.length);
         setPhase('live');
       }
     })();
@@ -124,7 +151,7 @@ export function SessionScreen({
       cancelSleep?.();
       narrationAudio.stop();
     };
-  }, [phase, scenario, cfg.choices]);
+  }, [phase, scenario, displayOptions]);
 
   // Decision timer — only ticks once every option is out.
   useEffect(() => {
@@ -140,10 +167,10 @@ export function SessionScreen({
     return () => clearTimeout(t);
   }, [phase, timeLeft, scenario, cfg.timer, onAnswer]);
 
-  const onMcq = (i: number) => {
+  const onMcq = (origIdx: number) => {
     if (!scenario.options) return;
-    const opt = scenario.options[i];
-    onAnswer(scenario, opt.correct, Date.now() - start.current, i);
+    const opt = scenario.options[origIdx];
+    onAnswer(scenario, opt.correct, Date.now() - start.current, origIdx);
   };
 
   const onTapTarget = (t: TapTarget) => {
@@ -224,18 +251,18 @@ export function SessionScreen({
       <h2 className="blb-scenario-title">{scenario.title}</h2>
       {!animating && <p className="blb-scenario-setup">{scenario.setup}</p>}
 
-      {scenario.kind === 'mcq' && scenario.options && !animating && (
+      {scenario.kind === 'mcq' && displayOptions.length > 0 && !animating && (
         <div className="blb-options">
-          {scenario.options.slice(0, cfg.choices).map((opt, i) => {
+          {displayOptions.map(({ opt, origIdx }, i) => {
             const shown = phase === 'live' || i < revealed;
             return (
               <button
-                key={i}
+                key={origIdx}
                 className={`blb-option ${shown ? '' : 'pending'} ${
                   readingIdx === i ? 'reading' : ''
                 }`}
                 disabled={!shown}
-                onClick={() => onMcq(i)}
+                onClick={() => onMcq(origIdx)}
               >
                 <span className="blb-option-letter">
                   {String.fromCharCode(65 + i)}
