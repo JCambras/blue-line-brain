@@ -64,6 +64,37 @@ export const SCENARIOS: Scenario[] = [
       puck: { x: 60, y: 92 },
       arrows: [{ fromX: 42, fromY: 78, toX: 52, toY: 88 }],
     },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: { d: { x: 45, y: 68 }, f1: { x: 30, y: 48 }, w: { x: 26, y: 58 } },
+          puck: { x: 12, y: 58 },
+          narration: "Puck's rimmed hard down the left wall into your zone.",
+        },
+        {
+          t: 3.5,
+          players: { d: { x: 48, y: 78 }, f1: { x: 34, y: 62 }, w: { x: 24, y: 66 } },
+          puck: { x: 16, y: 82 },
+          narration: "It's rolling around the boards behind your net.",
+        },
+        {
+          t: 7,
+          players: { d: { x: 50, y: 84 }, f1: { x: 38, y: 71 }, w: { x: 23, y: 71 } },
+          puck: { x: 38, y: 95 },
+          narration: "You're first man back — their forechecker is coming in hard.",
+        },
+        {
+          t: 11,
+          players: { d: { x: 50, y: 88 }, f1: { x: 42, y: 78 }, w: { x: 22, y: 75 } },
+          puck: { x: 60, y: 92 },
+          narration: 'The puck settles behind the net, pressure closing fast...',
+        },
+        { t: 12.5 },
+      ],
+      freezeLine:
+        "Let's stop it right there. You're the D going back for that puck. What do you do?",
+    },
   },
   {
     id: 'back-door',
@@ -104,6 +135,57 @@ export const SCENARIOS: Scenario[] = [
       ],
       puck: { x: 18, y: 78 },
       highlights: [{ x: 56, y: 88, radius: 9 }],
+    },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: {
+            'puck-carrier': { x: 30, y: 45 },
+            partner: { x: 36, y: 55 },
+            fwd: { x: 70, y: 52 },
+            d: { x: 55, y: 60 },
+          },
+          puck: { x: 30, y: 45 },
+          narration: 'They gain your zone down the far side with control.',
+        },
+        {
+          t: 4,
+          players: {
+            'puck-carrier': { x: 20, y: 64 },
+            partner: { x: 28, y: 70 },
+            fwd: { x: 66, y: 70 },
+            d: { x: 56, y: 70 },
+          },
+          puck: { x: 20, y: 64 },
+          narration: 'The carrier walks the wall — your partner steps up on him.',
+        },
+        {
+          t: 8,
+          players: {
+            'puck-carrier': { x: 18, y: 74 },
+            partner: { x: 24, y: 76 },
+            fwd: { x: 61, y: 81 },
+            d: { x: 57, y: 77 },
+          },
+          puck: { x: 18, y: 74 },
+          narration: 'Watch the weak side — their winger is sneaking in behind you.',
+        },
+        {
+          t: 12,
+          players: {
+            'puck-carrier': { x: 18, y: 78 },
+            partner: { x: 22, y: 80 },
+            fwd: { x: 56, y: 88 },
+            d: { x: 58, y: 80 },
+          },
+          puck: { x: 18, y: 78 },
+          narration: "He's creeping to the far post, right off your shoulder...",
+        },
+        { t: 13.5 },
+      ],
+      freezeLine:
+        "Stop it here. You're the weak-side D and the puck is across the ice. What's your read?",
     },
   },
   {
@@ -150,6 +232,37 @@ export const SCENARIOS: Scenario[] = [
       ],
       puck: { x: 48, y: 90 },
       arrows: [{ fromX: 48, fromY: 90, toX: 18, toY: 72 }],
+    },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: { d: { x: 52, y: 70 }, w: { x: 30, y: 52 }, f1: { x: 55, y: 42 } },
+          puck: { x: 70, y: 48 },
+          narration: 'They dump it in on your side and change lines.',
+        },
+        {
+          t: 4,
+          players: { d: { x: 56, y: 82 }, w: { x: 24, y: 62 }, f1: { x: 58, y: 60 } },
+          puck: { x: 74, y: 82 },
+          narration: 'You wheel back to pick it up — one forechecker on the chase.',
+        },
+        {
+          t: 8,
+          players: { d: { x: 52, y: 91 }, w: { x: 19, y: 68 }, f1: { x: 59, y: 72 } },
+          puck: { x: 58, y: 94 },
+          narration: 'You win the race below the goal line and get it on your stick.',
+        },
+        {
+          t: 11.5,
+          players: { d: { x: 48, y: 90 }, w: { x: 18, y: 72 }, f1: { x: 60, y: 80 } },
+          puck: { x: 48, y: 90 },
+          narration: 'Your winger posts up on the wall — the forechecker is closing...',
+        },
+        { t: 13 },
+      ],
+      freezeLine:
+        "Hold it there. You've got the puck and one beat to make a play. What is it?",
     },
   },
   {
@@ -198,6 +311,36 @@ export const SCENARIOS: Scenario[] = [
       arrows: [{ fromX: 38, fromY: 38, toX: 40, toY: 58 }],
       highlights: [{ x: 40, y: 50, radius: 7 }],
     },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: { f: { x: 42, y: 10 }, d1: { x: 41, y: 46 }, d2: { x: 59, y: 46 } },
+          puck: { x: 42, y: 10 },
+          narration: 'Their winger takes off out of his own end with speed.',
+        },
+        {
+          t: 4,
+          players: { f: { x: 39, y: 20 }, d1: { x: 41, y: 50 }, d2: { x: 59, y: 50 } },
+          puck: { x: 39, y: 20 },
+          narration: "He's through the neutral zone middle with a full head of steam.",
+        },
+        {
+          t: 8,
+          players: { f: { x: 38, y: 30 }, d1: { x: 40, y: 55 }, d2: { x: 60, y: 55 } },
+          puck: { x: 38, y: 30 },
+          narration: "You're backing up — your partner is even with you.",
+        },
+        {
+          t: 11.5,
+          players: { f: { x: 38, y: 38 }, d1: { x: 40, y: 60 }, d2: { x: 60, y: 60 } },
+          puck: { x: 38, y: 38 },
+          narration: "He's attacking your blue line right now...",
+        },
+        { t: 13 },
+      ],
+      freezeLine: "Freeze. You're the strong-side D. How do you play him?",
+    },
   },
   {
     id: 'blue-line-decision',
@@ -243,6 +386,36 @@ export const SCENARIOS: Scenario[] = [
       puck: { x: 50, y: 32 },
       arrows: [{ fromX: 50, fromY: 32, toX: 65, toY: 30, dashed: true }],
     },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: { d: { x: 50, y: 36 }, partner: { x: 28, y: 36 }, opp: { x: 42, y: 16 } },
+          puck: { x: 18, y: 10 },
+          narration: 'Your forwards are cycling it low in the offensive corner.',
+        },
+        {
+          t: 4,
+          players: { d: { x: 50, y: 34 }, opp: { x: 45, y: 18 } },
+          puck: { x: 22, y: 16 },
+          narration: 'The winger gets pinned — he looks up for a release valve.',
+        },
+        {
+          t: 7.5,
+          players: { d: { x: 50, y: 33 }, opp: { x: 47, y: 20 } },
+          puck: { x: 38, y: 27 },
+          narration: 'He rims it back to you at the point.',
+        },
+        {
+          t: 11,
+          players: { d: { x: 50, y: 32 }, partner: { x: 28, y: 32 }, opp: { x: 50, y: 22 } },
+          puck: { x: 50, y: 32 },
+          narration: 'You catch it — but their forward steps right into your shooting lane...',
+        },
+        { t: 12.5 },
+      ],
+      freezeLine: "Stop right there. The lane is blocked. What's your move?",
+    },
   },
   {
     id: 'backhand-catch',
@@ -274,9 +447,42 @@ export const SCENARIOS: Scenario[] = [
     coachCue: 'Get to your forehand fast.',
     visual: {
       rinkZone: 'offensive',
-      players: [{ id: 'd', team: 'home', x: 60, y: 30, label: 'D' }],
+      players: [
+        { id: 'd', team: 'home', x: 60, y: 30, label: 'D' },
+        { id: 'partner', team: 'home', x: 30, y: 32, label: 'D' },
+      ],
       puck: { x: 60, y: 30 },
       arrows: [{ fromX: 60, fromY: 30, toX: 50, toY: 30, dashed: true }],
+    },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: { d: { x: 62, y: 34 }, partner: { x: 24, y: 34 } },
+          puck: { x: 24, y: 34 },
+          narration: 'Your partner walks the offensive blue line with it.',
+        },
+        {
+          t: 4,
+          players: { d: { x: 61, y: 32 }, partner: { x: 30, y: 33 } },
+          puck: { x: 30, y: 33 },
+          narration: "He's under pressure and looks cross-ice at you.",
+        },
+        {
+          t: 7.5,
+          players: { d: { x: 60, y: 31 }, partner: { x: 30, y: 32 } },
+          puck: { x: 45, y: 31 },
+          narration: 'Here comes the pass — and it drifts to your backhand side.',
+        },
+        {
+          t: 10.5,
+          players: { d: { x: 60, y: 30 } },
+          puck: { x: 60, y: 30 },
+          narration: 'It lands on your backhand at the line...',
+        },
+        { t: 12 },
+      ],
+      freezeLine: "Freeze it. Puck's on your backhand. Quick — what do you do?",
     },
   },
   {
@@ -324,6 +530,51 @@ export const SCENARIOS: Scenario[] = [
       puck: { x: 30, y: 65 },
       arrows: [{ fromX: 30, fromY: 65, toX: 50, toY: 90, dashed: true }],
     },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: {
+            shooter: { x: 14, y: 80 },
+            fwd: { x: 42, y: 68 },
+            d: { x: 44, y: 72 },
+            g: { x: 48, y: 93 },
+          },
+          puck: { x: 14, y: 80 },
+          narration: 'They work it low on the half-wall in your end.',
+        },
+        {
+          t: 4,
+          players: { shooter: { x: 22, y: 72 }, fwd: { x: 46, y: 75 }, d: { x: 46, y: 75 } },
+          puck: { x: 22, y: 72 },
+          narration: 'Their shooter walks off the wall — the big winger heads for your crease.',
+        },
+        {
+          t: 8,
+          players: {
+            shooter: { x: 28, y: 67 },
+            fwd: { x: 49, y: 80 },
+            d: { x: 47, y: 77 },
+            g: { x: 49, y: 92 },
+          },
+          puck: { x: 28, y: 67 },
+          narration: 'He parks at the top of the paint, right on your goalie.',
+        },
+        {
+          t: 11.5,
+          players: {
+            shooter: { x: 30, y: 65 },
+            fwd: { x: 50, y: 82 },
+            d: { x: 48, y: 78 },
+            g: { x: 50, y: 92 },
+          },
+          puck: { x: 30, y: 65 },
+          narration: "The shooter's winding up — shot is coming through...",
+        },
+        { t: 13 },
+      ],
+      freezeLine: "Hold it. You've got the net-front man. What's the play?",
+    },
   },
   {
     id: 'pinch-decision',
@@ -368,6 +619,36 @@ export const SCENARIOS: Scenario[] = [
       ],
       puck: { x: 78, y: 38 },
       highlights: [{ x: 50, y: 12, radius: 6 }],
+    },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: { d: { x: 80, y: 38 }, partner: { x: 62, y: 8 }, opp: { x: 76, y: 18 } },
+          puck: { x: 86, y: 20 },
+          narration: "Puck's being battled on the far wall, deep in their zone.",
+        },
+        {
+          t: 4,
+          players: { opp: { x: 80, y: 26 }, partner: { x: 58, y: 9 } },
+          puck: { x: 83, y: 27 },
+          narration: 'Their winger digs it loose and starts up the boards.',
+        },
+        {
+          t: 8,
+          players: { d: { x: 80, y: 34 }, opp: { x: 79, y: 33 }, partner: { x: 54, y: 10 } },
+          puck: { x: 81, y: 34 },
+          narration: "It's squirting up your wall — you could step up and pinch.",
+        },
+        {
+          t: 11.5,
+          players: { d: { x: 80, y: 32 }, opp: { x: 78, y: 38 }, partner: { x: 50, y: 12 } },
+          puck: { x: 78, y: 38 },
+          narration: "But look up ice — your partner is caught deep and isn't set...",
+        },
+        { t: 13 },
+      ],
+      freezeLine: 'Freeze. Pinch or hold the line? Make the call.',
     },
   },
   {
@@ -416,6 +697,36 @@ export const SCENARIOS: Scenario[] = [
       arrows: [{ fromX: 35, fromY: 45, toX: 65, toY: 45, dashed: true }],
       highlights: [{ x: 50, y: 50, radius: 8 }],
     },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: { a1: { x: 30, y: 12 }, a2: { x: 70, y: 15 }, d: { x: 50, y: 42 } },
+          puck: { x: 30, y: 12 },
+          narration: "Turnover at their blue line — they're off the other way!",
+        },
+        {
+          t: 4,
+          players: { a1: { x: 32, y: 25 }, a2: { x: 68, y: 27 }, d: { x: 50, y: 50 } },
+          puck: { x: 32, y: 25 },
+          narration: "Two on one. You're the only man back.",
+        },
+        {
+          t: 8,
+          players: { a1: { x: 34, y: 36 }, a2: { x: 66, y: 37 }, d: { x: 50, y: 58 } },
+          puck: { x: 34, y: 36 },
+          narration: 'They cross center with speed — carrier left, trailer wide right.',
+        },
+        {
+          t: 11.5,
+          players: { a1: { x: 35, y: 45 }, a2: { x: 65, y: 45 }, d: { x: 50, y: 65 } },
+          puck: { x: 35, y: 45 },
+          narration: "It's a clean two-on-one bearing down on you...",
+        },
+        { t: 13 },
+      ],
+      freezeLine: 'Stop it there. Two on one, your goalie is set. What do you take away?',
+    },
   },
   {
     id: 'shot-traffic',
@@ -461,6 +772,46 @@ export const SCENARIOS: Scenario[] = [
       ],
       puck: { x: 50, y: 32 },
       arrows: [{ fromX: 50, fromY: 32, toX: 50, toY: 10 }],
+    },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: {
+            d: { x: 55, y: 36 },
+            f1: { x: 62, y: 12 },
+            opp1: { x: 56, y: 16 },
+            g: { x: 50, y: 8 },
+          },
+          puck: { x: 80, y: 14 },
+          narration: 'Your line is grinding away in the offensive corner.',
+        },
+        {
+          t: 4,
+          players: { d: { x: 53, y: 35 }, f1: { x: 56, y: 13 }, opp1: { x: 54, y: 17 } },
+          puck: { x: 72, y: 9 },
+          narration: 'Your center wins the battle and cycles it up the wall.',
+        },
+        {
+          t: 7.5,
+          players: { d: { x: 51, y: 33 }, f1: { x: 50, y: 15 }, opp1: { x: 53, y: 19 } },
+          puck: { x: 62, y: 22 },
+          narration: 'He spots you at the point — the puck is coming up top.',
+        },
+        {
+          t: 11,
+          players: {
+            d: { x: 50, y: 32 },
+            f1: { x: 45, y: 18 },
+            opp1: { x: 52, y: 22 },
+            g: { x: 50, y: 8 },
+          },
+          puck: { x: 50, y: 32 },
+          narration: "You've got it at the blue line with bodies piling up at the net...",
+        },
+        { t: 12.5 },
+      ],
+      freezeLine: "Freeze. Traffic everywhere in front. What's your best shot?",
     },
   },
   // -------- Tap-the-ice scenario --------
@@ -515,6 +866,44 @@ export const SCENARIOS: Scenario[] = [
         { id: 'g', team: 'home', x: 50, y: 95, label: 'G' },
       ],
       puck: { x: 18, y: 78 },
+    },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: {
+            'puck-c': { x: 15, y: 48 },
+            partner: { x: 30, y: 55 },
+            g: { x: 50, y: 94 },
+          },
+          puck: { x: 15, y: 48 },
+          narration: 'They control the entry wide on the far side.',
+        },
+        {
+          t: 4,
+          players: { 'puck-c': { x: 12, y: 64 }, partner: { x: 25, y: 68 } },
+          puck: { x: 12, y: 64 },
+          narration: 'The carrier drives down the far wall — your partner tracks him.',
+        },
+        {
+          t: 8,
+          players: { 'puck-c': { x: 16, y: 74 }, partner: { x: 22, y: 75 } },
+          puck: { x: 16, y: 74 },
+          narration: 'He pulls up on the half-wall, head up, surveying.',
+        },
+        {
+          t: 11.5,
+          players: {
+            'puck-c': { x: 18, y: 78 },
+            partner: { x: 22, y: 78 },
+            g: { x: 50, y: 95 },
+          },
+          puck: { x: 18, y: 78 },
+          narration: "Puck's on the far wall, opposite side from you...",
+        },
+        { t: 13 },
+      ],
+      freezeLine: 'Freeze it. Tap the spot on the ice where you need to be.',
     },
   },
 ];

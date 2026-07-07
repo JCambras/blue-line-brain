@@ -4,6 +4,11 @@ interface RinkDiagramProps {
   scenario: Scenario;
   onTap?: (target: TapTarget) => void;
   tapResult?: { targetIdx: number; correct: boolean } | null;
+  /** Live position overrides by player id, used while the play animation runs. */
+  playerPos?: Record<string, { x: number; y: number }>;
+  puckPos?: { x: number; y: number };
+  /** Hide arrows/highlights/tap targets — the freeze-frame hints — during animation. */
+  hideAnnotations?: boolean;
 }
 
 const ICE = '#eaf2ff';
@@ -12,8 +17,16 @@ const BLUE = '#2256a8';
 const HOMEBLUE = '#1f4ed8';
 const AWAYRED = '#c43030';
 
-export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
+export function RinkDiagram({
+  scenario,
+  onTap,
+  tapResult,
+  playerPos,
+  puckPos,
+  hideAnnotations,
+}: RinkDiagramProps) {
   const v = scenario.visual;
+  const puck = puckPos ?? v.puck;
 
   return (
     <svg
@@ -77,7 +90,8 @@ export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
       <rect x="46" y="94" width="8" height="2.5" fill="none" stroke={RED} strokeWidth="0.3" />
 
       {/* Highlights (focus zones) */}
-      {v.highlights?.map((h, i) => (
+      {!hideAnnotations &&
+        v.highlights?.map((h, i) => (
         <circle
           key={`h-${i}`}
           cx={h.x}
@@ -104,8 +118,9 @@ export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
           <path d="M0,0 L10,5 L0,10 z" fill="#0a0a0a" />
         </marker>
       </defs>
-      {v.arrows?.map((a, i) => (
-        <line
+      {!hideAnnotations &&
+        v.arrows?.map((a, i) => (
+          <line
           key={`a-${i}`}
           x1={a.fromX}
           y1={a.fromY}
@@ -120,6 +135,7 @@ export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
 
       {/* Tap targets (only in tap mode) */}
       {scenario.kind === 'tap' &&
+        !hideAnnotations &&
         scenario.tapTargets?.map((t, i) => {
           const isResult = tapResult?.targetIdx === i;
           const showResultColor = isResult
@@ -149,36 +165,39 @@ export function RinkDiagram({ scenario, onTap, tapResult }: RinkDiagramProps) {
         })}
 
       {/* Players */}
-      {v.players.map((p) => (
-        <g key={p.id}>
-          <circle
-            cx={p.x}
-            cy={p.y}
-            r="3.2"
-            fill={p.team === 'home' ? HOMEBLUE : AWAYRED}
-            stroke="#0a0a0a"
-            strokeWidth="0.4"
-          />
-          {p.label && (
-            <text
-              x={p.x}
-              y={p.y + 1.2}
-              textAnchor="middle"
-              fontSize="3.2"
-              fill="#fff"
-              fontWeight="700"
-              fontFamily="ui-monospace, monospace"
-            >
-              {p.label}
-            </text>
-          )}
-        </g>
-      ))}
+      {v.players.map((p) => {
+        const pos = playerPos?.[p.id] ?? p;
+        return (
+          <g key={p.id}>
+            <circle
+              cx={pos.x}
+              cy={pos.y}
+              r="3.2"
+              fill={p.team === 'home' ? HOMEBLUE : AWAYRED}
+              stroke="#0a0a0a"
+              strokeWidth="0.4"
+            />
+            {p.label && (
+              <text
+                x={pos.x}
+                y={pos.y + 1.2}
+                textAnchor="middle"
+                fontSize="3.2"
+                fill="#fff"
+                fontWeight="700"
+                fontFamily="ui-monospace, monospace"
+              >
+                {p.label}
+              </text>
+            )}
+          </g>
+        );
+      })}
 
       {/* Puck */}
       <circle
-        cx={v.puck.x}
-        cy={v.puck.y}
+        cx={puck.x}
+        cy={puck.y}
         r="1.4"
         fill="#0a0a0a"
         stroke="#fff"
