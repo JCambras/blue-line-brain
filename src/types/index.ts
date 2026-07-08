@@ -36,6 +36,11 @@ export interface Highlight {
 export interface RinkVisual {
   rinkZone: Zone;
   players: Player[];
+  /**
+   * Author a carried puck at the carrier's exact coordinates - the renderer
+   * shifts it onto that player's stick when drawing (see `puckOnStick` in
+   * RinkDiagram.tsx and "Puck placement" in src/data/scenarios/AUTHORING.md).
+   */
   puck: { x: number; y: number };
   arrows?: Arrow[];
   highlights?: Highlight[];
@@ -58,6 +63,7 @@ export interface AnimBeat {
    * Omitted players hold their previous spot.
    */
   players?: Record<string, { x: number; y: number }>;
+  /** Carried pucks follow the same convention as `RinkVisual.puck`. */
   puck?: { x: number; y: number };
   /**
    * Play-by-play line spoken (and captioned) when the timeline reaches this
