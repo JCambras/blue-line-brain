@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Scenario, TapTarget } from '@/types';
 import { DIFFICULTY_CONFIG } from '@/data/scenarios';
 import { sfx } from '@/lib/sfx';
-import { narrator } from '@/lib/narrator';
+import { narrationAudio } from '@/lib/narrationAudio';
 import { RinkDiagram } from './RinkDiagram';
 import { AnimatedRink } from './AnimatedRink';
 
@@ -50,24 +50,25 @@ export function SessionScreen({
     start.current = Date.now();
   }, [scenario.id, cfg.timer]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reveal phase: freeze line, then read each option aloud as it appears.
+  // Reveal phase: coach reads the freeze line, then each option as it appears.
+  // Every clip is the pre-rendered ElevenLabs coach voice (keys match
+  // scripts/narration-manifest.ts); missing audio just plays silent.
   useEffect(() => {
     if (phase !== 'reveal') return;
     let cancelled = false;
     start.current = Date.now(); // the clock is fair from when choices appear
     (async () => {
       if (scenario.animation?.freezeLine) {
-        await narrator.speak(scenario.animation.freezeLine);
+        await narrationAudio.playAndWait(`${scenario.id}.freeze`);
       }
+      if (cancelled) return;
       if (scenario.kind === 'mcq' && scenario.options) {
         const n = Math.min(cfg.choices, scenario.options.length);
         for (let i = 0; i < n; i++) {
           if (cancelled) return;
           setRevealed(i + 1);
           setReadingIdx(i);
-          const letter = String.fromCharCode(65 + i);
-          const lead = i === 0 ? 'Do you, ' : i === n - 1 ? 'Or, ' : '';
-          await narrator.speak(`${lead}${letter}: ${scenario.options[i].text}`);
+          await narrationAudio.playAndWait(`${scenario.id}.opt.${i}`);
         }
       }
       if (!cancelled) {
@@ -78,7 +79,7 @@ export function SessionScreen({
     })();
     return () => {
       cancelled = true;
-      narrator.cancel();
+      narrationAudio.stop();
     };
   }, [phase, scenario, cfg.choices]);
 

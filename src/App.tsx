@@ -12,7 +12,6 @@ import { LEVELS, levelFromXP } from '@/data/levels';
 import { loadState, saveState, clearState, todayKey, yesterdayKey } from '@/lib/storage';
 import { pickScenarios, weakestCategory, accuracyForDifficulty } from '@/lib/picker';
 import { sfx } from '@/lib/sfx';
-import { narrator } from '@/lib/narrator';
 import { narrationAudio } from '@/lib/narrationAudio';
 
 import { Scoreboard } from '@/components/Scoreboard';
@@ -29,9 +28,8 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>({ kind: 'home' });
   const [showOnboard, setShowOnboard] = useState(false);
 
-  // Voices load asynchronously — warm them up once; prefetch the audio manifest.
+  // Prefetch the coach-voice audio manifest once at startup.
   useEffect(() => {
-    narrator.init();
     narrationAudio.init();
   }, []);
 
@@ -39,7 +37,6 @@ export default function App() {
   useEffect(() => {
     saveState(state);
     sfx.enabled = state.soundOn;
-    narrator.enabled = state.soundOn;
     narrationAudio.enabled = state.soundOn;
     // Toggling sound off mid-play must cut narration immediately.
     if (!state.soundOn) narrationAudio.stop();
