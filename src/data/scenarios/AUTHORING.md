@@ -62,6 +62,23 @@ animation and freeze frame. It must match a `team: 'home'` player id.
 - `freezeLine` stops the tape and hands the player the decision:
   "Stop it here. You're the D on the wall. What's your move?"
 
+## Narration (spoken coach voice-over)
+
+`animation.narration` (required) is one short coach voice-over for the whole
+play - 2 to 4 sentences, ~15-65 words, spoken over the animation as it runs.
+Write it for a 10-14 year old: warm rink-coach voice, second person, present
+tense, plain dashes (never em-dashes). Cover the same play the beats do in a
+smooth read, and end open so it hands off to `freezeLine` (do not ask the
+decision question here - that is `freezeLine`'s job). The beat `narration`
+lines are the on-screen captions; this field is the single audio track.
+
+At build time `scripts/generate-narration.ts` (run via `npm run narrate`)
+renders each `narration` to an MP3 in `public/audio/`, keyed to the scenario id
+plus a content hash - editing the text regenerates just that clip, and the
+committed MP3s mean the app never needs an API key. Missing audio plays silent.
+Regenerate after editing: `npm run narrate` (needs `ELEVENLABS_API_KEY` in
+`.env`; see `.env.example`).
+
 ## Puck placement
 
 - **Carried**: put the puck at the carrier's exact coordinates in every beat

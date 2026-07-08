@@ -59,6 +59,17 @@ function checkAnimation(s: Scenario) {
   if (!anim.freezeLine) err(s.id, 'missing freezeLine');
   if (anim.beats.length < 3) err(s.id, `only ${anim.beats.length} beats`);
 
+  // Narration: one short coach voice-over per scenario, rendered to MP3 at
+  // build time (scripts/generate-narration.ts).
+  const narration = anim.narration?.trim();
+  if (!narration) {
+    err(s.id, 'missing animation.narration (coach voice-over)');
+  } else {
+    if (anim.narration.includes('—')) err(s.id, 'narration uses an em-dash; use plain dashes');
+    const words = narration.split(/\s+/).length;
+    if (words < 12 || words > 80) err(s.id, `narration is ${words} words, want ~15-65`);
+  }
+
   const playerIds = new Set(s.visual.players.map((p) => p.id));
   let prevT = -1;
   for (const b of anim.beats) {

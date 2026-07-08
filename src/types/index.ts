@@ -81,6 +81,14 @@ export interface PlayAnimation {
   beats: AnimBeat[];
   /** Spoken at the freeze, e.g. "Let's stop it here — you're the D. What do you do?" */
   freezeLine: string;
+  /**
+   * One short coach voice-over (2-4 sentences) for the whole animated play,
+   * written for a 10-14 year old. Pre-rendered to an MP3 at build time by
+   * `scripts/generate-narration.ts` (keyed to the scenario id) and played over
+   * the animation phase; see `src/data/scenarios/AUTHORING.md`. Missing MP3 =
+   * silent, no error.
+   */
+  narration: string;
 }
 
 // ---------- Decision options ----------

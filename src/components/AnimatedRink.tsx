@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Scenario } from '@/types';
-import { narrator } from '@/lib/narrator';
+import { narrationAudio } from '@/lib/narrationAudio';
 import { sfx } from '@/lib/sfx';
 import { RinkDiagram, puckOnStick } from './RinkDiagram';
 
@@ -126,6 +126,9 @@ export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
     const beats = resolveBeats(scenario);
     const total = beats[beats.length - 1].t;
     const spoken = new Set<number>();
+    // One pre-rendered coach voice-over for the whole play, started as the
+    // animation phase begins and kept in sync with the beat captions below.
+    narrationAudio.play(scenario.id);
     const startTs = performance.now();
     const history: { t: number; frame: Frame }[] = [];
     let carrier: string | null = null;
@@ -143,7 +146,6 @@ export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
           // clear of both where the puck is and where it's going.
           const next = beats[Math.min(i + 1, beats.length - 1)];
           setCaptionTop(Math.max(frameAt(beats, t).puck.y, next.frame.puck.y) > 55);
-          narrator.speak(b.narration);
         }
       });
       const f = frameAt(beats, t);
@@ -199,7 +201,8 @@ export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(holdTimer);
-      narrator.cancel();
+      // Skip, scenario change, or navigating away must not leave audio running.
+      narrationAudio.stop();
     };
   }, [scenario]);
 

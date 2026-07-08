@@ -71,6 +71,8 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
       ],
       freezeLine:
         "Let's stop it right there. You're the D going back for that puck. What do you do?",
+      narration:
+        "The puck's rimmed hard down the wall and rolling behind your net. You're first man back, and their forechecker is coming in hot. The puck settles behind the cage, and here comes the pressure.",
     },
   },
   {
@@ -164,6 +166,8 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
       ],
       freezeLine:
         "Stop it here. You're the weak-side D and the puck is across the ice. What's your read?",
+      narration:
+        "They gain your zone down the far side and walk the wall. Your partner steps up on the carrier. But watch the weak side - their winger is sneaking in behind you, creeping to the far post right off your shoulder.",
     },
   },
   {
@@ -236,6 +240,8 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
       ],
       freezeLine:
         "Hold it there. You've got the puck and one beat to make a play. What is it?",
+      narration:
+        "They dump it in on your side and change lines. You wheel back with one forechecker on the chase and win the race below the goal line. Puck's on your stick, your winger posts up on the wall, and the forechecker is closing.",
     },
   },
   {
@@ -328,6 +334,8 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Hold it. You've got the net-front man. What's the play?",
+      narration:
+        "They work it low on the half-wall in your end. Their shooter walks off the wall while the big winger heads for your crease and parks right on your goalie. The shooter's winding up, and the shot is coming through.",
     },
   },
   {
@@ -431,6 +439,8 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Freeze it. Tap the spot on the ice where you need to be.',
+      narration:
+        "They control the entry wide on the far side and drive down the wall. Your partner tracks the carrier, who pulls up on the half-wall with his head up. The puck's on the far wall, opposite side from you.",
     },
   },
 ];

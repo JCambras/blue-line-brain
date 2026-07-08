@@ -17,6 +17,7 @@ Open http://localhost:5173
 - Vite
 - Tailwind CSS
 - LocalStorage persistence (no backend)
+- Pre-rendered coach voice-over narration (ElevenLabs, build-time only)
 
 ## Project layout
 
@@ -39,7 +40,8 @@ hockey-brain/
     ├── lib/
     │   ├── storage.ts            # localStorage save/load
     │   ├── picker.ts             # SM-2-lite scenario selection
-    │   └── sfx.ts                # Web Audio sound effects
+    │   ├── sfx.ts                # Web Audio sound effects
+    │   └── narrationAudio.ts     # plays pre-rendered coach voice-over MP3s
     ├── components/
     │   ├── RinkDiagram.tsx       # SVG rink + players + tap targets
     │   ├── Scoreboard.tsx        # top header
@@ -75,6 +77,24 @@ Add to the matching zone file in `src/data/scenarios/` and follow
 - `options[]` (for mcq) with `feedback` and `trap` (the "I see why you'd pick this" insight)
 - `coachCue` — the ONE thing to remember
 - `visual` — normalized 0–100 coordinates (full rink, defensive zone is high-y)
+
+## Narration audio
+
+Each animated scenario has a required `animation.narration` coach voice-over
+that plays during the animation phase. The MP3s in `public/audio/` and their
+`manifest.json` are committed build artifacts, so the app and CI never need an
+API key, and the client only ever loads those static files (it never calls
+ElevenLabs). Regenerate clips only after editing narration text:
+
+```bash
+cp .env.example .env   # add your ELEVENLABS_API_KEY
+npm run narrate        # renders changed clips to public/audio/
+```
+
+Runs are skip-existing (keyed to a content hash of the text and voice), so
+unchanged clips are never re-charged. The generator's logic is unit-tested with
+the API mocked (`npm test`). See `src/data/scenarios/AUTHORING.md` for writing
+guidance.
 
 ## Scoring
 

@@ -3,6 +3,11 @@ dist
 dist-ssr
 *.local
 
+# Local secrets (ElevenLabs key etc.) — never commit
+.env
+.env.*
+!.env.example
+
 # Editor
 .vscode/*
 !.vscode/extensions.json

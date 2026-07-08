@@ -68,6 +68,7 @@ export const SKILLS_SCENARIOS: Scenario[] = [
         { t: 12 },
       ],
       freezeLine: "Freeze it. Puck's on your backhand. Quick — what do you do?",
+      narration: "Your partner walks the offensive blue line under pressure and looks cross-ice at you. Here comes the pass, and it drifts to your backhand side. It lands on your backhand right at the line.",
     },
   },
 ];
