@@ -42,6 +42,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
         { id: 'd', team: 'home', x: 50, y: 32, label: 'D' },
         { id: 'opp', team: 'away', x: 50, y: 22, label: 'F' },
         { id: 'partner', team: 'home', x: 28, y: 32, label: 'D' },
+        { id: 'w', team: 'home', x: 20, y: 13, label: 'W' },
       ],
       puck: { x: 50, y: 32 },
       arrows: [{ fromX: 50, fromY: 32, toX: 65, toY: 30, dashed: true }],
@@ -50,25 +51,25 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
       beats: [
         {
           t: 0,
-          players: { d: { x: 50, y: 36 }, partner: { x: 28, y: 36 }, opp: { x: 42, y: 16 } },
+          players: { d: { x: 50, y: 36 }, partner: { x: 28, y: 36 }, w: { x: 18, y: 10 }, opp: { x: 42, y: 16 } },
           puck: { x: 18, y: 10 },
           narration: 'Your forwards are cycling it low in the offensive corner.',
         },
         {
           t: 4,
-          players: { d: { x: 50, y: 34 }, opp: { x: 45, y: 18 } },
+          players: { d: { x: 50, y: 34 }, w: { x: 21, y: 15 }, opp: { x: 45, y: 18 } },
           puck: { x: 22, y: 16 },
           narration: 'The winger gets pinned — he looks up for a release valve.',
         },
         {
           t: 7.5,
-          players: { d: { x: 50, y: 33 }, opp: { x: 47, y: 20 } },
-          puck: { x: 38, y: 27 },
-          narration: 'He rims it back to you at the point.',
+          players: { d: { x: 50, y: 33 }, w: { x: 20, y: 14 }, opp: { x: 47, y: 20 } },
+          puck: { x: 21, y: 15 },
+          narration: 'He chips it back out to you at the point.',
         },
         {
           t: 11,
-          players: { d: { x: 50, y: 32 }, partner: { x: 28, y: 32 }, opp: { x: 50, y: 22 } },
+          players: { d: { x: 50, y: 32 }, partner: { x: 28, y: 32 }, w: { x: 20, y: 13 }, opp: { x: 50, y: 22 } },
           puck: { x: 50, y: 32 },
           narration: 'You catch it — but their forward steps right into your shooting lane...',
         },
@@ -126,7 +127,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
       beats: [
         {
           t: 0,
-          players: { d: { x: 80, y: 38 }, partner: { x: 62, y: 8 }, opp: { x: 76, y: 18 } },
+          players: { d: { x: 80, y: 38 }, partner: { x: 62, y: 8 }, opp: { x: 83, y: 19 } },
           puck: { x: 86, y: 20 },
           narration: "Puck's being battled on the far wall, deep in their zone.",
         },
@@ -192,7 +193,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
       youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 50, y: 32, label: 'D' },
-        { id: 'f1', team: 'home', x: 45, y: 18, label: 'F' },
+        { id: 'f1', team: 'home', x: 58, y: 16, label: 'F' },
         { id: 'opp1', team: 'away', x: 52, y: 22, label: 'F' },
         { id: 'g', team: 'away', x: 50, y: 8, label: 'G' },
       ],
@@ -205,8 +206,8 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
           t: 0,
           players: {
             d: { x: 55, y: 36 },
-            f1: { x: 62, y: 12 },
-            opp1: { x: 56, y: 16 },
+            f1: { x: 78, y: 12 },
+            opp1: { x: 82, y: 16 },
             g: { x: 50, y: 8 },
           },
           puck: { x: 80, y: 14 },
@@ -214,21 +215,21 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
         },
         {
           t: 4,
-          players: { d: { x: 53, y: 35 }, f1: { x: 56, y: 13 }, opp1: { x: 54, y: 17 } },
-          puck: { x: 72, y: 9 },
+          players: { d: { x: 53, y: 35 }, f1: { x: 84, y: 17 }, opp1: { x: 80, y: 15 } },
+          puck: { x: 85, y: 18 },
           narration: 'Your center wins the battle and cycles it up the wall.',
         },
         {
           t: 7.5,
-          players: { d: { x: 51, y: 33 }, f1: { x: 50, y: 15 }, opp1: { x: 53, y: 19 } },
-          puck: { x: 62, y: 22 },
+          players: { d: { x: 51, y: 33 }, f1: { x: 85, y: 22 }, opp1: { x: 80, y: 19 } },
+          puck: { x: 86, y: 23 },
           narration: 'He spots you at the point — the puck is coming up top.',
         },
         {
           t: 11,
           players: {
             d: { x: 50, y: 32 },
-            f1: { x: 45, y: 18 },
+            f1: { x: 58, y: 16 },
             opp1: { x: 52, y: 22 },
             g: { x: 50, y: 8 },
           },

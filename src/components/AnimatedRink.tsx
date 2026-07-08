@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Scenario } from '@/types';
 import { narrator } from '@/lib/narrator';
 import { sfx } from '@/lib/sfx';
-import { RinkDiagram } from './RinkDiagram';
+import { RinkDiagram, puckOnStick } from './RinkDiagram';
 
 interface Frame {
   players: Record<string, { x: number; y: number }>;
@@ -147,10 +147,17 @@ export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
         }
       });
       const f = frameAt(beats, t);
+      // Trail history uses the stick-shifted puck (the same shift RinkDiagram
+      // applies when drawing) so trails match what is drawn; the raw frame is
+      // what gets passed down, and RinkDiagram applies the shift exactly once.
+      const fd: Frame = {
+        players: f.players,
+        puck: puckOnStick(f.puck, scenario.visual.players, f.players),
+      };
 
       // Sample history for trails
       if (!history.length || t - history[history.length - 1].t >= TRAIL_SAMPLE) {
-        history.push({ t, frame: f });
+        history.push({ t, frame: fd });
       }
       while (history.length && history[0].t < t - TRAIL_WINDOW) history.shift();
 
@@ -170,7 +177,7 @@ export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
       }
 
       setFrame(f);
-      setTrails(buildTrails(history, f));
+      setTrails(buildTrails(history, fd));
       setCarrierId(carrier);
 
       if (t >= total) {

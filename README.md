@@ -33,7 +33,7 @@ hockey-brain/
     ├── types/
     │   └── index.ts              # Scenario, SaveState, etc.
     ├── data/
-    │   ├── scenarios.ts          # all seed scenarios
+    │   ├── scenarios/            # scenario bank (per-zone files) + AUTHORING.md
     │   ├── levels.ts             # Squirts → Pro
     │   └── badges.ts             # jersey patches
     ├── lib/
@@ -63,7 +63,9 @@ hockey-brain/
 
 ## Adding scenarios
 
-Edit `src/data/scenarios.ts`. Every scenario needs:
+Add to the matching zone file in `src/data/scenarios/` and follow
+`src/data/scenarios/AUTHORING.md` (animation beats, puck placement, voice).
+`npm run validate` enforces the mechanical rules. Every scenario needs:
 
 - `id` — unique slug
 - `zone` — `defensive | neutral | offensive | skills`
