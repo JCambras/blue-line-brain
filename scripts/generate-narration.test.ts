@@ -129,6 +129,18 @@ test('no key: nothing rendered, missing reported, manifest holds only existing c
   assert.equal(manifest().b, undefined, 'un-rendered clip left out -> silent, not broken');
 });
 
+test('no key + edited text: old committed clip is NOT pruned (no data loss)', async () => {
+  const oldFile = audioFileName('a', contentHash('Old line.', CFG));
+  const { deps, manifest, files } = harness({ present: [oldFile], hasKey: false });
+  const res = await generateNarration([scenario('a', 'New line.')], CFG, deps);
+
+  const newFile = audioFileName('a', contentHash('New line.', CFG));
+  assert.deepEqual(res.missing, [newFile], 'new clip could not be rendered');
+  assert.deepEqual(res.pruned, [], 'nothing pruned while manifest is incomplete');
+  assert.ok(files.has(oldFile), 'old committed clip preserved');
+  assert.equal(manifest().a, undefined, 'scenario silent this run, but recoverable');
+});
+
 test('API error aborts and preserves already-rendered clips (skip-existing on rerun)', async () => {
   const scenarios = [scenario('a', 'Line A.'), scenario('b', 'Line B.'), scenario('c', 'Line C.')];
   const { deps, files } = harness();

@@ -78,8 +78,10 @@ export async function generateNarration(
   }
 
   // Prune stale MP3s (superseded by an edit) that the manifest no longer names.
+  // Skip pruning when the manifest is incomplete (no key, or any clip missing)
+  // so an incomplete run never deletes a still-needed committed artifact.
   const pruned: string[] = [];
-  if (deps.listAudio && deps.removeAudio) {
+  if (deps.hasKey && missing.length === 0 && deps.listAudio && deps.removeAudio) {
     const keep = new Set(Object.values(manifest));
     for (const file of deps.listAudio()) {
       if (file.endsWith('.mp3') && !keep.has(file)) {
