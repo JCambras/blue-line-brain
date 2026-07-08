@@ -73,11 +73,14 @@ decision question here - that is `freezeLine`'s job). The beat `narration`
 lines are the on-screen captions; this field is the single audio track.
 
 At build time `scripts/generate-narration.ts` (run via `npm run narrate`)
-renders each `narration` to an MP3 in `public/audio/`, keyed to the scenario id
-plus a content hash - editing the text regenerates just that clip, and the
-committed MP3s mean the app never needs an API key. Missing audio plays silent.
-Regenerate after editing: `npm run narrate` (needs `ELEVENLABS_API_KEY` in
-`.env`; see `.env.example`).
+renders three clips per scenario to `public/audio/`, all in the same coach
+voice: the `animation.narration` voice-over, the `freezeLine` prompt, and each
+answer option (`SessionScreen` reads these during the reveal phase). Each clip
+is keyed to the scenario id plus a content hash - editing the narration, freeze
+line, or an option's text regenerates just that clip, and the committed MP3s
+mean the app never needs an API key. Missing audio plays silent. Regenerate
+after editing: `npm run narrate` (needs `ELEVENLABS_API_KEY` in `.env`; see
+`.env.example`).
 
 ## Puck placement
 
@@ -94,7 +97,11 @@ Regenerate after editing: `npm run narrate` (needs `ELEVENLABS_API_KEY` in
 - **Rims and chips "around the boards"** must actually follow the boards:
   keep the puck within ~10 units of the edge and add a waypoint beat (no
   narration needed) at each corner so the straight-line tween never cuts
-  across the middle of the zone.
+  across the middle of the zone. When the narration says the puck rims
+  "behind the net", route it *behind* the net - between the net and the end
+  boards (home `y` ~97.5-98, away `y` ~2.5) - never across the front of the
+  crease. Push the waypoints past the goalie toward the end boards so the
+  tween never tracks through the net's own depth.
 - If the narration names a teammate doing something with the puck ("your
   winger works the wall"), that player must exist in `visual.players` and be
   at the puck.
