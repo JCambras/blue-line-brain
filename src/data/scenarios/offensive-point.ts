@@ -52,13 +52,13 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         {
           t: 4,
           players: { opp: { x: 70, y: 10 } },
-          puck: { x: 55, y: 4 },
+          puck: { x: 56, y: 2.5 },
           narration: 'He rims it hard around the boards behind the net.',
         },
         {
           t: 5.7,
           players: { opp: { x: 67, y: 11 } },
-          puck: { x: 24, y: 5 },
+          puck: { x: 24, y: 2.5 },
         },
         {
           t: 7.5,
