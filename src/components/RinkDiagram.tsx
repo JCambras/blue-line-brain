@@ -5,8 +5,10 @@ import type { Player, Scenario, TapTarget } from '@/types';
  * AUTHORING.md). Drawing the puck there buries it under the player disc and
  * hides the label, so shift it to the rim - onto the carrier's stick.
  * Loose pucks (farther than STICK_REACH from everyone) render exactly where
- * the data puts them. Idempotent: applying it to an already-shifted position
- * is a no-op, so callers may pre-apply it.
+ * the data puts them. Not idempotent - a shifted position can land within
+ * reach of a second player - so it must be applied to raw authored/tweened
+ * positions exactly once, here on the render path. AnimatedRink applies it
+ * separately to build trail history that matches what is drawn.
  */
 const STICK_REACH = 3.6;
 

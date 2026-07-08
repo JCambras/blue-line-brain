@@ -51,6 +51,16 @@ animation and freeze frame. It must match a `team: 'home'` player id.
   the puck.
 - Middle beats every 3-4 seconds. Skaters move ~2-8 units/second (cinematic,
   not teleporting); a pass can jump 20-40 units between beats.
+- The **last positioned beat** (t around 11-12.5) must land **exactly** on the
+  `visual` positions - players and puck - so the freeze frame matches.
+- After it, add one bare beat `{ t: <prev + 1.5> }` (no positions, no
+  narration) so the final line has air before the freeze.
+- Every beat carries `narration` - broadcast play-by-play, present tense,
+  building tension - except that bare last one and any bare waypoint beats
+  (see rims and chips under Puck placement). The final narrated line ends
+  with `...` teeing up the freeze.
+- `freezeLine` stops the tape and hands the player the decision:
+  "Stop it here. You're the D on the wall. What's your move?"
 
 ## Puck placement
 
@@ -71,15 +81,6 @@ animation and freeze frame. It must match a `team: 'home'` player id.
 - If the narration names a teammate doing something with the puck ("your
   winger works the wall"), that player must exist in `visual.players` and be
   at the puck.
-- The **last positioned beat** (t around 11-12.5) must land **exactly** on the
-  `visual` positions - players and puck - so the freeze frame matches.
-- After it, add one bare beat `{ t: <prev + 1.5> }` (no positions, no
-  narration) so the final line has air before the freeze.
-- Every beat except that bare last one carries `narration`: broadcast
-  play-by-play, present tense, building tension. The final narrated line ends
-  with `...` teeing up the freeze.
-- `freezeLine` stops the tape and hands the player the decision:
-  "Stop it here. You're the D on the wall. What's your move?"
 
 ## Voice
 

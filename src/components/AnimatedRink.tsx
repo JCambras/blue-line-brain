@@ -147,8 +147,9 @@ export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
         }
       });
       const f = frameAt(beats, t);
-      // Display frame: the carried puck rides the stick (same shift
-      // RinkDiagram applies), so the trail history matches what is drawn.
+      // Trail history uses the stick-shifted puck (the same shift RinkDiagram
+      // applies when drawing) so trails match what is drawn; the raw frame is
+      // what gets passed down, and RinkDiagram applies the shift exactly once.
       const fd: Frame = {
         players: f.players,
         puck: puckOnStick(f.puck, scenario.visual.players, f.players),
@@ -175,7 +176,7 @@ export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
         carrier = best;
       }
 
-      setFrame(fd);
+      setFrame(f);
       setTrails(buildTrails(history, fd));
       setCarrierId(carrier);
 
