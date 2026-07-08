@@ -93,6 +93,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
       ],
       freezeLine:
         "Freeze it there. You've got the puck at center with a man angling in. What's the play?",
+      narration:
+        "Your center runs out of room and turns the puck back to you at center ice. Now their forechecker reads it and angles hard, taking away the wall. You've got your partner wide open on the other side, and here comes the pressure.",
     },
   },
   {
@@ -186,6 +188,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
       ],
       freezeLine:
         "Stop the tape. You've got the puck and a winger in stride. What do you do?",
+      narration:
+        "You strip it clean in your own corner and start up ice. Your winger takes off through the neutral zone with a step on their D, and he is flying. A backchecker is closing on you from behind, and your winger is still open.",
     },
   },
   {
@@ -278,6 +282,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
       ],
       freezeLine:
         "Hold it there. You're on the wall at your blue line with pressure. What's your out?",
+      narration:
+        "You pick it up behind your own net and wheel up the left side. Their forechecker reads it and cuts across to meet you at the blue line. Now he's right in your face, stick out, and the wall is running out.",
     },
   },
   {
@@ -371,6 +377,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
       ],
       freezeLine:
         "Freeze. You're just shy of the red line with a checker closing. What do you do with it?",
+      narration:
+        "Long shift for your group and the legs are heavy. You take the pass at the top of your zone and push it up the right side. Their center turns and comes right at you. You're a stride short of the red line and he's on you.",
     },
   },
 
@@ -476,6 +484,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Stop it. The trap is loaded on your side. Where does the puck go?',
+      narration:
+        "They drop into their one-two-two across the neutral zone. You carry up the wall and their first forward starts down at you as the wall closes. Your partner peels off and hinges underneath you. F1 is committed, and the whole trap is leaning your way.",
     },
   },
   {
@@ -579,6 +589,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Hold it. Their D is caught below you. What's the play?",
+      narration:
+        "You retrieve at the top of your circle and scan up ice. Their left D pinches down hard to keep the play alive. Your winger slips out behind that pinch and stretches the ice. Now their D is caught deep and your stretch man is all alone at their line.",
     },
   },
   {
@@ -685,6 +697,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Freeze it. Your partner has the puck - tap the spot where you should be.',
+      narration:
+        "Your partner picks it up off the breakout and carries through center with speed. Their backchecker starts tracking him through the middle. He's crossing into their half with the puck on a string, and now it's on you to find your spot.",
     },
   },
   {
@@ -783,6 +797,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Stop it there. Rim coming to you, checker closing. What's your first touch?",
+      narration:
+        "Your partner rims it hard around the boards to get it out of trouble. It's riding the wall up the left side, so you climb to the center wall to meet it. Their center has you lined up. The rim is almost on your stick and he's two strides away.",
     },
   },
 
@@ -889,6 +905,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Freeze. Look at their bench side. You're the strong-side D - what do you do?",
+      narration:
+        "You start the break out of your own end with control and feed your center. The rush is on, and their winger peels off for the bench. Their whole line is changing on the far side. Your center crosses the red line and the middle lane is wide open.",
     },
   },
   {
@@ -992,6 +1010,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Stop it here. You're caught mid-change with fresh pressure coming. What's the play?",
+      narration:
+        "You carry out of your zone as your line heads for a change. Your winger is still ten feet from the bench when their fresh line jumps on. Two fresh checkers turn and come straight at you. You're one stride past center with nobody to pass to.",
     },
   },
   {
@@ -1095,6 +1115,8 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Freeze it. One second before their trap sets. What do you do?',
+      narration:
+        "They dump it deep and you go back to scoop it, turning up ice as their forwards peel back to build the trap. Their first forward is still swinging toward his spot in the middle. The trap is only half-built, and your center is climbing through the middle.",
     },
   },
 ];

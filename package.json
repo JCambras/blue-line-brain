@@ -8,7 +8,9 @@
     "build": "npm run validate && tsc -b && vite build",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
-    "validate": "node --experimental-strip-types scripts/validate-scenarios.ts"
+    "validate": "node --experimental-strip-types scripts/validate-scenarios.ts",
+    "narrate": "node --experimental-strip-types scripts/generate-narration.ts",
+    "test": "node --experimental-strip-types --test scripts/*.test.ts"
   },
   "dependencies": {
     "react": "^18.3.1",

@@ -69,6 +69,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12 },
       ],
       freezeLine: "Freeze. The puck's in your feet and pressure is coming. What do you do?",
+      narration: "Your partner grabs it low and you swing wide for the D-to-D. The forechecker bears down, so he has to move it now. But the pass wobbles off the tape and skips right into your skates. Their winger is turning on you.",
     },
   },
   {
@@ -139,6 +140,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Stop it there. Bouncing puck at your point. What's your move?",
+      narration: "Your team cycles it low while you hold the line at the point. Their winger whacks at it on the wall and it squirts loose. Now it is rolling on its edge, hopping toward you. The bouncing puck jumps right at your stick.",
     },
   },
   {
@@ -209,6 +211,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12 },
       ],
       freezeLine: 'Freeze it. Hard rim coming at you on the wall. How do you take it?',
+      narration: "They fire a hard rim around the boards into your zone. It whips down the far wall and behind your net, still flying. You slide down your wall to meet it while a forechecker tracks you. Here it comes around the corner, full speed at your blade.",
     },
   },
   {
@@ -279,6 +282,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12 },
       ],
       freezeLine: "Hold it there. You're skating backward and the pass is coming. How do you take it?",
+      narration: "The entry is denied, so your center pulls it back out to regroup. You peel through the middle, skating backward as his outlet. Their winger presses him and he has to move it back to you. The pass is on its way and your feet are still moving.",
     },
   },
   {
@@ -356,6 +360,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Stop the tape. Winger's open but there's a blade in the lane. What's the pass?",
+      narration: "They dump it into your corner and send a man on the chase. You wheel back and scoop it up, coming out the near side. Your winger posts up open on the wall. But the forechecker sags off and lays his stick flat right across the lane.",
     },
   },
   {
@@ -432,6 +437,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12 },
       ],
       freezeLine: "Freeze it right there. He's showing you the puck. What does your stick do?",
+      narration: "Their winger takes it with speed through the neutral zone. You pivot backward and set your gap for a clean one-on-one. He crosses your blue line wide, puck dangling out in front. Now he is showing you the puck, daring you to reach.",
     },
   },
   {
@@ -508,6 +514,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Stop it here. You won the race but the hit is coming. What do you do with the puck?',
+      narration: "They chip it down your right-side wall and forecheck hard. You turn and go get it with their center on the chase. You win the race to the wall, but the outlet up the boards is covered. He is a half second away and you have nowhere to go.",
     },
   },
   {
@@ -593,6 +600,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12 },
       ],
       freezeLine: 'Freeze. He is fully extended. Tap the spot where you put the puck.',
+      narration: "You escape your zone with it up the right-side wall. Their winger reads it and angles over to cut you off. You carry through the neutral zone as he sizes up the lunge. Then he dives stick-first across your lane, fully extended.",
     },
   },
   {
@@ -684,6 +692,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12 },
       ],
       freezeLine: 'Freeze. Shot coming, goalie sees it, winger at the back door. What do you take away?',
+      narration: "They cycle it low on your left wall and set up shop. The half-wall man looks high and their point man slides to the middle. Up top it goes, and the far winger sneaks toward your back post. He loads up for the one-timer, your goalie set and seeing it clean.",
     },
   },
   {
@@ -787,6 +796,7 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         { t: 12 },
       ],
       freezeLine: "Stop it there. He's calling for the one-touch. Do you give it to him?",
+      narration: "Dump-in on the right side and your partner wheels back for it. He collects it near the net while you swing to the weak side. Your center curls low through the middle, calling for a touch play. The D-to-D is on its way, but a backchecker is flying in behind your center.",
     },
   },
 ];

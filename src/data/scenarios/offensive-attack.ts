@@ -112,6 +112,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Freeze it. You're the D joining the rush. Tap the ice you should fill.",
+      narration: "Your winger carries it wide and your center drives the middle right beside him. They hit the line with speed, and you jump up as the fourth man. Their D backs off, and soft ice opens in the middle.",
     },
   },
   {
@@ -205,6 +206,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Hold it there. The line is clogged. What do you do with the puck?',
+      narration: "You carry it out with speed through center, but their whole line is standing up shoulder to shoulder at the blue. You're two strides from the wall, your winger is flying wide, and there's no room up the gut.",
     },
   },
   {
@@ -286,6 +288,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Stop the tape. You won the pinch. What's next?",
+      narration: "Their winger tries to walk the puck out of the corner, so you pinch down the wall to cut him off. You get there first, pin him, and the puck squirts free. Now you come out of the battle with it, a step ahead of the man you just beat.",
     },
   },
   {
@@ -381,6 +384,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Freeze. You're all alone on the wall. What's the play?",
+      narration: "You strip the puck at center and take off up the left side, but your tired forwards head for a change. You're leading this rush alone. Their D steers you toward the corner, you're running out of room, and fresh legs are only now hopping on.",
     },
   },
 
@@ -470,6 +474,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze it right there. The D just slid. Shot or pass?',
+      narration: "Turnover at center, and you and your winger break out two on one. You carry it over the line with him wide right. The lone defender backpedals, reading your eyes, and now he commits and slides across to take away the pass.",
     },
   },
   {
@@ -571,6 +576,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Stop it here. You're the weak-side D at the point. Where do you go?",
+      narration: "Your winger grinds the cycle on the right wall and walks it low, so their whole zone shifts with him. Their high forward has his eyes glued to the puck, and he's lost you completely. Now your winger curls back up the wall, head up, looking for a target.",
     },
   },
   {
@@ -673,6 +679,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Freeze. You're the fourth man over the line. What's your move?",
+      narration: "Your winger takes it wide over the line while your center drives hard to the net. Their D collapses with your center, and the winger runs out of room on the wall. He pulls up and looks back for a late man.",
     },
   },
   {
@@ -764,6 +771,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze. The win is on your stick. Shoot or settle?',
+      narration: "Offensive-zone draw at the left dot, and you're set up top at the point. Your center jams the draw and wins it clean back to you. It skids flat onto your blade, the centers are still tangled, and the lane is wide open.",
     },
   },
 
@@ -870,6 +878,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Stop it there. Pressure is coming. Force it or keep it alive?',
+      narration: "Your center grinds the puck low on the right wall and bumps it up to you. You pinch down and take it on the half wall. Their winger charges, the slot is packed, and the goalie is square.",
     },
   },
   {
@@ -975,6 +984,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Freeze. Everything in you wants to join. What's the right read?",
+      narration: "Your winger leads the rush through center and your partner takes off with him as the fourth man. They gain the zone, but look behind the play: their sniper is not backchecking. He's camped near the far line, waiting on a breakaway pass.",
     },
   },
   {
@@ -1080,6 +1090,7 @@ export const OFFENSIVE_ATTACK_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Freeze right there. The rebound is sitting. Do you go?',
+      narration: "You let a low wrister go from the point through a screen, and the goalie kicks out a fat rebound to the top of the crease. He's down and scrambling. Your center peels high to cover the point, and you're the closest man to a wide-open net.",
     },
   },
 ];

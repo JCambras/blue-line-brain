@@ -76,6 +76,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Stop right there. The lane is blocked. What's your move?",
+      narration: "Your forwards cycle it low in the corner. The winger gets pinned and chips it back out to you at the point. You catch it clean, ready to shoot, and their forward steps right into your lane.",
     },
   },
   {
@@ -152,6 +153,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Freeze. Pinch or hold the line? Make the call.',
+      narration: "The puck is battled loose on the far wall, deep in their zone. Their winger digs it out and it squirts up your boards - you could step up and pinch. But look up ice. Your partner is caught deep and he is not set.",
     },
   },
   {
@@ -239,6 +241,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Freeze. Traffic everywhere in front. What's your best shot?",
+      narration: "Your line is grinding in the corner. Your center wins the battle, cycles it up the wall, and spots you at the point. Now the puck is on your stick at the blue line with bodies piling up in front of the net.",
     },
   },
 ];

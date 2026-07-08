@@ -91,6 +91,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Stop it here. Your partner has the puck carrier. Where do you need to be?",
+      narration: "They carry it in down the left with speed. Your partner steps out and takes the puck carrier on the wall. Now their center peels off and floats right into your slot, stick down, calling for it.",
     },
   },
   {
@@ -172,6 +173,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Freeze. Shot's coming and you've got the crasher. What's your job?",
+      narration: "Their winger holds it on the wall, then bumps it back to the point. The point man tees it up, and their guy drives straight for your crease. Here comes the shot with a crasher on your goalie.",
     },
   },
   {
@@ -241,6 +243,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Stop right there. He gets the puck first. How do you take him?",
+      narration: "They chip it deep into your corner and give chase. The puck rims down the wall, and their forward is flying in after it. He is a stride from touching it first, and you are closing across to meet him.",
     },
   },
   {
@@ -310,6 +313,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Hold it. He's got the puck low and you're on him. What wins this battle?",
+      narration: "Their winger carries it wide, and you steer him down the wall, out of the middle. He grinds it low with his back to you, then curls along the goal line, puck on his backhand, hunting for a lane.",
     },
   },
   {
@@ -405,6 +409,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Freeze it. That rebound is yours. Tap where you put it.',
+      narration: "Their shooter walks in off the far wing, looking shot all the way, and their center drives the net. He fires, and your goalie kicks it out with no glove on it. The rebound is sitting right at your feet with bodies crashing in.",
     },
   },
 
@@ -504,6 +509,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13.5 },
       ],
       freezeLine: "Stop it there. They're crossing on the cycle. What's your call?",
+      narration: "They gain your zone and set up their cycle. Their winger takes it deep down the left wall with you on him, then grinds it low as their center loops in behind. He chips it up the wall to that center and cuts hard for your net.",
     },
   },
   {
@@ -590,6 +596,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13.5 },
       ],
       freezeLine: "Hold it right there. He's behind your net with the puck. What do you do?",
+      narration: "Their best forward carries in wide with speed. You steer him wide, so he takes the long way and wheels behind your net with full control. Now he stops back there, eyes up, looking to walk out either side.",
     },
   },
   {
@@ -690,6 +697,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13.5 },
       ],
       freezeLine: "Freeze. You're the second D on this rush. Who is yours?",
+      narration: "It is two on two through the neutral zone, but watch for a third man. The carrier crosses your line wide and slows it all down. He delays on the wall while your partner holds him, and here comes the trailer into the top of the slot.",
     },
   },
   {
@@ -777,6 +785,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Stop it here. You can't move this guy and the shot is coming. What now?",
+      narration: "Their point man walks in over your line, puck on a string. Their big winger plants himself in front of your crease. You try to move him off the paint, but he is not going anywhere. The point man loads up and that screen is locked in.",
     },
   },
   {
@@ -853,6 +862,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13.5 },
       ],
       freezeLine: "Freeze. He's shielding it on the wall and help is on the way. What's your move?",
+      narration: "It is rimmed into your zone hugging the near wall. Their winger beats you to it by half a step, gets there first with his back turned, puck shielded against the boards. You are on his back now, and your center is coming in to support.",
     },
   },
 
@@ -957,6 +967,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13.5 },
       ],
       freezeLine: "Freeze it. Partner's beat, but look at the back pressure. Who do you take?",
+      narration: "Their top gun attacks your partner one on one at the line. He has speed, and your center is busting back hard behind the play. He cuts inside and your partner is beat clean, but your center catches him, stick on his hip, as their man posts up in your slot.",
     },
   },
   {
@@ -1057,6 +1068,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Stop it. Shot threat up top, screen at your net. Where do you go?',
+      narration: "They work it on the half wall deep in your end. Their winger grinds to the corner while the point man slides across, then rims it high to the point. Your winger jumps out and gets his stick in the lane as their big man sets the screen.",
     },
   },
   {
@@ -1149,6 +1161,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Freeze. The post is sealed. Where's the real danger?",
+      narration: "Their winger attacks wide down the right side. You force him below the goal line, but he keeps his feet moving and curls under the net looking for the jam. Your goalie seals the near post, and now their second man slips toward the back door.",
     },
   },
 ];

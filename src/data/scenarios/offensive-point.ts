@@ -75,6 +75,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze it. The rim is coming right at your skates. How do you keep it in?',
+      narration: 'Their winger digs it out of the corner and rims it hard around the boards. Now it is racing up your wall, hugging the glass the whole way. It is climbing toward your point, one bounce from squirting out.',
     },
   },
   {
@@ -162,6 +163,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Stop the tape. The puck is halfway to your blade. What should your body be doing?',
+      narration: 'Your partner walks the line up top, eyes up, selling the shot. The defender bites toward him and the D-to-D lane swings open. He looks you off one more beat, and the pass is on its way across to you.',
     },
   },
   {
@@ -243,6 +245,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze. The glass-and-out is a split second away. What do you do at the line?',
+      narration: 'Their winger comes out of the corner scrum with it on the wall. He turns up ice and winds up to bang it off the glass. The clear is coming hard up your wall, head high.',
     },
   },
   {
@@ -327,6 +330,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Hold it there. Everyone is stacked on your wall. What is the play?',
+      narration: 'Your winger works the half wall, runs out of room, and bumps it back to you at the point. You catch it clean and their winger sprints out at you. The whole defense is shaded hard to your side of the ice.',
     },
   },
   // ---------------------------------------------------------------- varsity
@@ -420,6 +424,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze right there. Check your support, then make the call. Pinch or not?',
+      narration: 'Your forwards force a turnover down low and their winger tries to escape up your wall. Your center rotates high to cover behind you, and your partner owns the middle. The loose puck sits there, one stride below you.',
     },
   },
   {
@@ -506,6 +511,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Hold it. The lane is open but the screen is half-formed. When do you shoot?',
+      narration: 'Your winger wins the corner and floats a touch pass up to you at the point. You settle it with a clean lane, and he starts driving hard for the crease. He is almost to the blue paint, still wrestling for that net-front spot.',
     },
   },
   {
@@ -593,6 +599,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze. He is already on the ice sliding at you. What now?',
+      narration: 'Your partner walks the line and slides it across to you on the right side. You load up a big windup, and their forward sprints out to block it. He leaves his feet, sliding headfirst into your shooting lane.',
     },
   },
   {
@@ -689,6 +696,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze. Your partner is gone off the line. Tap where you go.',
+      narration: 'Your winger protects the puck on the low wall and the cycle rolls. Your partner spots a seam and takes off down the far wall. He is activating deep, and the whole left point is emptying out behind him.',
     },
   },
   // ---------------------------------------------------------------- elite
@@ -779,6 +787,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze. Look at the lane, look at the goalie, look at the flank. What wins here?',
+      narration: 'Power play, and your flanker has it on the left half wall. The kill shades toward him, then he kicks it up top to you and the box expands. Their killer stretches into your lane, and the goalie locks in square on your blade.',
     },
   },
   {
@@ -865,6 +874,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Stop it there. The goalie moved with you. Where does this puck go?',
+      narration: 'You catch a bump-back at the right point with a little room. You start walking the line, dragging the box along with you, and the goalie shuffles across to glue himself to your release point. You cut inside the dot, and every eye in the rink is on your blade.',
     },
   },
   {
@@ -955,6 +965,7 @@ export const OFFENSIVE_POINT_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: 'Freeze it right there. The cycle is alive. What do you do with your feet?',
+      narration: 'Your winger has it deep on the right wall with a defenseman draped all over him. Their winger sinks down to help, and your center quietly drifts up top to cover the line. The slot is empty and nobody in their colors is looking at you.',
     },
   },
 ];

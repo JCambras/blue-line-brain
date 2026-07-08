@@ -71,6 +71,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Stop it there. Up one, under a minute, pressure coming. What do you do with it?',
+      narration: "You're up a goal with forty-five seconds left. They fire it deep and you wheel back to beat them to it on the boards. You come up with the puck first, but a forechecker is two strides away and closing fast.",
     },
   },
 
@@ -163,6 +164,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Hold it there. You're shorthanded with the puck in the corner. What's the play?",
+      narration: "You're a man down with forty seconds left to kill. They dish it low and you jump on it first in the corner. Their point man pinches to trap your winger, and the wall is closing in on you.",
     },
   },
   {
@@ -245,6 +247,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Freeze. Arm's up on them and your net is empty behind you. What do you do?",
+      narration: "He hooks you reaching for a loose puck and the ref's arm shoots up. It's a delayed penalty, so the whistle only blows the moment they touch it. Your goalie sprints for the bench, the extra attacker is ready, and you carry it through center with the whole play in your hands.",
     },
   },
   {
@@ -327,6 +330,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Stop it. Three-on-three overtime, he's turning back with the puck. What's your move?",
+      narration: "It's three-on-three overtime and their best player wheels out of his own end, building speed through center. You hold your gap and protect the middle, so he peels off toward the wall. Now he's circling back with it, daring you to come get him.",
     },
   },
   {
@@ -430,6 +434,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Freeze it right there. Draw's lost, shot's coming. What's your job?",
+      narration: "It's a defensive-zone draw and you're lined up on the inside edge. Your center loses it clean, drawn straight back to the point. Their winger releases off the wall and drives your net-front, the point man is winding up, and that winger is right on your hip.",
     },
   },
 
@@ -523,6 +528,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine: "Stop the tape. Look at the puck - it's off his stick. What do you do?",
+      narration: "You're a man down and their power play is set up with the umbrella. Their point man walks the line and forces it down low to the half-wall, but the pass is behind his guy. Now it's rattling around in his skates and his head is down.",
     },
   },
   {
@@ -623,6 +629,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: "Freeze. You're the low D on the kill. Tap the spot where you need to be.",
+      narration: "Two of yours are in the box, so it's a five-on-three and they smell blood. Their flank shooter slides down the wall, cocked for the one-timer. Their winger is parked on the far post tapping his stick, and the shooter is staring across the royal road ready to feather it through.",
     },
   },
   {
@@ -714,6 +721,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Stop it there. Up one, fifty seconds, six on five. Where does this puck go?',
+      narration: "You're up one with fifty seconds left and their goalie's on the bench, so six attackers are buzzing your zone. They work it down your wall and you close hard, pin the carrier, and the puck squirts loose along the boards. It's on your stick now, and their point man is pinching straight down the wall above you.",
     },
   },
   {
@@ -806,6 +814,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine: 'Freeze it. Last shift of a tied game, the rim is coming to you. Pinch or peel?',
+      narration: "Tied game, thirty seconds left, and your line has been out a while grinding in their end. Their defenseman strips your winger and rims it hard up your wall. Their sniper is already flying the zone, the rim is coming right to your point, and he's got a step behind you.",
     },
   },
 ];

@@ -13,6 +13,7 @@ import { loadState, saveState, clearState, todayKey, yesterdayKey } from '@/lib/
 import { pickScenarios, weakestCategory, accuracyForDifficulty } from '@/lib/picker';
 import { sfx } from '@/lib/sfx';
 import { narrator } from '@/lib/narrator';
+import { narrationAudio } from '@/lib/narrationAudio';
 
 import { Scoreboard } from '@/components/Scoreboard';
 import { ProgressStrip } from '@/components/ProgressStrip';
@@ -28,9 +29,10 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>({ kind: 'home' });
   const [showOnboard, setShowOnboard] = useState(false);
 
-  // Voices load asynchronously — warm them up once.
+  // Voices load asynchronously — warm them up once; prefetch the audio manifest.
   useEffect(() => {
     narrator.init();
+    narrationAudio.init();
   }, []);
 
   // Persist state
@@ -38,6 +40,9 @@ export default function App() {
     saveState(state);
     sfx.enabled = state.soundOn;
     narrator.enabled = state.soundOn;
+    narrationAudio.enabled = state.soundOn;
+    // Toggling sound off mid-play must cut narration immediately.
+    if (!state.soundOn) narrationAudio.stop();
   }, [state]);
 
   // First-run onboarding
