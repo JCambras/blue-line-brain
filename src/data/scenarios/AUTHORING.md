@@ -75,14 +75,18 @@ decision question here - that is `freezeLine`'s job). The beat `narration`
 lines are the on-screen captions; this field is the single audio track.
 
 At build time `scripts/generate-narration.ts` (run via `npm run narrate`)
-renders three clips per scenario to `public/audio/`, all in the same coach
-voice: the `animation.narration` voice-over, the `freezeLine` prompt, and each
-answer option (`SessionScreen` reads these during the reveal phase). Each clip
-is keyed to the scenario id plus a content hash - editing the narration, freeze
-line, or an option's text regenerates just that clip, and the committed MP3s
-mean the app never needs an API key. Missing audio plays silent. Regenerate
-after editing: `npm run narrate` (needs `ELEVENLABS_API_KEY` in `.env`; see
-`.env.example`).
+renders every clip a scenario needs to `public/audio/`, all in the same coach
+voice: the `animation.narration` voice-over, the `freezeLine` prompt, each
+answer option (`SessionScreen` reads these during the reveal phase), and the
+results-beat feedback `<id>.fb` - the correct answer stated plus its rationale
+(the correct option's/target's `feedback`), which `FeedbackScreen` plays after a
+rotating generic opener (`fb.correct.*` / `fb.wrong.*`, from `STATIC_OPENER_CLIPS`)
+for both right and wrong answers. Each clip is keyed to the scenario id plus a
+content hash - editing the narration, freeze line, an option's text, or the
+correct option's `feedback` regenerates just the affected clip(s), and the
+committed MP3s mean the app never needs an API key. Missing audio plays silent.
+Regenerate after editing: `npm run narrate` (needs `ELEVENLABS_API_KEY` in
+`.env`; see `.env.example`).
 
 ## Puck placement
 
