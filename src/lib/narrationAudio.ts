@@ -6,7 +6,9 @@
  * sound toggle through `enabled`.
  *
  * Manifest keys match scripts/narration-manifest.ts:
- *   `<id>` (voice-over), `<id>.freeze` (prompt), `<id>.opt.<i>` (option i).
+ *   `<id>` (voice-over), `<id>.freeze` (prompt), `<id>.opt.<i>` (option i),
+ *   `<id>.fb` (results-beat feedback), `fb.correct.<i>` / `fb.wrong.<i>`
+ *   (generic results openers, rotated by `nextFeedbackOpener`).
  */
 type Manifest = Record<string, string>;
 
@@ -21,6 +23,20 @@ class NarrationAudio {
   private currentResolve: (() => void) | null = null;
   /** Bumped on every play()/stop() so a slow manifest fetch can't start stale audio. */
   private token = 0;
+  /** Rotating results-beat opener index per verdict, so the coach isn't monotonous. */
+  private openerIdx: { correct: number; wrong: number } = { correct: 0, wrong: 0 };
+
+  /**
+   * Manifest key for the next generic results-beat opener, rotating through the
+   * three variants for that verdict so repeated plays vary. Persisted on the
+   * singleton, so it advances across every FeedbackScreen mount.
+   */
+  nextFeedbackOpener(correct: boolean): string {
+    const kind = correct ? 'correct' : 'wrong';
+    const i = this.openerIdx[kind];
+    this.openerIdx[kind] = (i + 1) % 3;
+    return `fb.${kind}.${i}`;
+  }
 
   /** Warm the manifest once at startup; failures degrade to silent. */
   init(): void {

@@ -10,9 +10,11 @@ import {
   audioFileName,
   contentHash,
   expectedManifest,
+  feedbackSpeech,
   narratedScenarios,
   optionSpeech,
   scenarioClips,
+  STATIC_OPENER_CLIPS,
   type VoiceConfig,
 } from './narration-manifest.ts';
 import { generateNarration, type GenerateDeps } from './narration-core.ts';
@@ -113,6 +115,88 @@ test('scenarioClips reads only DIFFICULTY_CONFIG.choices options (rookie = 3)', 
   assert.deepEqual(keys, ['rk', 'rk.freeze', 'rk.opt.0', 'rk.opt.1', 'rk.opt.2']);
   // Last read option (index 2 of 3) leads with "Or,".
   assert.equal(optionSpeech(2, 3, 'Three'), 'Or, C: Three');
+});
+
+/** An mcq scenario with a designated correct option, for feedback-clip tests. */
+function mcqWithCorrect(
+  id: string,
+  correctIdx: number,
+  opts: Array<{ text: string; feedback: string }>,
+  difficulty = 'elite'
+): Scenario {
+  return {
+    id,
+    kind: 'mcq',
+    difficulty,
+    options: opts.map((o, i) => ({ ...o, correct: i === correctIdx })),
+    animation: { beats: [], freezeLine: 'Freeze.', narration: 'Play.' },
+  } as unknown as Scenario;
+}
+
+test('feedbackSpeech states the correct answer then its rationale (mcq)', () => {
+  const s = mcqWithCorrect('sc', 1, [
+    { text: 'Cut inside', feedback: 'Turnover.' },
+    { text: 'Escape up the wall', feedback: 'Safe exit, head up.' },
+    { text: 'Pin it', feedback: 'You get buried.' },
+  ]);
+  assert.equal(feedbackSpeech(s), 'Escape up the wall. Safe exit, head up.');
+});
+
+test('feedbackSpeech speaks the tap label verbatim, then its rationale', () => {
+  const tap = {
+    id: 'tp',
+    kind: 'tap',
+    difficulty: 'elite',
+    tapTargets: [
+      { x: 0, y: 0, radius: 8, correct: false, feedback: 'No.', label: 'Wall' },
+      { x: 1, y: 1, radius: 8, correct: true, feedback: 'Own the slot.', label: 'Trail the middle' },
+    ],
+    animation: { beats: [], freezeLine: 'Freeze.', narration: 'Play.' },
+  } as unknown as Scenario;
+  // Terse coach labels read naturally verbatim after an opener.
+  assert.equal(feedbackSpeech(tap), 'Trail the middle. Own the slot.');
+});
+
+test('feedbackSpeech returns null with no keyed answer (test scenarios stay clean)', () => {
+  assert.equal(feedbackSpeech(scenario('x', 'Play.', { options: ['A', 'B'] })), null);
+});
+
+test('scenarioClips appends the .fb feedback clip after the read options', () => {
+  const s = mcqWithCorrect(
+    'sc',
+    0,
+    [
+      { text: 'Escape up the wall', feedback: 'Safe.' },
+      { text: 'Cut inside', feedback: 'Nope.' },
+      { text: 'Pin it', feedback: 'Nope.' },
+      { text: 'Rim it', feedback: 'Nope.' },
+    ]
+  );
+  const keys = scenarioClips(s).map((c) => c.key);
+  assert.deepEqual(keys, ['sc', 'sc.freeze', 'sc.opt.0', 'sc.opt.1', 'sc.opt.2', 'sc.opt.3', 'sc.fb']);
+  assert.equal(scenarioClips(s).at(-1)!.text, 'Escape up the wall. Safe.');
+});
+
+test('STATIC_OPENER_CLIPS are the six rotated results openers', () => {
+  assert.deepEqual(
+    STATIC_OPENER_CLIPS.map((c) => c.key),
+    ['fb.correct.0', 'fb.correct.1', 'fb.correct.2', 'fb.wrong.0', 'fb.wrong.1', 'fb.wrong.2']
+  );
+  for (const c of STATIC_OPENER_CLIPS) assert.ok(c.text.trim().length > 0);
+});
+
+test('generate renders extra (opener) clips alongside the scenario clips', async () => {
+  const scenarios = [scenario('a', 'Line A.')];
+  const { deps, calls, manifest } = harness();
+  const res = await generateNarration(scenarios, CFG, deps, STATIC_OPENER_CLIPS);
+
+  for (const c of STATIC_OPENER_CLIPS) {
+    assert.ok(calls.includes(c.text), `opener "${c.text}" rendered`);
+    assert.equal(manifest()[c.key], audioFileName(c.key, contentHash(c.text, CFG)));
+  }
+  assert.equal(manifest().a, audioFileName('a', contentHash('Line A.', CFG)));
+  assert.deepEqual(manifest(), expectedManifest(scenarios, CFG, STATIC_OPENER_CLIPS));
+  assert.equal(res.generated.length, STATIC_OPENER_CLIPS.length + 1);
 });
 
 test('audioFileName keys freeze/option clips distinctly from the voice-over', () => {

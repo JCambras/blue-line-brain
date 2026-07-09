@@ -258,33 +258,33 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     zone: 'defensive',
     category: 'retrieval',
     difficulty: 'rookie',
-    title: 'Fake and Cut',
+    title: 'Fake and Escape',
     setup:
       "You're first to a dumped puck. The forechecker is charging in behind you on a straight line at full speed.",
     kind: 'mcq',
     options: [
       {
-        text: 'Turn straight up the wall at full speed',
+        text: 'Fake outside, then cut back into the middle',
         correct: false,
         feedback:
-          'You turn right into his hit lane - exactly where he is aiming. Puck and teeth go flying.',
-        trap: 'Fast feels safe, but he is faster and he picked that line first.',
+          'Cutting into the middle under pressure turns it over right in front of your own net. One poke check there is a grade-A chance against.',
+        trap: 'Beating him inside looks slick, but the middle of your own zone is the worst place to lose it.',
       },
       {
         text: 'Pin the puck on the boards and protect it',
         correct: false,
         feedback:
-          'You invite the pin. The play dies on the wall and the best you get is a faceoff in your end.',
-        trap: 'Protecting the puck sounds smart, but you had an escape and gave it up.',
+          'You invite the pin. The play dies on the wall and the best you get is a faceoff in your own end.',
+        trap: 'Protecting the puck sounds smart, but you had a clean escape and gave it up.',
       },
       {
-        text: 'Fake to the wall, then cut back inside',
+        text: 'Shoulder-fake inside, then escape up the wall, head up',
         correct: true,
         feedback:
-          'At full speed he cannot turn. One shoulder fake and he flies past while you skate into open ice.',
+          "The fake freezes him, and at full speed he can't turn back. You slip outside up the wall with your head up, looking for a quick outlet.",
       },
     ],
-    coachCue: "Speed can't turn. Fake and cut.",
+    coachCue: 'Fake inside, escape up the wall - head up.',
     visual: {
       rinkZone: 'defensive',
       youId: 'd',

@@ -15,7 +15,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SCENARIOS } from '../src/data/scenarios/index.ts';
-import { type VoiceConfig } from './narration-manifest.ts';
+import { STATIC_OPENER_CLIPS, type VoiceConfig } from './narration-manifest.ts';
 import { generateNarration } from './narration-core.ts';
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), '../..');
@@ -93,16 +93,21 @@ async function fetchAudio(text: string, c: VoiceConfig): Promise<Uint8Array> {
 async function main(): Promise<void> {
   mkdirSync(AUDIO_DIR, { recursive: true });
 
-  const result = await generateNarration(SCENARIOS, cfg, {
-    hasKey: apiKey.length > 0,
-    exists: (f) => existsSync(path.join(AUDIO_DIR, f)),
-    fetchAudio,
-    writeAudio: (f, bytes) => writeFileSync(path.join(AUDIO_DIR, f), bytes),
-    writeManifest: (m) => writeFileSync(MANIFEST, JSON.stringify(m, null, 2) + '\n'),
-    listAudio: () => readdirSync(AUDIO_DIR),
-    removeAudio: (f) => rmSync(path.join(AUDIO_DIR, f), { force: true }),
-    log: (m) => console.log('  ' + m),
-  });
+  const result = await generateNarration(
+    SCENARIOS,
+    cfg,
+    {
+      hasKey: apiKey.length > 0,
+      exists: (f) => existsSync(path.join(AUDIO_DIR, f)),
+      fetchAudio,
+      writeAudio: (f, bytes) => writeFileSync(path.join(AUDIO_DIR, f), bytes),
+      writeManifest: (m) => writeFileSync(MANIFEST, JSON.stringify(m, null, 2) + '\n'),
+      listAudio: () => readdirSync(AUDIO_DIR),
+      removeAudio: (f) => rmSync(path.join(AUDIO_DIR, f), { force: true }),
+      log: (m) => console.log('  ' + m),
+    },
+    STATIC_OPENER_CLIPS
+  );
 
   console.log(
     `\nnarration: ${result.generated.length} generated, ` +

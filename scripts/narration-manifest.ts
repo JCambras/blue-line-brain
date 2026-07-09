@@ -7,13 +7,16 @@
  * No filesystem or network access lives here so it can be unit-tested without
  * a key or a mock server.
  *
- * Manifest keys (kept in sync with the client in `src/lib/narrationAudio.ts`
- * and `src/components/SessionScreen.tsx`):
+ * Manifest keys (kept in sync with the client in `src/lib/narrationAudio.ts`,
+ * `src/components/SessionScreen.tsx`, and `src/components/FeedbackScreen.tsx`):
  *   `<id>`          - the animation play-by-play voice-over
  *   `<id>.freeze`   - the freeze-line decision prompt
  *   `<id>.opt.<i>`  - answer option i (0-based), as it is read to the player
+ *   `<id>.fb`       - the results-beat feedback: correct answer + its rationale
+ *   `fb.correct.<i>` / `fb.wrong.<i>` - generic, scenario-independent openers
+ *                     the results beat rotates through before the `.fb` clip
  * The filename is `<key>.<hash>.mp3`, so `<id>`'s file keeps its historical
- * `<id>.<hash>.mp3` name and only the new freeze/option clips are added.
+ * `<id>.<hash>.mp3` name and only the new freeze/option/feedback clips are added.
  */
 import { createHash } from 'node:crypto';
 import type { Scenario } from '../src/types/index.ts';
@@ -63,7 +66,41 @@ export function optionSpeech(i: number, n: number, text: string): string {
   return `${lead}${letter}: ${text}`;
 }
 
-/** Every spoken clip a scenario needs, in play order (voice-over, freeze, opts). */
+/** Join a spoken answer to its rationale with clean sentence punctuation. */
+function joinSpoken(head: string, tail: string): string {
+  const h = head.trim();
+  const t = tail.trim();
+  const stopped = /[.!?]$/.test(h) ? h : `${h}.`;
+  return t ? `${stopped} ${t}` : stopped;
+}
+
+/**
+ * The results-beat feedback line for a scenario: the correct answer stated as a
+ * verb-first imperative, then its rationale (the correct option's/target's
+ * `feedback`). Played after a rotating generic opener (see STATIC_OPENER_CLIPS),
+ * for both right and wrong answers. Returns null when there is no correct
+ * choice to speak (keeps test scenarios without a keyed answer out of the bank).
+ */
+export function feedbackSpeech(s: Scenario): string | null {
+  if (s.kind === 'mcq') {
+    const opt = s.options?.find((o) => o.correct);
+    const text = opt?.text?.trim();
+    if (!text) return null;
+    return joinSpoken(text, opt!.feedback ?? '');
+  }
+  if (s.kind === 'tap') {
+    const target = s.tapTargets?.find((t) => t.correct);
+    if (!target) return null;
+    // Labels are terse coach phrases ("Off the wall", "Trail the middle",
+    // "Goal-side"); spoken verbatim they read naturally after every opener
+    // ("...you want to - Trail the middle."). The rationale follows.
+    const answer = target.label?.trim() || 'The highlighted spot';
+    return joinSpoken(answer, target.feedback ?? '');
+  }
+  return null;
+}
+
+/** Every spoken clip a scenario needs, in play order (voice-over, freeze, opts, feedback). */
 export function scenarioClips(s: Scenario): NarrationClip[] {
   const clips: NarrationClip[] = [];
   const narration = s.animation?.narration?.trim();
@@ -75,8 +112,27 @@ export function scenarioClips(s: Scenario): NarrationClip[] {
     const text = s.options![i].text.trim();
     if (text) clips.push({ key: `${s.id}.opt.${i}`, text: optionSpeech(i, n, text) });
   }
+  const feedback = feedbackSpeech(s);
+  if (feedback) clips.push({ key: `${s.id}.fb`, text: feedback });
   return clips;
 }
+
+/**
+ * Generic, scenario-independent opener clips the results beat rotates through
+ * before the per-scenario `.fb` clip, so the coach never sounds monotonous.
+ * The correct/wrong openers lead straight into the stated answer (see
+ * `feedbackSpeech`) - "That's right! You want to -" flows into "Skate it up the
+ * wall...". Kept identical to the keys the client rotates in
+ * `src/components/FeedbackScreen.tsx`.
+ */
+export const STATIC_OPENER_CLIPS: NarrationClip[] = [
+  { key: 'fb.correct.0', text: "That's correct, nice job." },
+  { key: 'fb.correct.1', text: "That's right! You want to -" },
+  { key: 'fb.correct.2', text: 'Correct!' },
+  { key: 'fb.wrong.0', text: 'Nope, in this case you want to -' },
+  { key: 'fb.wrong.1', text: "That's incorrect, you actually want to -" },
+  { key: 'fb.wrong.2', text: 'Not quite -' },
+];
 
 /** All spoken clips across the bank, in bank order. */
 export function narratedScenarios(scenarios: Scenario[]): NarrationClip[] {
@@ -105,13 +161,18 @@ export function audioFileName(key: string, hash: string): string {
   return `${key}.${hash}.mp3`;
 }
 
-/** The manifest every clip should map to for the given config. */
+/**
+ * The manifest every clip should map to for the given config. `extraClips`
+ * carries the scenario-independent openers (STATIC_OPENER_CLIPS) so the real
+ * build includes them; it defaults to none so unit tests stay per-scenario.
+ */
 export function expectedManifest(
   scenarios: Scenario[],
-  cfg: VoiceConfig
+  cfg: VoiceConfig,
+  extraClips: NarrationClip[] = []
 ): Manifest {
   const manifest: Manifest = {};
-  for (const clip of narratedScenarios(scenarios)) {
+  for (const clip of [...extraClips, ...narratedScenarios(scenarios)]) {
     manifest[clip.key] = audioFileName(clip.key, contentHash(clip.text, cfg));
   }
   return manifest;
