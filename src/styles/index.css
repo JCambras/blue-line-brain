@@ -504,6 +504,29 @@ body {
 .blb-skip:hover {
   background: var(--ink);
 }
+/* Replay the animation + coach narration. Sits top-left on the frozen rink,
+   mirroring the Skip button that showed during the play. */
+.blb-replay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(8, 17, 31, 0.75);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  z-index: 2;
+}
+.blb-replay:hover {
+  background: var(--ink);
+}
 .blb-rink-wrap svg {
   display: block;
 }

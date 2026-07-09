@@ -21,6 +21,7 @@ const CFG: VoiceConfig = {
   voiceId: 'voice-1',
   modelId: 'model-1',
   outputFormat: 'mp3_22050_32',
+  voiceSettings: { stability: 0.35, similarityBoost: 0.85, style: 0.45, useSpeakerBoost: true },
 };
 
 /**
@@ -127,6 +128,11 @@ test('contentHash is stable and changes with text or voice config', () => {
   assert.notEqual(h, contentHash('hello!', CFG), 'text change -> new hash');
   assert.notEqual(h, contentHash('hello', { ...CFG, voiceId: 'other' }), 'voice change -> new hash');
   assert.notEqual(h, contentHash('hello', { ...CFG, outputFormat: 'mp3_44100_128' }), 'format change');
+  assert.notEqual(
+    h,
+    contentHash('hello', { ...CFG, voiceSettings: { ...CFG.voiceSettings, style: 0.15 } }),
+    'voice settings change -> new hash'
+  );
 });
 
 test('audioFileName keys the file to scenario id plus hash', () => {

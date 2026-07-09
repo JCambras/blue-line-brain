@@ -70,7 +70,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Freeze it. You've got him one-on-one on the wall. How do you kill this rush?",
+      freezeLine: "You've got him one-on-one on the wall. How do you kill this rush?",
       narration:
         "Their winger breaks out and heads up the left wall. He stays wide, building speed along the boards. Now it's you against him, one-on-one, and he's crossing the red line hugging the wall.",
     },
@@ -144,7 +144,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine:
-        "Stop it there. You're backskating on him. What are you doing with your stick?",
+        "You're backskating on him. What are you doing with your stick?",
       narration:
         "Their center collects it and comes up the middle. You're backing up, keeping the gap honest. He crosses center and eyes you up, hunting for a lane. Now it's a straight-up battle, him against your feet and your stick.",
     },
@@ -217,7 +217,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Hold it right there. The dump is in and he's chasing. What do you do?",
+      freezeLine: "The dump is in and he's chasing. What do you do?",
       narration:
         "Their winger comes out of the zone on his forehand. You've got a tight gap, no room for him in the middle. He runs out of ice with nowhere to carry it, so he flips it hard around the wall behind you.",
     },
@@ -291,7 +291,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine:
-        "Stop the tape. The puck is behind you and he's burning wide. What's your move?",
+        "The puck is behind you and he's burning wide. What's your move?",
       narration:
         "Their speedy winger carries it up the left side. You slide over to meet him and the gap is closing. You've got him lined up one-on-one near the wall, then he chips it soft past your feet and jumps outside.",
     },
@@ -372,7 +372,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         { t: 12.5 },
       ],
       freezeLine:
-        "Freeze. He's faster than you and he knows it. What do you do with your feet?",
+        "He's faster than you and he knows it. What do you do with your feet?",
       narration:
         "Their fastest forward takes off from deep in his own end. Listen to those crossovers, he's absolutely flying. You're backing up but the gap is getting away from you, and now he hits the red line at full speed, coming right down your side.",
     },
@@ -478,7 +478,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Stop it there. You're the weak-side D on a three-on-two. Who is yours?",
+      freezeLine: "You're the weak-side D on a three-on-two. Who is yours?",
       narration:
         "They break out three across, a full line rush. It's three on two, and the carrier is wide on your partner's side. Their center drives the middle lane hard with the third man wide right. They hit the red line with numbers, everything still in front of you.",
     },
@@ -589,7 +589,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine:
-        "Freeze it. You're the back D against that stretch man. Tap the spot where you need to be.",
+        "You're the back D against that stretch man. Tap the spot where you need to be.",
       narration:
         "Their D retrieves it behind his own net, looking to break out. Your forechecker pressures him, so he wheels and buys time. Look high, their winger is stretching the ice at your blue line with his stick out, calling for the bomb.",
     },
@@ -690,7 +690,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Stop it. His head is down and you've got backup. What's your move?",
+      freezeLine: "His head is down and you've got backup. What's your move?",
       narration:
         "Their winger escapes the zone with your center chasing him. He carries through center ice as your center closes from behind. Then the puck starts rolling and rattles into his feet. His head is down at the red line, kicking at it, your center a stride away.",
     },
@@ -791,7 +791,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine:
-        "Freeze. The drop is made - one man at your net, one man with the puck. Who's yours?",
+        "The drop is made - one man at your net, one man with the puck. Who's yours?",
       narration:
         "They regroup and attack with a trailer in the hip pocket. The carrier drives right at you with his buddy trailing the play. Watch the drop, he slows up as he crosses the red line, then leaves it for the trailer and keeps driving your net without it.",
     },
@@ -896,7 +896,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Freeze it. They've traded sides at your line. Who do you take?",
+      freezeLine: "They've traded sides at your line. Who do you take?",
       narration:
         "Two forwards come with speed, one on each side of center ice. The carrier's on your side, his winger opposite, so far so simple. Then here comes the criss-cross, scissoring right in front of you as the carrier swings to your partner's side and his buddy cuts into your lane.",
     },
@@ -999,7 +999,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine:
-        "Stop it here. Check the freeze - your partner has the puck man pinned. What's your job?",
+        "Check the freeze - your partner has the puck man pinned. What's your job?",
       narration:
         "They come out of their zone two abreast with speed. Your partner steps out and starts angling the carrier to the wall. Their second forward drives the middle lane straight at your net. Partner's got the carrier pinned wide, and the driver is coming through the guts.",
     },
@@ -1101,7 +1101,7 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine:
-        "Freeze. Look at the ice - who's around him, and where's your partner? What's your play?",
+        "Look at the ice - who's around him, and where's your partner? What's your play?",
       narration:
         "Your partner pinched and lost it, so their winger takes off the other way. He turns the corner with a full head of steam while your winger gives chase. Your partner's still caught up ice, but that backchecker is right on his hip now, the flyer bearing down on you.",
     },

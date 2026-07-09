@@ -74,7 +74,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine:
-        "Stop it there. You've got the puck in the corner and one man on you. Where does it go?",
+        "You've got the puck in the corner and one man on you. Where does it go?",
       narration:
         "They dump it into your right corner and you turn back for it. One forechecker angles down the wall to steer you wide, and your partner slides behind the net. You get to the puck with pressure coming.",
     },
@@ -150,7 +150,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Freeze. The rim's coming around with a man chasing. What do you do?",
+      freezeLine: "The rim's coming around with a man chasing. What do you do?",
       narration:
         "They rim it hard around your right wall and it's flying around the boards. A forechecker chases it down, but your goalie slides out behind the net and gets set to trap it.",
     },
@@ -248,7 +248,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         { t: 13 },
       ],
       freezeLine:
-        "Stop it there. You're shorthanded with the puck and no outlet. What's the play?",
+        "You're shorthanded with the puck and no outlet. What's the play?",
       narration:
         "You're a man down and their power play chips it low into your corner. You get there first and dig it off the wall, but both of them turn and collapse on you. Nobody is open.",
     },
@@ -324,7 +324,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Hold it there. He's flying in behind you. What's your first move?",
+      freezeLine: "He's flying in behind you. What's your first move?",
       narration:
         "The puck's dumped in behind you and it's a footrace. You win it back, but their forechecker is building up steam, coming in on a straight line at full speed. You're on the puck and he's right on your back.",
     },
@@ -426,7 +426,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Stop right there. You're stuck on the half-wall. Where's the puck going?",
+      freezeLine: "You're stuck on the half-wall. Where's the puck going?",
       narration:
         "Turnover at your blue line and the puck's chipped into your corner. You peel back to grab it with a forechecker following you in. You come out the near side, but their winger has your wall outlet blanketed, and now your center swings low through the middle.",
     },
@@ -531,7 +531,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Freeze it. He's chasing you behind the net at full speed. What now?",
+      freezeLine: "He's chasing you behind the net at full speed. What now?",
       narration:
         "In it comes on your right side and you win the race, but not by much. You collect it and take it behind the net with the forechecker chasing hard on your hip. Your partner peels into the corner you just left.",
     },
@@ -635,7 +635,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Hold it. You've got speed and a step on him. What's your play?",
+      freezeLine: "You've got speed and a step on him. What's your play?",
       narration:
         "The dump-in rattles around your right corner and you build speed on the retrieval. You scoop it up at full stride, and their lone forechecker is cutting across on a flat angle, not down. The back of the net is wide open in front of you.",
     },
@@ -739,7 +739,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: 'Stop it. Winger on the wall, their D pinching on him. Tape or wall?',
+      freezeLine: 'Winger on the wall, their D pinching on him. Tape or wall?',
       narration:
         "Their point man walks the line and throws it at the net, but it's wide and rings around your wall. You cut it off in the corner and your winger posts up on the boards. Their D is pinching right down his back.",
     },
@@ -848,7 +848,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: 'Freeze it right there. Clean win back to you. Where does it go?',
+      freezeLine: 'Clean win back to you. Where does it go?',
       narration:
         "Defensive-zone draw at the left dot. Your center leans in and wins it clean, right back to you in the corner. The centers are tied up, your winger seals his man on the wall, and their wingers are still flat-footed at the top of the circle.",
     },
@@ -961,7 +961,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: 'Stop the tape. Look at the ice. Where does this puck go?',
+      freezeLine: 'Look at the ice. Where does this puck go?',
       narration:
         "They flip it into your right corner and send one man. You go back for it as their right D creeps down the boards. You pick it up and duck behind the net, their D pinching down on your winger. The whole right side is packed, and the forechecker curls in after you.",
     },
@@ -1068,7 +1068,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: "Freeze. Look where the first forechecker just ended up. What's your move?",
+      freezeLine: "Look where the first forechecker just ended up. What's your move?",
       narration:
         "The dump comes down your left side with a forechecker flying after it. You've got the inside line and touch it first, but he's coming in hot. He launches in for the finish and slides right past you, below the goal line.",
     },
@@ -1189,7 +1189,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         },
         { t: 13 },
       ],
-      freezeLine: 'Stop it there. Two men deep on you. Tap where this puck goes.',
+      freezeLine: 'Two men deep on you. Tap where this puck goes.',
       narration:
         "It's a two-man forecheck, sent in hard behind the dump. The first man hunts you and the second one's coming too. You get to it first and tuck behind the net, but both keep coming. The second peels onto your partner, and your center bumps into the middle.",
     },

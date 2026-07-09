@@ -52,6 +52,16 @@ const cfg: VoiceConfig = {
   modelId: process.env.ELEVENLABS_MODEL_ID?.trim() || 'eleven_turbo_v2_5',
   // Mono, 22.05 kHz, 32 kbps — plenty for speech and keeps the committed audio small.
   outputFormat: process.env.ELEVENLABS_OUTPUT_FORMAT?.trim() || 'mp3_22050_32',
+  // Warm, expressive rink-coach delivery: lower stability lets the read breathe
+  // and inflect, higher style adds emphasis, high similarity keeps Brian's
+  // timbre, speaker boost adds presence. Folded into the content hash, so
+  // changing any of these re-renders every clip on the next `npm run narrate`.
+  voiceSettings: {
+    stability: 0.35,
+    similarityBoost: 0.85,
+    style: 0.45,
+    useSpeakerBoost: true,
+  },
 };
 
 /** The one place that talks to ElevenLabs. */
@@ -65,7 +75,12 @@ async function fetchAudio(text: string, c: VoiceConfig): Promise<Uint8Array> {
     body: JSON.stringify({
       text,
       model_id: c.modelId,
-      voice_settings: { stability: 0.45, similarity_boost: 0.8, style: 0.15 },
+      voice_settings: {
+        stability: c.voiceSettings.stability,
+        similarity_boost: c.voiceSettings.similarityBoost,
+        style: c.voiceSettings.style,
+        use_speaker_boost: c.voiceSettings.useSpeakerBoost,
+      },
     }),
   });
   if (!res.ok) {

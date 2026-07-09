@@ -5,6 +5,7 @@ import { DEFENSIVE_COVERAGE_SCENARIOS } from './defensive-coverage.ts';
 import { NEUTRAL_SCENARIOS } from './neutral.ts';
 import { NEUTRAL_RUSH_SCENARIOS } from './neutral-rush.ts';
 import { NEUTRAL_TRANSITION_SCENARIOS } from './neutral-transition.ts';
+import { EVEN_STRENGTH_SCENARIOS } from './even-strength.ts';
 import { OFFENSIVE_SCENARIOS } from './offensive.ts';
 import { OFFENSIVE_POINT_SCENARIOS } from './offensive-point.ts';
 import { OFFENSIVE_ATTACK_SCENARIOS } from './offensive-attack.ts';
@@ -37,6 +38,7 @@ export const SCENARIOS: Scenario[] = [
   ...NEUTRAL_SCENARIOS,
   ...NEUTRAL_RUSH_SCENARIOS,
   ...NEUTRAL_TRANSITION_SCENARIOS,
+  ...EVEN_STRENGTH_SCENARIOS,
   ...OFFENSIVE_SCENARIOS,
   ...OFFENSIVE_POINT_SCENARIOS,
   ...OFFENSIVE_ATTACK_SCENARIOS,
