@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import type { Screen } from '@/types';
+import { narrationAudio } from '@/lib/narrationAudio';
 import { RinkDiagram } from './RinkDiagram';
 
 interface FeedbackScreenProps {
@@ -8,6 +10,26 @@ interface FeedbackScreenProps {
 
 export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
   const { scenario, correct, optionIdx, tapIdx } = screen;
+
+  // Results beat: the coach speaks the verdict out loud - a rotating generic
+  // opener, then this scenario's correct-answer + rationale clip - for both
+  // right and wrong answers. Every clip is a pre-rendered coach-voice MP3 (keys
+  // match scripts/narration-manifest.ts); missing audio just plays silent, and
+  // narrationAudio's `enabled` gate honors the sound toggle. Cancels cleanly on
+  // next/skip/quit/unmount so no line ever trails into the following screen.
+  useEffect(() => {
+    let cancelled = false;
+    const opener = narrationAudio.nextFeedbackOpener(correct);
+    void (async () => {
+      await narrationAudio.playAndWait(opener);
+      if (cancelled) return;
+      await narrationAudio.playAndWait(`${scenario.id}.fb`);
+    })();
+    return () => {
+      cancelled = true;
+      narrationAudio.stop();
+    };
+  }, [scenario.id, correct]);
   const isMcq = scenario.kind === 'mcq';
   const opt = isMcq && optionIdx != null ? scenario.options![optionIdx] : null;
   const tap =

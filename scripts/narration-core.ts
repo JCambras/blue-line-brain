@@ -6,6 +6,7 @@
 import type { Scenario } from '../src/types/index.ts';
 import {
   type Manifest,
+  type NarrationClip,
   type VoiceConfig,
   audioFileName,
   contentHash,
@@ -50,10 +51,11 @@ export interface GenerateResult {
 export async function generateNarration(
   scenarios: Scenario[],
   cfg: VoiceConfig,
-  deps: GenerateDeps
+  deps: GenerateDeps,
+  extraClips: NarrationClip[] = []
 ): Promise<GenerateResult> {
   const log = deps.log ?? (() => {});
-  const clips = narratedScenarios(scenarios);
+  const clips = [...extraClips, ...narratedScenarios(scenarios)];
   const generated: string[] = [];
   const skipped: string[] = [];
   const missing: string[] = [];
