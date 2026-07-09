@@ -40,7 +40,8 @@ hockey-brain/
     │   └── badges.ts             # jersey patches
     ├── lib/
     │   ├── storage.ts            # localStorage save/load
-    │   ├── picker.ts             # SM-2-lite scenario selection
+    │   ├── picker.ts             # scenario selection (pool + unlock gating)
+    │   ├── scenarioOrdering.ts   # spaced-repetition bias + strong shuffle
     │   ├── sfx.ts                # Web Audio sound effects
     │   └── narrationAudio.ts     # plays pre-rendered coach voice-over MP3s
     ├── components/
@@ -62,7 +63,7 @@ hockey-brain/
 1. **Pattern → Decision → Outcome.** Every scenario teaches one thing.
 2. **Speed is the skill.** Timer is mandatory at every difficulty level.
 3. **Wrong is fine.** Every miss explains the trap and shows the right read.
-4. **Retention compounds.** SM-2-lite spaced repetition surfaces weak/old scenarios first.
+4. **Retention compounds.** A bounded spaced-repetition bias surfaces weak/old/unseen scenarios first, while a strong shuffle keeps similar-mastery scenarios reordering freely from run to run.
 
 ## Adding scenarios
 
