@@ -42,7 +42,8 @@ hockey-brain/
     │   ├── storage.ts            # localStorage save/load
     │   ├── picker.ts             # SM-2-lite scenario selection
     │   ├── sfx.ts                # Web Audio sound effects
-    │   └── narrationAudio.ts     # plays pre-rendered coach voice-over MP3s
+    │   ├── narrationAudio.ts     # plays pre-rendered coach voice-over MP3s
+    │   └── narrationTiming.ts    # pure playback timing constants + fade helper
     ├── components/
     │   ├── RinkDiagram.tsx       # SVG rink + players + tap targets
     │   ├── Scoreboard.tsx        # top header
