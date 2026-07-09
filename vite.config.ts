@@ -50,6 +50,20 @@ export default defineConfig({
         navigateFallback: '/index.html',
         runtimeCaching: [
           {
+            // The manifest maps scenario keys to content-hashed clip filenames
+            // and, unlike the immutable MP3s, keeps a fixed URL across
+            // redeploys. Revalidate it in the background so returning online
+            // users pick up regenerated/added clips instead of being pinned to
+            // a stale key->filename map, while offline still serves the cached
+            // copy. Must precede the broader /audio/ rule (first match wins).
+            urlPattern: ({ url }) => url.pathname === '/audio/manifest.json',
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'audio-manifest',
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
             urlPattern: ({ url }) => url.pathname.startsWith('/audio/'),
             handler: 'CacheFirst',
             options: {
