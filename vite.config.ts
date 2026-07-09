@@ -55,7 +55,9 @@ export default defineConfig({
             options: {
               cacheName: 'audio-clips',
               expiration: {
-                maxEntries: 200,
+                // Cover the full committed narration set (~590 MP3s under
+                // /audio/ + manifest.json) so all clips can persist offline.
+                maxEntries: 650,
                 maxAgeSeconds: 60 * 60 * 24 * 30,
               },
               cacheableResponse: { statuses: [0, 200] },
