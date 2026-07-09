@@ -39,8 +39,6 @@ export function SessionScreen({
   const [revealed, setRevealed] = useState(0);
   const [readingIdx, setReadingIdx] = useState(-1);
   const [timeLeft, setTimeLeft] = useState(cfg.timer);
-  // Bumped by Replay to remount AnimatedRink so the play + narration restart.
-  const [replayNonce, setReplayNonce] = useState(0);
   const start = useRef(Date.now());
 
   // Reset when scenario changes
@@ -49,21 +47,20 @@ export function SessionScreen({
     setRevealed(0);
     setReadingIdx(-1);
     setTimeLeft(cfg.timer);
-    setReplayNonce(0);
     start.current = Date.now();
   }, [scenario.id, cfg.timer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Replay: restart the animation + coach narration from the top without
   // touching the score or session position. Stops any in-flight audio, rewinds
-  // the reveal state, and remounts AnimatedRink via a fresh key. Respects the
-  // sound toggle through narrationAudio's own `enabled` gate.
+  // the reveal state, and remounts AnimatedRink (switching to the 'anim' phase
+  // unmounts the frozen RinkDiagram and mounts a fresh AnimatedRink). Respects
+  // the sound toggle through narrationAudio's own `enabled` gate.
   const replay = () => {
     if (!scenario.animation) return;
     narrationAudio.stop();
     setRevealed(0);
     setReadingIdx(-1);
     setTimeLeft(cfg.timer);
-    setReplayNonce((n) => n + 1);
     setPhase('anim');
   };
 
@@ -160,7 +157,6 @@ export function SessionScreen({
         {animating ? (
           <>
             <AnimatedRink
-              key={replayNonce}
               scenario={scenario}
               onDone={() => setPhase('reveal')}
             />
