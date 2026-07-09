@@ -79,7 +79,7 @@ export interface PlayAnimation {
    * `visual` positions so the freeze frame matches the static diagram.
    */
   beats: AnimBeat[];
-  /** Spoken at the freeze, e.g. "Let's stop it here — you're the D. What do you do?" */
+  /** Spoken at the freeze, straight into the decision (no "stop it here" opener), e.g. "You're the D. What do you do?" */
   freezeLine: string;
   /**
    * One short coach voice-over (2-4 sentences) for the whole animated play,

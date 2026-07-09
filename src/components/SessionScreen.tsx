@@ -50,6 +50,20 @@ export function SessionScreen({
     start.current = Date.now();
   }, [scenario.id, cfg.timer]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Replay: restart the animation + coach narration from the top without
+  // touching the score or session position. Stops any in-flight audio, rewinds
+  // the reveal state, and remounts AnimatedRink (switching to the 'anim' phase
+  // unmounts the frozen RinkDiagram and mounts a fresh AnimatedRink). Respects
+  // the sound toggle through narrationAudio's own `enabled` gate.
+  const replay = () => {
+    if (!scenario.animation) return;
+    narrationAudio.stop();
+    setRevealed(0);
+    setReadingIdx(-1);
+    setTimeLeft(cfg.timer);
+    setPhase('anim');
+  };
+
   // Reveal phase: coach reads the freeze line, then each option as it appears.
   // Every clip is the pre-rendered ElevenLabs coach voice (keys match
   // scripts/narration-manifest.ts); missing audio just plays silent.
@@ -142,16 +156,26 @@ export function SessionScreen({
       <div className="blb-rink-wrap">
         {animating ? (
           <>
-            <AnimatedRink scenario={scenario} onDone={() => setPhase('reveal')} />
+            <AnimatedRink
+              scenario={scenario}
+              onDone={() => setPhase('reveal')}
+            />
             <button className="blb-skip" onClick={() => setPhase('reveal')}>
               Skip ▸▸
             </button>
           </>
         ) : (
-          <RinkDiagram
-            scenario={scenario}
-            onTap={scenario.kind === 'tap' ? onTapTarget : undefined}
-          />
+          <>
+            <RinkDiagram
+              scenario={scenario}
+              onTap={scenario.kind === 'tap' ? onTapTarget : undefined}
+            />
+            {scenario.animation && (
+              <button className="blb-replay" onClick={replay}>
+                ↺ Replay
+              </button>
+            )}
+          </>
         )}
       </div>
 

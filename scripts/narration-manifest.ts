@@ -19,11 +19,21 @@ import { createHash } from 'node:crypto';
 import type { Scenario } from '../src/types/index.ts';
 import { DIFFICULTY_CONFIG } from '../src/data/scenarios/index.ts';
 
+/** ElevenLabs voice_settings - shape the delivery (expressiveness, warmth). */
+export interface VoiceSettings {
+  stability: number;
+  similarityBoost: number;
+  style: number;
+  useSpeakerBoost: boolean;
+}
+
 /** The knobs that affect the rendered audio; folded into the content hash. */
 export interface VoiceConfig {
   voiceId: string;
   modelId: string;
   outputFormat: string;
+  /** Delivery settings - part of the hash so retuning the voice re-renders. */
+  voiceSettings: VoiceSettings;
 }
 
 export interface NarrationClip {
@@ -82,8 +92,10 @@ export function contentHash(text: string, cfg: VoiceConfig): string {
   // Fields are joined with a NUL byte (not a space) so the hash is unambiguous
   // and matches every already-committed clip filename. Do NOT change this
   // separator - it would invalidate the whole cache and force a full re-render.
+  const vs = cfg.voiceSettings;
+  const voice = `${vs.stability}|${vs.similarityBoost}|${vs.style}|${vs.useSpeakerBoost}`;
   return createHash('sha256')
-    .update([cfg.voiceId, cfg.modelId, cfg.outputFormat, text].join('\x00'))
+    .update([cfg.voiceId, cfg.modelId, cfg.outputFormat, voice, text].join('\x00'))
     .digest('hex')
     .slice(0, 8);
 }

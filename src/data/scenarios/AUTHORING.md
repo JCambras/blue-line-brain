@@ -59,8 +59,10 @@ animation and freeze frame. It must match a `team: 'home'` player id.
   building tension - except that bare last one and any bare waypoint beats
   (see rims and chips under Puck placement). The final narrated line ends
   with `...` teeing up the freeze.
-- `freezeLine` stops the tape and hands the player the decision:
-  "Stop it here. You're the D on the wall. What's your move?"
+- `freezeLine` hands the player the decision. Go **straight into the
+  situation/question** - no "Stop it here" / "Freeze" / "Hold it" transition
+  opener (the whistle and freeze frame already stop the tape):
+  "You're the D on the wall. What's your move?"
 
 ## Narration (spoken coach voice-over)
 
