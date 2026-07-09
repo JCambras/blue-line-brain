@@ -10,6 +10,8 @@
  *   `<id>.fb` (results-beat feedback), `fb.correct.<i>` / `fb.wrong.<i>`
  *   (generic results openers, rotated by `nextFeedbackOpener`).
  */
+import { CLIP_FADE_MS, CLIP_FADE_STEP_MS, fadeRamp } from './narrationTiming';
+
 type Manifest = Record<string, string>;
 
 const AUDIO_BASE = `${import.meta.env.BASE_URL}audio/`;
@@ -108,12 +110,35 @@ class NarrationAudio {
     const resolve = this.currentResolve;
     this.current = null;
     this.currentResolve = null;
-    if (audio) {
-      audio.pause();
-      audio.src = '';
-    }
+    // Detach first so the next clip can start immediately, then fade the
+    // outgoing one out instead of hard-cutting it (a hard pause mid-waveform
+    // clicks/garbles at the section boundary).
+    if (audio) this.fadeOutAndRelease(audio);
     // Unblock any awaiter so its sequence can observe the cancellation and stop.
     if (resolve) resolve();
+  }
+
+  /**
+   * Release an audio element cleanly. A clip that already finished or was never
+   * playing is dropped immediately; one cut mid-play is faded to silence over
+   * CLIP_FADE_MS so the stop is inaudible, then paused and released.
+   */
+  private fadeOutAndRelease(audio: HTMLAudioElement): void {
+    if (audio.paused || audio.ended) {
+      audio.src = '';
+      return;
+    }
+    const ramp = fadeRamp(audio.volume, CLIP_FADE_MS, CLIP_FADE_STEP_MS);
+    let i = 0;
+    const tick = window.setInterval(() => {
+      audio.volume = ramp[i];
+      i++;
+      if (i >= ramp.length) {
+        window.clearInterval(tick);
+        audio.pause();
+        audio.src = '';
+      }
+    }, CLIP_FADE_STEP_MS);
   }
 }
 

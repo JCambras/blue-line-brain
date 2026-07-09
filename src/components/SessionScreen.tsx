@@ -3,6 +3,7 @@ import type { Scenario, TapTarget } from '@/types';
 import { DIFFICULTY_CONFIG } from '@/data/scenarios';
 import { sfx } from '@/lib/sfx';
 import { narrationAudio } from '@/lib/narrationAudio';
+import { OPTION_LEAD_IN_MS } from '@/lib/narrationTiming';
 import { RinkDiagram } from './RinkDiagram';
 import { AnimatedRink } from './AnimatedRink';
 
@@ -70,6 +71,9 @@ export function SessionScreen({
   useEffect(() => {
     if (phase !== 'reveal') return;
     let cancelled = false;
+    // Cancels the lead-in pause below so a skip/quit/unmount during it neither
+    // hangs the sequence nor leaks the timer.
+    let cancelLeadIn: (() => void) | undefined;
     start.current = Date.now(); // the clock is fair from when choices appear
     (async () => {
       if (scenario.animation?.freezeLine) {
@@ -77,6 +81,17 @@ export function SessionScreen({
       }
       if (cancelled) return;
       if (scenario.kind === 'mcq' && scenario.options) {
+        // Half-second beat so the jump from the freeze prompt into the options
+        // isn't rushed. Resolvable early so cleanup never leaves it pending.
+        await new Promise<void>((resolve) => {
+          const timer = setTimeout(resolve, OPTION_LEAD_IN_MS);
+          cancelLeadIn = () => {
+            clearTimeout(timer);
+            resolve();
+          };
+        });
+        cancelLeadIn = undefined;
+        if (cancelled) return;
         const n = Math.min(cfg.choices, scenario.options.length);
         for (let i = 0; i < n; i++) {
           if (cancelled) return;
@@ -93,6 +108,7 @@ export function SessionScreen({
     })();
     return () => {
       cancelled = true;
+      cancelLeadIn?.();
       narrationAudio.stop();
     };
   }, [phase, scenario, cfg.choices]);

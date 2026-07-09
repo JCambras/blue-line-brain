@@ -43,7 +43,8 @@ hockey-brain/
     │   ├── picker.ts             # scenario selection (pool + unlock gating)
     │   ├── scenarioOrdering.ts   # spaced-repetition bias + strong shuffle
     │   ├── sfx.ts                # Web Audio sound effects
-    │   └── narrationAudio.ts     # plays pre-rendered coach voice-over MP3s
+    │   ├── narrationAudio.ts     # plays pre-rendered coach voice-over MP3s
+    │   └── narrationTiming.ts    # pure playback timing constants + fade helper
     ├── components/
     │   ├── RinkDiagram.tsx       # SVG rink + players + tap targets
     │   ├── Scoreboard.tsx        # top header
