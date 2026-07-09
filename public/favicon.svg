@@ -1,0 +1,42 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Blue Line Brain">
+  <defs>
+    <radialGradient id="glow" cx="82%" cy="14%" r="75%">
+      <stop offset="0%" stop-color="#f5b41f" stop-opacity="0.30"/>
+      <stop offset="55%" stop-color="#f5b41f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="puck" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe08a"/>
+      <stop offset="45%" stop-color="#f5b41f"/>
+      <stop offset="100%" stop-color="#d8990c"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2f5cf0"/>
+      <stop offset="100%" stop-color="#1a3fb8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- full-bleed dark ice background (safe zone for maskable) -->
+  <rect width="512" height="512" fill="#08111f"/>
+  <rect width="512" height="512" fill="url(#glow)"/>
+
+  <!-- the blue line -->
+  <rect x="200" y="24" width="112" height="464" fill="url(#line)"/>
+
+  <!-- the puck, hero of the mark, centered on the blue line -->
+  <g>
+    <!-- side wall -->
+    <path d="M120 256 a136 60 0 0 0 272 0 v40 a136 60 0 0 1 -272 0 z" fill="#c98a0a"/>
+    <!-- top face -->
+    <ellipse cx="256" cy="256" rx="136" ry="60" fill="url(#puck)"/>
+    <!-- inner ring -->
+    <ellipse cx="256" cy="256" rx="92" ry="38" fill="none" stroke="#08111f" stroke-width="10" opacity="0.22"/>
+    <!-- brain synapse glyph on the face: hockey IQ -->
+    <g stroke="#08111f" stroke-width="12" stroke-linecap="round" opacity="0.6" fill="none">
+      <path d="M256 232 v48"/>
+      <path d="M256 244 q-26 0 -34 12"/>
+      <path d="M256 244 q26 0 34 12"/>
+      <circle cx="214" cy="256" r="4" fill="#08111f" stroke="none"/>
+      <circle cx="298" cy="256" r="4" fill="#08111f" stroke="none"/>
+    </g>
+  </g>
+</svg>
