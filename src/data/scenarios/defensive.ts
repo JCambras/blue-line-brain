@@ -38,7 +38,7 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
         { id: 'f1', team: 'away', x: 42, y: 78, label: 'F' },
         { id: 'w', team: 'home', x: 22, y: 75, label: 'W' },
       ],
-      puck: { x: 58, y: 95 },
+      puck: { x: 58, y: 97.5 },
       arrows: [{ fromX: 42, fromY: 78, toX: 52, toY: 88 }],
     },
     animation: {
@@ -52,19 +52,19 @@ export const DEFENSIVE_SCENARIOS: Scenario[] = [
         {
           t: 3.5,
           players: { d: { x: 48, y: 78 }, f1: { x: 34, y: 62 }, w: { x: 24, y: 66 } },
-          puck: { x: 16, y: 82 },
+          puck: { x: 11, y: 92 },
           narration: "It's rolling around the boards behind your net.",
         },
         {
           t: 7,
           players: { d: { x: 50, y: 84 }, f1: { x: 38, y: 71 }, w: { x: 23, y: 71 } },
-          puck: { x: 38, y: 95 },
+          puck: { x: 40, y: 98 },
           narration: "You're first man back — their forechecker is coming in hard.",
         },
         {
           t: 11,
           players: { d: { x: 50, y: 88 }, f1: { x: 42, y: 78 }, w: { x: 22, y: 75 } },
-          puck: { x: 58, y: 95 },
+          puck: { x: 58, y: 97.5 },
           narration: 'The puck settles behind the net, pressure closing fast...',
         },
         { t: 12.5 },

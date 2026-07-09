@@ -11,6 +11,8 @@ import {
   contentHash,
   expectedManifest,
   narratedScenarios,
+  optionSpeech,
+  scenarioClips,
   type VoiceConfig,
 } from './narration-manifest.ts';
 import { generateNarration, type GenerateDeps } from './narration-core.ts';
@@ -21,11 +23,25 @@ const CFG: VoiceConfig = {
   outputFormat: 'mp3_22050_32',
 };
 
-/** Minimal scenario carrying just what the generator reads. */
-function scenario(id: string, narration?: string): Scenario {
+/**
+ * Minimal scenario carrying just what the generator reads. `narration`
+ * undefined -> no animation at all; options are attached only when given.
+ */
+function scenario(
+  id: string,
+  narration?: string,
+  opts?: { freezeLine?: string; options?: string[]; difficulty?: string; kind?: string }
+): Scenario {
+  const options = opts?.options?.map((text) => ({ text, correct: false }));
   return {
     id,
-    animation: narration === undefined ? undefined : { beats: [], freezeLine: 'x', narration },
+    kind: opts?.kind ?? (options ? 'mcq' : 'tap'),
+    difficulty: opts?.difficulty ?? 'elite',
+    options,
+    animation:
+      narration === undefined && opts?.freezeLine === undefined
+        ? undefined
+        : { beats: [], freezeLine: opts?.freezeLine ?? '', narration: narration ?? '' },
   } as unknown as Scenario;
 }
 
@@ -52,7 +68,7 @@ function harness(opts: { present?: string[]; hasKey?: boolean } = {}) {
   return { deps, files, calls, manifest: () => manifest };
 }
 
-test('narratedScenarios keeps only scenarios with non-empty narration, trimmed', () => {
+test('narratedScenarios keeps only clips with non-empty text, trimmed', () => {
   const clips = narratedScenarios([
     scenario('a', 'Coach line A.'),
     scenario('b', '   '),
@@ -62,10 +78,46 @@ test('narratedScenarios keeps only scenarios with non-empty narration, trimmed',
   assert.deepEqual(
     clips,
     [
-      { id: 'a', text: 'Coach line A.' },
-      { id: 'd', text: 'Coach line D.' },
+      { key: 'a', text: 'Coach line A.' },
+      { key: 'd', text: 'Coach line D.' },
     ]
   );
+});
+
+test('scenarioClips covers voice-over, freeze line, and each read option', () => {
+  const s = scenario('sc', 'Play by play.', {
+    freezeLine: 'Stop it here.',
+    options: ['Hold the line', 'Crash down', 'Reverse it', 'Wheel out'],
+    difficulty: 'elite', // 4 choices
+    kind: 'mcq',
+  });
+  assert.deepEqual(scenarioClips(s), [
+    { key: 'sc', text: 'Play by play.' },
+    { key: 'sc.freeze', text: 'Stop it here.' },
+    { key: 'sc.opt.0', text: 'Do you, A: Hold the line' },
+    { key: 'sc.opt.1', text: 'B: Crash down' },
+    { key: 'sc.opt.2', text: 'C: Reverse it' },
+    { key: 'sc.opt.3', text: 'Or, D: Wheel out' },
+  ]);
+});
+
+test('scenarioClips reads only DIFFICULTY_CONFIG.choices options (rookie = 3)', () => {
+  const s = scenario('rk', 'Play.', {
+    freezeLine: 'Freeze.',
+    options: ['One', 'Two', 'Three', 'Four'],
+    difficulty: 'rookie', // 3 choices -> a 4th option is never read
+    kind: 'mcq',
+  });
+  const keys = scenarioClips(s).map((c) => c.key);
+  assert.deepEqual(keys, ['rk', 'rk.freeze', 'rk.opt.0', 'rk.opt.1', 'rk.opt.2']);
+  // Last read option (index 2 of 3) leads with "Or,".
+  assert.equal(optionSpeech(2, 3, 'Three'), 'Or, C: Three');
+});
+
+test('audioFileName keys freeze/option clips distinctly from the voice-over', () => {
+  assert.equal(audioFileName('back-door', 'abcd1234'), 'back-door.abcd1234.mp3');
+  assert.equal(audioFileName('back-door.freeze', 'abcd1234'), 'back-door.freeze.abcd1234.mp3');
+  assert.equal(audioFileName('back-door.opt.2', 'abcd1234'), 'back-door.opt.2.abcd1234.mp3');
 });
 
 test('contentHash is stable and changes with text or voice config', () => {

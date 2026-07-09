@@ -60,21 +60,21 @@ export async function generateNarration(
   const manifest: Manifest = {};
 
   for (const clip of clips) {
-    const filename = audioFileName(clip.id, contentHash(clip.text, cfg));
+    const filename = audioFileName(clip.key, contentHash(clip.text, cfg));
     if (deps.exists(filename)) {
       skipped.push(filename);
-      manifest[clip.id] = filename;
+      manifest[clip.key] = filename;
       continue;
     }
     if (!deps.hasKey) {
       missing.push(filename);
-      continue; // leave it out of the manifest -> silent for this scenario
+      continue; // leave it out of the manifest -> silent for this clip
     }
     log(`generating ${filename}  ("${clip.text.slice(0, 48)}...")`);
     const bytes = await deps.fetchAudio(clip.text, cfg);
     deps.writeAudio(filename, bytes);
     generated.push(filename);
-    manifest[clip.id] = filename;
+    manifest[clip.key] = filename;
   }
 
   // Prune stale MP3s (superseded by an edit) that the manifest no longer names.

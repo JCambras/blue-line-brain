@@ -193,13 +193,13 @@ export const SKILLS_DECISION_SCENARIOS: Scenario[] = [
         {
           t: 3.5,
           players: { d: { x: 13, y: 70 }, f1: { x: 28, y: 58 }, c: { x: 43, y: 52 } },
-          puck: { x: 80, y: 90 },
+          puck: { x: 87, y: 96 },
           narration: 'It whips down the far wall and behind your net, still flying.',
         },
         {
           t: 7,
           players: { d: { x: 13, y: 75 }, f1: { x: 26, y: 64 }, c: { x: 41, y: 56 } },
-          puck: { x: 45, y: 96 },
+          puck: { x: 48, y: 98 },
           narration: 'You slide down your wall to meet it - a forechecker tracks you.',
         },
         {
