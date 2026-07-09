@@ -1,11 +1,19 @@
 import type { SaveState, Scenario } from '@/types';
 import { SCENARIOS } from '@/data/scenarios';
+import { orderPool } from './scenarioOrdering';
 
 /**
- * Pick `count` scenarios using a lightweight spaced-repetition score:
- *   score = (5 - confidence) * 100 + ageHours + jitter
- * Higher score = surface sooner. New scenarios get a large baseline so they
- * appear before well-mastered ones.
+ * Pick `count` scenarios, ordered by spaced repetition with a strong shuffle.
+ *
+ * Each scenario scores `bias + random`, where `bias` favors unseen and
+ * weak/stale scenarios (bounded so no bucket dominates on magnitude) and
+ * `random` is large enough to dominate small mastery/recency differences. The
+ * upshot: within any (category, difficulty) grouping, similar-mastery peers
+ * reorder freely from run to run, while unseen/weak/stale scenarios still tend
+ * to surface first. See {@link orderPool} for the exact weighting.
+ *
+ * `filter` and the varsity/elite unlock gating select the pool; the top `count`
+ * scored scenarios are returned.
  */
 export function pickScenarios(
   state: SaveState,
@@ -21,19 +29,7 @@ export function pickScenarios(
 
   if (pool.length === 0) return [];
 
-  const now = Date.now();
-  const scored = pool.map((s) => {
-    const stat = state.scenarioStats[s.id];
-    if (!stat) {
-      return { s, score: 1000 + Math.random() * 100 };
-    }
-    const ageHours = (now - stat.lastSeen) / (1000 * 60 * 60);
-    const score = (5 - stat.confidence) * 100 + ageHours + Math.random() * 30;
-    return { s, score };
-  });
-
-  scored.sort((a, b) => b.score - a.score);
-  return scored.slice(0, count).map((x) => x.s);
+  return orderPool(pool, state).slice(0, count);
 }
 
 /**
