@@ -81,13 +81,16 @@ Add to the matching zone file in `src/data/scenarios/` and follow
 ## Narration audio
 
 Everything spoken is the one ElevenLabs coach voice - there is no browser
-speech. Each scenario renders three kinds of clip: the `animation.narration`
-voice-over that plays during the animation phase, the `freezeLine` prompt, and
-each answer option (both read aloud during the reveal phase). The MP3s in
-`public/audio/` and their `manifest.json` are committed build artifacts, so the
+speech. Each scenario renders four kinds of clip: the `animation.narration`
+voice-over that plays during the animation phase, the `freezeLine` prompt, each
+answer option (both read aloud during the reveal phase), and the results-beat
+feedback (`<id>.fb` - the correct answer stated plus its rationale, which
+`FeedbackScreen` plays after a rotating generic opener for both right and wrong
+answers). The MP3s in `public/audio/` and their `manifest.json` are committed
+build artifacts, so the
 app and CI never need an API key, and the client only ever loads those static
 files (it never calls ElevenLabs). Regenerate clips only after editing narration,
-freeze-line, or option text:
+freeze-line, option, or correct-answer feedback text:
 
 ```bash
 cp .env.example .env   # add your ELEVENLABS_API_KEY

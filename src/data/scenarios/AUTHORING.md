@@ -28,6 +28,8 @@ scenario's `zone` tag, e.g. skills scenarios).
 - Every wrong option gets `feedback` (what goes wrong, 1-2 punchy sentences)
   and `trap` (why the option is tempting - the best distractors are mistakes
   real players actually make).
+- The correct option's `feedback` is the rationale spoken on the results beat
+  (after the stated answer), so give it a clear one-line "why".
 - Options are read aloud by TTS, so keep each under ~12 words.
 
 ## Decision (tap)
