@@ -119,6 +119,6 @@ Everything saves to `localStorage` under `blb-save-v1`. Reset from the home scre
 ## What's next
 
 - Coach Mode authoring UI (drag players onto rink, build scenarios in-app)
-- Replay animation after feedback (show the right read execute)
+- Replay the right read after feedback (the frozen rink's ↺ Replay button already re-runs the setup animation + narration; this would animate the correct answer executing)
 - More tap-the-ice scenarios (stronger pedagogically than MCQ for spatial reads)
 - Team scenario packs (coach authors → JSON export → team imports)
