@@ -54,13 +54,19 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'audio-clips',
+              // Narration MP3s play via `new Audio()`, which fetches with a
+              // `Range` header; range-supporting hosts answer 206 Partial
+              // Content. `rangeRequests` adds Workbox's RangeRequestsPlugin
+              // (caching the full body, serving partials from it) and 206 must
+              // be an allowed status, or the clips would never cache offline.
+              rangeRequests: true,
               expiration: {
                 // Cover the full committed narration set (~590 MP3s under
                 // /audio/ + manifest.json) so all clips can persist offline.
                 maxEntries: 650,
                 maxAgeSeconds: 60 * 60 * 24 * 30,
               },
-              cacheableResponse: { statuses: [0, 200] },
+              cacheableResponse: { statuses: [0, 200, 206] },
             },
           },
           {
