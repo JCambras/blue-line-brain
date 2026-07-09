@@ -61,9 +61,10 @@ export default defineConfig({
               // be an allowed status, or the clips would never cache offline.
               rangeRequests: true,
               expiration: {
-                // Cover the full committed narration set (~590 MP3s under
-                // /audio/ + manifest.json) so all clips can persist offline.
-                maxEntries: 650,
+                // Cover the full committed narration set (~706 MP3s under
+                // /audio/ + manifest.json) so all clips can persist offline,
+                // with headroom for future scenarios/feedback clips.
+                maxEntries: 800,
                 maxAgeSeconds: 60 * 60 * 24 * 30,
               },
               cacheableResponse: { statuses: [0, 200, 206] },
