@@ -18,6 +18,7 @@ Open http://localhost:5173
 - Tailwind CSS
 - LocalStorage persistence (no backend)
 - Pre-rendered coach voice-over narration (ElevenLabs, build-time only)
+- Installable PWA - offline-capable via a Workbox service worker (`vite-plugin-pwa`)
 
 ## Project layout
 
@@ -118,6 +119,23 @@ guidance.
 ## Persistence
 
 Everything saves to `localStorage` under `blb-save-v1`. Reset from the home screen if you want a clean slate.
+
+## Install & offline (PWA)
+
+The app is an installable PWA that runs offline after the first load. `npm run
+build` emits a Workbox service worker (`dist/sw.js`) and web manifest that
+precache the app shell and runtime-cache the narration MP3s and Google Fonts, so
+the full scenario set plays with no network. Config lives in `vite.config.ts`
+(`vite-plugin-pwa`). The service worker is disabled in dev, so verify
+installability/offline against a production build:
+
+```bash
+npm run build && npm run preview
+```
+
+Manifest icons in `public/` are committed artifacts rasterized from
+`public/favicon.svg`; regenerate them with the one-liner in the header of
+`scripts/generate-icons.mjs`.
 
 ## What's next
 
