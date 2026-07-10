@@ -9,12 +9,21 @@ import { test } from 'node:test';
 import {
   CLIP_FADE_MS,
   CLIP_FADE_STEP_MS,
+  OPTION_GAP_MS,
   OPTION_LEAD_IN_MS,
   fadeRamp,
 } from '../src/lib/narrationTiming.ts';
 
-test('the option lead-in is the intended half-second beat', () => {
-  assert.equal(OPTION_LEAD_IN_MS, 500);
+test('the option lead-in is an unhurried, positive beat', () => {
+  assert.ok(OPTION_LEAD_IN_MS >= 500, 'at least a half second so the options are not rushed');
+});
+
+test('the inter-option gap separates reads without dragging', () => {
+  assert.ok(OPTION_GAP_MS > 0, 'there is a real beat between option reads');
+  assert.ok(
+    OPTION_GAP_MS < OPTION_LEAD_IN_MS,
+    'peers are spaced less than the phase change into the options'
+  );
 });
 
 test('fadeRamp lands on exactly silence', () => {

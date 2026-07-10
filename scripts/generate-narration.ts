@@ -47,20 +47,24 @@ loadDotEnv();
 
 const apiKey = process.env.ELEVENLABS_API_KEY?.trim() ?? '';
 const cfg: VoiceConfig = {
-  // "Brian" — a warm, clear, calm American voice that reads like a coach.
-  voiceId: process.env.ELEVENLABS_VOICE_ID?.trim() || 'nPczCjzI2devNBz1zQrb',
+  // Coach voice for the play-by-play. Chosen by the captain from ElevenLabs;
+  // override with ELEVENLABS_VOICE_ID to audition a different one.
+  voiceId: process.env.ELEVENLABS_VOICE_ID?.trim() || 'UgBBYS2sOqTuMpoF3BR0',
   modelId: process.env.ELEVENLABS_MODEL_ID?.trim() || 'eleven_turbo_v2_5',
   // Mono, 22.05 kHz, 32 kbps — plenty for speech and keeps the committed audio small.
   outputFormat: process.env.ELEVENLABS_OUTPUT_FORMAT?.trim() || 'mp3_22050_32',
-  // Warm, expressive rink-coach delivery: lower stability lets the read breathe
-  // and inflect, higher style adds emphasis, high similarity keeps Brian's
-  // timbre, speaker boost adds presence. Folded into the content hash, so
-  // changing any of these re-renders every clip on the next `npm run narrate`.
+  // Steady, warm rink-coach delivery at a natural pace: moderate stability keeps
+  // the read even and calm (very low stability rushes and over-inflects), a
+  // gentle style keeps it warm without theatrical over-emphasis, high similarity
+  // holds the voice's timbre, speaker boost adds presence, and speed 1.0 is the
+  // natural, un-slowed pace. Folded into the content hash, so changing any of
+  // these re-renders every clip on the next `npm run narrate`.
   voiceSettings: {
-    stability: 0.35,
+    stability: 0.5,
     similarityBoost: 0.85,
-    style: 0.45,
+    style: 0.28,
     useSpeakerBoost: true,
+    speed: 1.0,
   },
 };
 
@@ -80,6 +84,8 @@ async function fetchAudio(text: string, c: VoiceConfig): Promise<Uint8Array> {
         similarity_boost: c.voiceSettings.similarityBoost,
         style: c.voiceSettings.style,
         use_speaker_boost: c.voiceSettings.useSpeakerBoost,
+        // Only sent when configured, so the request matches older runs otherwise.
+        ...(c.voiceSettings.speed === undefined ? {} : { speed: c.voiceSettings.speed }),
       },
     }),
   });

@@ -3,7 +3,7 @@ import type { Scenario, TapTarget } from '@/types';
 import { DIFFICULTY_CONFIG } from '@/data/scenarios';
 import { sfx } from '@/lib/sfx';
 import { narrationAudio } from '@/lib/narrationAudio';
-import { OPTION_LEAD_IN_MS } from '@/lib/narrationTiming';
+import { OPTION_GAP_MS, OPTION_LEAD_IN_MS } from '@/lib/narrationTiming';
 import { RinkDiagram } from './RinkDiagram';
 import { AnimatedRink } from './AnimatedRink';
 
@@ -71,9 +71,21 @@ export function SessionScreen({
   useEffect(() => {
     if (phase !== 'reveal') return;
     let cancelled = false;
-    // Cancels the lead-in pause below so a skip/quit/unmount during it neither
-    // hangs the sequence nor leaks the timer.
-    let cancelLeadIn: (() => void) | undefined;
+    // Cancels an in-flight pacing beat (lead-in or inter-option gap) so a
+    // skip/quit/unmount during it neither hangs the sequence nor leaks a timer.
+    let cancelSleep: (() => void) | undefined;
+    const sleep = (ms: number) =>
+      new Promise<void>((resolve) => {
+        const timer = setTimeout(() => {
+          cancelSleep = undefined;
+          resolve();
+        }, ms);
+        cancelSleep = () => {
+          clearTimeout(timer);
+          cancelSleep = undefined;
+          resolve();
+        };
+      });
     start.current = Date.now(); // the clock is fair from when choices appear
     (async () => {
       if (scenario.animation?.freezeLine) {
@@ -81,20 +93,19 @@ export function SessionScreen({
       }
       if (cancelled) return;
       if (scenario.kind === 'mcq' && scenario.options) {
-        // Half-second beat so the jump from the freeze prompt into the options
-        // isn't rushed. Resolvable early so cleanup never leaves it pending.
-        await new Promise<void>((resolve) => {
-          const timer = setTimeout(resolve, OPTION_LEAD_IN_MS);
-          cancelLeadIn = () => {
-            clearTimeout(timer);
-            resolve();
-          };
-        });
-        cancelLeadIn = undefined;
+        // Unhurried beat so the jump from the freeze prompt into the options
+        // isn't rushed.
+        await sleep(OPTION_LEAD_IN_MS);
         if (cancelled) return;
         const n = Math.min(cfg.choices, scenario.options.length);
         for (let i = 0; i < n; i++) {
           if (cancelled) return;
+          // A shorter beat between option reads so the coach doesn't run them
+          // together — none before the first, the lead-in already spaced it.
+          if (i > 0) {
+            await sleep(OPTION_GAP_MS);
+            if (cancelled) return;
+          }
           setRevealed(i + 1);
           setReadingIdx(i);
           await narrationAudio.playAndWait(`${scenario.id}.opt.${i}`);
@@ -108,7 +119,7 @@ export function SessionScreen({
     })();
     return () => {
       cancelled = true;
-      cancelLeadIn?.();
+      cancelSleep?.();
       narrationAudio.stop();
     };
   }, [phase, scenario, cfg.choices]);
