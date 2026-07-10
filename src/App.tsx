@@ -28,9 +28,21 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>({ kind: 'home' });
   const [showOnboard, setShowOnboard] = useState(false);
 
-  // Prefetch the coach-voice audio manifest once at startup.
+  // Prefetch the coach-voice audio manifest once at startup, and prime the
+  // audio pool on the first user gesture. Narration starts from timers/effects,
+  // never synchronously inside a click, so without this priming the browser's
+  // autoplay policy (strict on iOS/Safari) would block every clip and the app
+  // would be silent. The listeners fire inside the real gesture, which is what
+  // unlocks the elements; `unlock()` is idempotent so the first one wins.
   useEffect(() => {
     narrationAudio.init();
+    const unlock = () => narrationAudio.unlock();
+    const opts = { capture: true } as const;
+    const events = ['pointerdown', 'touchstart', 'keydown'] as const;
+    for (const ev of events) window.addEventListener(ev, unlock, opts);
+    return () => {
+      for (const ev of events) window.removeEventListener(ev, unlock, opts);
+    };
   }, []);
 
   // Persist state

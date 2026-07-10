@@ -22,12 +22,18 @@ import { createHash } from 'node:crypto';
 import type { Scenario } from '../src/types/index.ts';
 import { DIFFICULTY_CONFIG } from '../src/data/scenarios/index.ts';
 
-/** ElevenLabs voice_settings - shape the delivery (expressiveness, warmth). */
+/** ElevenLabs voice_settings - shape the delivery (expressiveness, warmth, pace). */
 export interface VoiceSettings {
   stability: number;
   similarityBoost: number;
   style: number;
   useSpeakerBoost: boolean;
+  /**
+   * Playback pace (ElevenLabs `speed`, ~0.7-1.2, 1.0 = natural). Below 1 slows
+   * the read for an unhurried coach delivery. Optional so older manifests/tests
+   * that omit it hash exactly as before (see `contentHash`).
+   */
+  speed?: number;
 }
 
 /** The knobs that affect the rendered audio; folded into the content hash. */
@@ -149,7 +155,10 @@ export function contentHash(text: string, cfg: VoiceConfig): string {
   // and matches every already-committed clip filename. Do NOT change this
   // separator - it would invalidate the whole cache and force a full re-render.
   const vs = cfg.voiceSettings;
-  const voice = `${vs.stability}|${vs.similarityBoost}|${vs.style}|${vs.useSpeakerBoost}`;
+  const base = `${vs.stability}|${vs.similarityBoost}|${vs.style}|${vs.useSpeakerBoost}`;
+  // `speed` is appended only when set, so configs that omit it (older manifests,
+  // unit tests) keep their historical hash while a retuned pace re-renders.
+  const voice = vs.speed === undefined ? base : `${base}|${vs.speed}`;
   return createHash('sha256')
     .update([cfg.voiceId, cfg.modelId, cfg.outputFormat, voice, text].join('\x00'))
     .digest('hex')
