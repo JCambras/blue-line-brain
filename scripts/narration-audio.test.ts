@@ -25,8 +25,11 @@ class FakeAudio implements AudioLike {
   onended: (() => void) | null = null;
   onerror: (() => void) | null = null;
   playCalls = 0;
+  /** Overridable so a test can simulate the platform refusing a prime/play. */
+  shouldFail: () => boolean = () => false;
   play(): Promise<void> {
     this.playCalls++;
+    if (this.shouldFail()) return Promise.reject(new Error('NotAllowedError'));
     this.paused = false;
     this.ended = false;
     return Promise.resolve();
@@ -45,10 +48,12 @@ const MANIFEST: Record<string, string> = {
 function makeHarness() {
   const created: FakeAudio[] = [];
   const timers = new Map<number, () => void>();
+  const state = { failPlays: false };
   let nextId = 1;
   const narration = new NarrationAudio({
     createAudio: () => {
       const a = new FakeAudio();
+      a.shouldFail = () => state.failPlays;
       created.push(a);
       return a;
     },
@@ -67,7 +72,7 @@ function makeHarness() {
   const flushFades = (n: number) => {
     for (let i = 0; i < n; i++) for (const fn of [...timers.values()]) fn();
   };
-  return { narration, created, flushFades };
+  return { narration, created, flushFades, state };
 }
 
 /** Let the (fake) manifest promise + the play chain settle. */
@@ -86,16 +91,42 @@ test('unlock() primes every pooled element inside the gesture (autoplay unlock)'
   }
 });
 
-test('unlock() is idempotent - a second call does not re-prime', () => {
+test('unlock() stops priming once a prime has resolved', async () => {
   const { narration, created } = makeHarness();
   narration.unlock();
+  await settle(); // let a prime resolve so `unlocked` latches
   const calls = created.map((a) => a.playCalls);
   narration.unlock();
   assert.deepEqual(
     created.map((a) => a.playCalls),
     calls,
-    'no extra play() on the second unlock'
+    'no extra play() once the pool is unlocked'
   );
+});
+
+test('a rejected in-gesture prime does not latch unlocked; a later gesture retries', async () => {
+  const { narration, created, state } = makeHarness();
+  state.failPlays = true; // platform refuses the first gesture's prime
+  narration.unlock();
+  await settle();
+  const afterFail = created.map((a) => a.playCalls);
+  assert.ok(afterFail.every((n) => n >= 1), 'the rejected prime was still attempted');
+
+  // A later gesture, now that playback is permitted, must prime again rather
+  // than staying silent forever (the bug the optimistic latch would have caused).
+  state.failPlays = false;
+  narration.unlock();
+  await settle();
+  assert.ok(
+    created.some((a, i) => a.playCalls > afterFail[i]),
+    're-primes on a later gesture'
+  );
+
+  // And real playback works on the now-unlocked pool.
+  narration.play('a');
+  await settle();
+  const el = created.find((a) => a.src.endsWith('a.mp3'));
+  assert.ok(el && !el.paused, 'a real clip plays after the retry unlock');
 });
 
 test('a started clip plays at full volume and is not silenced', async () => {

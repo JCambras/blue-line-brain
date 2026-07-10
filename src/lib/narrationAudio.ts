@@ -119,7 +119,6 @@ class NarrationAudio {
    */
   unlock(): void {
     if (this.unlocked) return;
-    this.unlocked = true;
     this.ensurePool();
     for (const audio of this.pool) {
       try {
@@ -129,6 +128,12 @@ class NarrationAudio {
         const p = audio.play();
         if (p && typeof p.then === 'function') {
           p.then(() => {
+            // A prime actually STARTED inside the gesture — the pool is now
+            // unlocked for gesture-less playback. Latch here, not optimistically
+            // at the top: if every prime is rejected (iOS Low Power Mode, a
+            // WebView, or a gesture the platform doesn't treat as activating),
+            // `unlocked` stays false so the next gesture primes again.
+            this.unlocked = true;
             audio.pause();
             try {
               audio.currentTime = 0;
@@ -136,9 +141,11 @@ class NarrationAudio {
               // seek before load can throw; harmless, the next src resets it
             }
           }).catch(() => {
-            // A blocked prime still leaves the element usable if a later gesture
-            // primes it; nothing to do here.
+            // Prime blocked — leave `unlocked` false so a later gesture retries.
           });
+        } else {
+          // No promise (older browsers) — nothing to await, treat as unlocked.
+          this.unlocked = true;
         }
       } catch {
         // Element unusable (very old browser) — playback just stays silent.
