@@ -40,4 +40,36 @@ export const BADGES: Record<string, BadgeInfo> = {
     desc: '5-day daily streak',
     icon: '📅',
   },
+
+  // Lacrosse attack patches
+  lax_dodger: {
+    name: 'Dodger',
+    desc: 'Mastered dodging and initiating',
+    icon: '🥍',
+  },
+  lax_feeder: {
+    name: 'Feeder',
+    desc: 'Draw two, feed one',
+    icon: '🎯',
+  },
+  lax_ghost: {
+    name: 'Ghost',
+    desc: 'Deadly off the ball',
+    icon: '👻',
+  },
+  lax_sniper: {
+    name: 'Sniper',
+    desc: 'Finished where the goalie is not',
+    icon: '🚀',
+  },
+  lax_ride_or_die: {
+    name: 'Ride or Die',
+    desc: 'Won it back on the ride',
+    icon: '🛡️',
+  },
+  lax_boss: {
+    name: 'Field General',
+    desc: 'Cleared a lacrosse Boss Battle',
+    icon: '👑',
+  },
 };
