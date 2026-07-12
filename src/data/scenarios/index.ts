@@ -12,6 +12,10 @@ import { OFFENSIVE_ATTACK_SCENARIOS } from './offensive-attack.ts';
 import { SKILLS_SCENARIOS } from './skills.ts';
 import { SKILLS_DECISION_SCENARIOS } from './skills-decisions.ts';
 import { SITUATION_SCENARIOS } from './situations.ts';
+import { LACROSSE_DODGE_SCENARIOS } from './lacrosse-dodge.ts';
+import { LACROSSE_OFFBALL_SCENARIOS } from './lacrosse-offball.ts';
+import { LACROSSE_FINISH_SCENARIOS } from './lacrosse-finish.ts';
+import { LACROSSE_RIDE_SCENARIOS } from './lacrosse-ride.ts';
 
 /**
  * Difficulty config: timer (seconds) and number of MCQ choices.
@@ -45,4 +49,8 @@ export const SCENARIOS: Scenario[] = [
   ...SKILLS_SCENARIOS,
   ...SKILLS_DECISION_SCENARIOS,
   ...SITUATION_SCENARIOS,
+  ...LACROSSE_DODGE_SCENARIOS,
+  ...LACROSSE_OFFBALL_SCENARIOS,
+  ...LACROSSE_FINISH_SCENARIOS,
+  ...LACROSSE_RIDE_SCENARIOS,
 ];
