@@ -366,8 +366,8 @@ export const LACROSSE_DODGE_SCENARIOS: Scenario[] = [
       beats: [
         {
           t: 0,
-          players: { a: { x: 50, y: 30 }, x1: { x: 50, y: 24 }, g: { x: 50, y: 7 } },
-          puck: { x: 50, y: 30 },
+          players: { a: { x: 50, y: 34 }, x1: { x: 50, y: 28 }, g: { x: 50, y: 7 } },
+          puck: { x: 50, y: 34 },
           narration: 'You catch it up top, isolated, one on one against a good pole.',
         },
         {
@@ -447,12 +447,12 @@ export const LACROSSE_DODGE_SCENARIOS: Scenario[] = [
         {
           t: 0,
           players: {
-            a: { x: 36, y: 26 },
-            x1: { x: 42, y: 24 },
+            a: { x: 32, y: 30 },
+            x1: { x: 40, y: 27 },
             a2: { x: 72, y: 22 },
             g: { x: 50, y: 7 },
           },
-          puck: { x: 36, y: 26 },
+          puck: { x: 32, y: 30 },
           narration: 'You start your dodge from up top, looking to get downhill.',
         },
         {

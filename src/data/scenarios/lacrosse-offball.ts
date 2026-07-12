@@ -134,12 +134,12 @@ export const LACROSSE_OFFBALL_SCENARIOS: Scenario[] = [
           t: 0,
           players: {
             a: { x: 68, y: 20 },
-            a2: { x: 40, y: 30 },
-            x1: { x: 44, y: 27 },
+            a2: { x: 40, y: 36 },
+            x1: { x: 44, y: 31 },
             xa: { x: 60, y: 22 },
             g: { x: 50, y: 7 },
           },
-          puck: { x: 40, y: 30 },
+          puck: { x: 40, y: 36 },
           narration: 'Your teammate has the ball up top and looks your way.',
         },
         {
@@ -385,12 +385,12 @@ export const LACROSSE_OFFBALL_SCENARIOS: Scenario[] = [
           t: 0,
           players: {
             a: { x: 62, y: 22 },
-            a2: { x: 30, y: 28 },
-            x1: { x: 36, y: 26 },
+            a2: { x: 28, y: 30 },
+            x1: { x: 34, y: 27 },
             xa: { x: 58, y: 18 },
             g: { x: 50, y: 7 },
           },
-          puck: { x: 30, y: 28 },
+          puck: { x: 28, y: 30 },
           narration: 'Your teammate begins his dodge from the left wing.',
         },
         {

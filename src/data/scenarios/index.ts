@@ -16,6 +16,7 @@ import { LACROSSE_DODGE_SCENARIOS } from './lacrosse-dodge.ts';
 import { LACROSSE_OFFBALL_SCENARIOS } from './lacrosse-offball.ts';
 import { LACROSSE_FINISH_SCENARIOS } from './lacrosse-finish.ts';
 import { LACROSSE_RIDE_SCENARIOS } from './lacrosse-ride.ts';
+import { LACROSSE_TAP_SCENARIOS } from './lacrosse-taps.ts';
 
 /**
  * Difficulty config: timer (seconds) and number of MCQ choices.
@@ -53,4 +54,5 @@ export const SCENARIOS: Scenario[] = [
   ...LACROSSE_OFFBALL_SCENARIOS,
   ...LACROSSE_FINISH_SCENARIOS,
   ...LACROSSE_RIDE_SCENARIOS,
+  ...LACROSSE_TAP_SCENARIOS,
 ];
