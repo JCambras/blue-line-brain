@@ -1,5 +1,6 @@
-import type { SaveState, Scenario } from '@/types';
+import type { SaveState, Scenario, Sport } from '@/types';
 import { SCENARIOS } from '@/data/scenarios';
+import { sportOf } from '@/data/modules';
 import { orderPool } from './scenarioOrdering';
 
 /**
@@ -34,13 +35,16 @@ export function pickScenarios(
 
 /**
  * Find the category the player is weakest in (lowest accuracy, ≥2 attempts).
+ * When `sport` is given, only scenarios of that sport count, so a hockey weak
+ * spot never leaks into a lacrosse "practice weakest" drill and vice versa.
  * Returns null if not enough data yet.
  */
-export function weakestCategory(state: SaveState): string | null {
+export function weakestCategory(state: SaveState, sport?: Sport): string | null {
   const catAcc: Record<string, { c: number; a: number }> = {};
   Object.entries(state.scenarioStats).forEach(([id, s]) => {
     const sc = SCENARIOS.find((x) => x.id === id);
     if (!sc) return;
+    if (sport && sportOf(sc) !== sport) return;
     if (!catAcc[sc.category]) catAcc[sc.category] = { c: 0, a: 0 };
     catAcc[sc.category].c += s.correct;
     catAcc[sc.category].a += s.attempts;

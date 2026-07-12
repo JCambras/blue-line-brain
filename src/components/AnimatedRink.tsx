@@ -103,6 +103,8 @@ interface AnimatedRinkProps {
   scenario: Scenario;
   /** Called once when the play reaches its freeze frame. */
   onDone: () => void;
+  /** Field surface to draw (defaults to the hockey rink). */
+  Diagram?: typeof RinkDiagram;
 }
 
 /**
@@ -111,7 +113,7 @@ interface AnimatedRinkProps {
  * speaks + captions the play-by-play, then whistles the play dead and
  * calls onDone.
  */
-export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
+export function AnimatedRink({ scenario, onDone, Diagram = RinkDiagram }: AnimatedRinkProps) {
   const [frame, setFrame] = useState<Frame>(() => frameAt(resolveBeats(scenario), 0));
   const [trails, setTrails] = useState<Trails>({ players: {} });
   const [carrierId, setCarrierId] = useState<string | null>(null);
@@ -208,7 +210,7 @@ export function AnimatedRink({ scenario, onDone }: AnimatedRinkProps) {
 
   return (
     <>
-      <RinkDiagram
+      <Diagram
         scenario={scenario}
         playerPos={frame.players}
         puckPos={frame.puck}

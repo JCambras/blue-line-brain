@@ -8,6 +8,12 @@ import type {
   LevelKey,
 } from '@/types';
 import { SCENARIOS } from '@/data/scenarios';
+import {
+  DEFAULT_MODULE_ID,
+  moduleById,
+  sportOf,
+  type ModuleId,
+} from '@/data/modules';
 import { LEVELS, levelFromXP } from '@/data/levels';
 import { loadState, saveState, clearState, todayKey, yesterdayKey } from '@/lib/storage';
 import { pickScenarios, weakestCategory, accuracyForDifficulty } from '@/lib/picker';
@@ -27,6 +33,8 @@ export default function App() {
   const [state, setState] = useState<SaveState>(() => loadState());
   const [screen, setScreen] = useState<Screen>({ kind: 'home' });
   const [showOnboard, setShowOnboard] = useState(false);
+  const [moduleId, setModuleId] = useState<ModuleId>(DEFAULT_MODULE_ID);
+  const activeModule = moduleById(moduleId);
 
   // Prefetch the coach-voice audio manifest once at startup, and prime the
   // audio pool on the first user gesture. Narration starts from timers/effects,
@@ -64,16 +72,24 @@ export default function App() {
 
   const startSession = useCallback(
     (mode: SessionMode) => {
+      // Every mode is scoped to the active sport so hockey and lacrosse never
+      // bleed into each other's Daily 5, Boss, or weakest-spot drills.
+      const sport = activeModule.sport;
+      const inSport = (s: Scenario) => sportOf(s) === sport;
       let scenarios: Scenario[] = [];
       if (mode === 'daily5') {
-        scenarios = pickScenarios(state, 5);
+        scenarios = pickScenarios(state, 5, inSport);
       } else if (mode === 'boss') {
-        scenarios = pickScenarios(state, 10);
+        scenarios = pickScenarios(state, 10, inSport);
       } else if (mode === 'weakest') {
-        const cat = weakestCategory(state);
-        scenarios = pickScenarios(state, 5, (s) => (cat ? s.category === cat : true));
+        const cat = weakestCategory(state, sport);
+        scenarios = pickScenarios(
+          state,
+          5,
+          (s) => inSport(s) && (cat ? s.category === cat : true)
+        );
       } else {
-        scenarios = pickScenarios(state, 5, (s) => s.zone === mode);
+        scenarios = pickScenarios(state, 5, (s) => inSport(s) && s.zone === mode);
       }
       if (scenarios.length === 0) {
         alert('No scenarios available yet for this mode. Try Daily 5.');
@@ -81,7 +97,7 @@ export default function App() {
       }
       setScreen({ kind: 'session', mode, scenarios, idx: 0, results: [] });
     },
-    [state]
+    [state, activeModule.sport]
   );
 
   const handleAnswer = useCallback(
@@ -165,7 +181,7 @@ export default function App() {
 
         // Category-based badges (only on correct)
         const sc = SCENARIOS.find((x) => x.id === r.scenarioId);
-        if (sc && r.correct) {
+        if (sc && r.correct && sportOf(sc) === 'hockey') {
           if (sc.category === 'retrieval' && !next.badges.includes('retrieval_radar')) {
             next.badges.push('retrieval_radar');
             newBadges.push('retrieval_radar');
@@ -266,6 +282,8 @@ export default function App() {
         {screen.kind === 'home' && (
           <HomeScreen
             state={state}
+            activeModule={activeModule}
+            setModule={setModuleId}
             startSession={startSession}
             openCoach={() => setScreen({ kind: 'coach' })}
             resetProgress={resetProgress}

@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
 import type { SaveState, SessionMode } from '@/types';
 import { BADGES } from '@/data/badges';
+import { MODULES, type AppModule, type ModuleId } from '@/data/modules';
 import { weakestCategory } from '@/lib/picker';
 import { todayKey } from '@/lib/storage';
 
 interface HomeScreenProps {
   state: SaveState;
+  activeModule: AppModule;
+  setModule: (id: ModuleId) => void;
   startSession: (m: SessionMode) => void;
   openCoach: () => void;
   resetProgress: () => void;
@@ -13,16 +16,33 @@ interface HomeScreenProps {
 
 export function HomeScreen({
   state,
+  activeModule,
+  setModule,
   startSession,
   openCoach,
   resetProgress,
 }: HomeScreenProps) {
   const today = todayKey();
   const dailyDone = state.dailyLastDone === today;
-  const weakest = useMemo(() => weakestCategory(state), [state]);
+  const weakest = useMemo(
+    () => weakestCategory(state, activeModule.sport),
+    [state, activeModule.sport]
+  );
 
   return (
     <div className="blb-home">
+      <section className="blb-modswitch">
+        {MODULES.map((m) => (
+          <button
+            key={m.id}
+            className={`blb-modbtn ${m.id === activeModule.id ? 'active' : ''}`}
+            onClick={() => setModule(m.id)}
+          >
+            {m.switchLabel}
+          </button>
+        ))}
+      </section>
+
       <section className="blb-cta-row">
         <button
           className={`blb-cta blb-cta-primary ${dailyDone ? 'done' : ''}`}
@@ -50,32 +70,17 @@ export function HomeScreen({
       </section>
 
       <section className="blb-zones">
-        <h2 className="blb-section-h">PICK A ZONE</h2>
+        <h2 className="blb-section-h">{activeModule.trackHeading}</h2>
         <div className="blb-zone-grid">
-          <ZoneCard
-            label="DEFENSIVE ZONE"
-            sub="Retrieval · coverage · breakouts"
-            onClick={() => startSession('defensive')}
-            accent="#1f4ed8"
-          />
-          <ZoneCard
-            label="NEUTRAL ZONE"
-            sub="Gap · rush defense · transition"
-            onClick={() => startSession('neutral')}
-            accent="#6b21a8"
-          />
-          <ZoneCard
-            label="OFFENSIVE ZONE"
-            sub="Blue line · pinching · shots"
-            onClick={() => startSession('offensive')}
-            accent="#b91c1c"
-          />
-          <ZoneCard
-            label="SKILLS LAB"
-            sub="Hands · feet · stick details"
-            onClick={() => startSession('skills')}
-            accent="#0f766e"
-          />
+          {activeModule.tracks.map((t) => (
+            <ZoneCard
+              key={t.key}
+              label={t.label}
+              sub={t.sub}
+              onClick={() => startSession(t.key)}
+              accent={t.accent}
+            />
+          ))}
         </div>
       </section>
 
@@ -104,11 +109,9 @@ export function HomeScreen({
         <div className="blb-side-card">
           <h3 className="blb-side-h">GAME DAY CHEAT SHEET</h3>
           <ul className="blb-cheat">
-            <li>Scan before you touch.</li>
-            <li>Protect the house.</li>
-            <li>Hard tape passes.</li>
-            <li>Move after you pass.</li>
-            <li>Head up at the blue line.</li>
+            {activeModule.cheatSheet.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
           </ul>
         </div>
 

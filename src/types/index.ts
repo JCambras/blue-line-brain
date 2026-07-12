@@ -2,7 +2,13 @@
 // Core types for Blue Line Brain
 // ============================================================
 
-export type Zone = 'defensive' | 'neutral' | 'offensive' | 'skills';
+/** Which sport a scenario belongs to. Absent on a scenario means hockey. */
+export type Sport = 'hockey' | 'lacrosse';
+/** The four hockey zones (the original `Zone`). */
+export type HockeyZone = 'defensive' | 'neutral' | 'offensive' | 'skills';
+/** The four lacrosse-attack skill tracks. */
+export type LacrosseTrack = 'dodge' | 'offball' | 'finish' | 'ride';
+export type Zone = HockeyZone | LacrosseTrack;
 export type Difficulty = 'rookie' | 'varsity' | 'elite';
 export type InteractionKind = 'mcq' | 'tap';
 
@@ -113,6 +119,8 @@ export interface TapTarget {
 // ---------- Scenario ----------
 export interface Scenario {
   id: string;
+  /** Which sport module this scenario belongs to; absent = hockey. */
+  sport?: Sport;
   zone: Zone;
   category: string;
   difficulty: Difficulty;
@@ -155,14 +163,7 @@ export interface SaveState {
 }
 
 // ---------- Session ----------
-export type SessionMode =
-  | 'daily5'
-  | 'defensive'
-  | 'neutral'
-  | 'offensive'
-  | 'skills'
-  | 'boss'
-  | 'weakest';
+export type SessionMode = 'daily5' | 'boss' | 'weakest' | Zone;
 
 export interface SessionResult {
   scenarioId: string;
