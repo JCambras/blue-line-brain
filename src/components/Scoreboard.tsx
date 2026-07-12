@@ -1,13 +1,16 @@
-import type { SaveState } from '@/types';
-import { LEVELS } from '@/data/levels';
+import type { ModuleId, ModuleProgress } from '@/types';
+import { ladderFor } from '@/data/levels';
 
 interface ScoreboardProps {
-  state: SaveState;
+  prog: ModuleProgress;
+  moduleId: ModuleId;
+  soundOn: boolean;
   onHome: () => void;
   onToggleSound: () => void;
 }
 
-export function Scoreboard({ state, onHome, onToggleSound }: ScoreboardProps) {
+export function Scoreboard({ prog, moduleId, soundOn, onHome, onToggleSound }: ScoreboardProps) {
+  const level = ladderFor(moduleId).levels[prog.level];
   return (
     <header className="blb-scoreboard">
       <div className="blb-brand" onClick={onHome} role="button" tabIndex={0}>
@@ -15,20 +18,17 @@ export function Scoreboard({ state, onHome, onToggleSound }: ScoreboardProps) {
         <span className="blb-brand-name">BLUE LINE BRAIN</span>
       </div>
       <div className="blb-stats">
-        <Stat
-          label="LVL"
-          value={`${LEVELS[state.level].patch} ${LEVELS[state.level].name}`}
-        />
-        <Stat label="XP" value={state.xp.toLocaleString()} />
-        <Stat label="STREAK" value={`🔥 ${state.streak}`} accent={state.streak >= 3} />
-        <Stat label="DAILY" value={`📅 ${state.dailyStreakDays}d`} />
+        <Stat label="LVL" value={`${level.patch} ${level.name}`} />
+        <Stat label="XP" value={prog.xp.toLocaleString()} />
+        <Stat label="STREAK" value={`🔥 ${prog.streak}`} accent={prog.streak >= 3} />
+        <Stat label="DAILY" value={`📅 ${prog.dailyStreakDays}d`} />
       </div>
       <button
         className="blb-mute"
         aria-label="toggle sound"
         onClick={onToggleSound}
       >
-        {state.soundOn ? '🔊' : '🔇'}
+        {soundOn ? '🔊' : '🔇'}
       </button>
     </header>
   );

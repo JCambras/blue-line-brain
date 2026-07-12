@@ -1,7 +1,7 @@
 import type { SaveState, Scenario, Sport } from '@/types';
-import { SCENARIOS } from '@/data/scenarios';
-import { sportOf } from '@/data/modules';
-import { orderPool } from './scenarioOrdering';
+import { SCENARIOS } from '../data/scenarios/index.ts';
+import { sportOf } from '../data/modules.ts';
+import { orderPool } from './scenarioOrdering.ts';
 
 /**
  * Pick `count` scenarios, ordered by spaced repetition with a strong shuffle.
@@ -19,12 +19,13 @@ import { orderPool } from './scenarioOrdering';
 export function pickScenarios(
   state: SaveState,
   count: number,
-  filter?: (s: Scenario) => boolean
+  filter?: (s: Scenario) => boolean,
+  unlocked: { varsity: boolean; elite: boolean } = { varsity: true, elite: true }
 ): Scenario[] {
   const pool = SCENARIOS.filter((s) => {
     if (filter && !filter(s)) return false;
-    if (s.difficulty === 'varsity' && !state.unlocked.varsity) return false;
-    if (s.difficulty === 'elite' && !state.unlocked.elite) return false;
+    if (s.difficulty === 'varsity' && !unlocked.varsity) return false;
+    if (s.difficulty === 'elite' && !unlocked.elite) return false;
     return true;
   });
 
@@ -64,13 +65,18 @@ export function weakestCategory(state: SaveState, sport?: Sport): string | null 
 }
 
 /**
- * Returns accuracy for a given difficulty (across at least 3 attempts) for unlock checks.
+ * Returns accuracy for a given difficulty (across at least 3 attempts) for unlock
+ * checks. When `sport` is given, only that sport's scenarios count, so each
+ * module unlocks its own varsity/elite independently.
  */
 export function accuracyForDifficulty(
   state: SaveState,
-  diff: Scenario['difficulty']
+  diff: Scenario['difficulty'],
+  sport?: Sport
 ): number {
-  const ids = SCENARIOS.filter((s) => s.difficulty === diff).map((s) => s.id);
+  const ids = SCENARIOS.filter(
+    (s) => s.difficulty === diff && (!sport || sportOf(s) === sport)
+  ).map((s) => s.id);
   let attempts = 0;
   let correct = 0;
   ids.forEach((id) => {

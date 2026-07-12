@@ -1,14 +1,16 @@
-import type { Screen } from '@/types';
-import { LEVELS } from '@/data/levels';
+import type { ModuleId, Screen } from '@/types';
+import { ladderFor } from '@/data/levels';
 import { BADGES } from '@/data/badges';
 import { SCENARIOS } from '@/data/scenarios';
 
 interface ResultsScreenProps {
   screen: Extract<Screen, { kind: 'results' }>;
+  moduleId: ModuleId;
   onHome: () => void;
 }
 
-export function ResultsScreen({ screen, onHome }: ResultsScreenProps) {
+export function ResultsScreen({ screen, moduleId, onHome }: ResultsScreenProps) {
+  const levels = ladderFor(moduleId).levels;
   const { results, xpEarned, newBadges, leveledUp, mode } = screen;
   const correctCount = results.filter((r) => r.correct).length;
   const acc = Math.round((correctCount / results.length) * 100);
@@ -50,7 +52,7 @@ export function ResultsScreen({ screen, onHome }: ResultsScreenProps) {
         <div className="blb-levelup">
           <div className="blb-levelup-tag">CALLED UP</div>
           <div className="blb-levelup-name">
-            {LEVELS[leveledUp].patch} {LEVELS[leveledUp].name}
+            {levels[leveledUp].patch} {levels[leveledUp].name}
           </div>
         </div>
       )}
