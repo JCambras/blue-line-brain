@@ -6,16 +6,19 @@ import type {
   SessionResult,
   Scenario,
   LevelKey,
+  ModuleId,
 } from '@/types';
 import { SCENARIOS } from '@/data/scenarios';
+import { moduleById, sportOf } from '@/data/modules';
+import { levelFromXP } from '@/data/levels';
 import {
-  DEFAULT_MODULE_ID,
-  moduleById,
-  sportOf,
-  type ModuleId,
-} from '@/data/modules';
-import { LEVELS, levelFromXP } from '@/data/levels';
-import { loadState, saveState, clearState, todayKey, yesterdayKey } from '@/lib/storage';
+  loadState,
+  saveState,
+  clearState,
+  defaultState,
+  todayKey,
+  yesterdayKey,
+} from '@/lib/storage';
 import { pickScenarios, weakestCategory, accuracyForDifficulty } from '@/lib/picker';
 import { sfx } from '@/lib/sfx';
 import { narrationAudio } from '@/lib/narrationAudio';
@@ -33,8 +36,9 @@ export default function App() {
   const [state, setState] = useState<SaveState>(() => loadState());
   const [screen, setScreen] = useState<Screen>({ kind: 'home' });
   const [showOnboard, setShowOnboard] = useState(false);
-  const [moduleId, setModuleId] = useState<ModuleId>(DEFAULT_MODULE_ID);
+  const [moduleId, setModuleId] = useState<ModuleId>(state.activeModule);
   const activeModule = moduleById(moduleId);
+  const prog = state.perModule[moduleId];
 
   // Prefetch the coach-voice audio manifest once at startup, and prime the
   // audio pool on the first user gesture. Narration starts from timers/effects,
@@ -62,9 +66,14 @@ export default function App() {
     if (!state.soundOn) narrationAudio.stop();
   }, [state]);
 
+  // Persist the active module so the app reopens where the player left off.
+  useEffect(() => {
+    setState((s) => (s.activeModule === moduleId ? s : { ...s, activeModule: moduleId }));
+  }, [moduleId]);
+
   // First-run onboarding
   useEffect(() => {
-    if (state.xp === 0 && Object.keys(state.scenarioStats).length === 0) {
+    if (Object.keys(state.scenarioStats).length === 0) {
       setShowOnboard(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,21 +84,23 @@ export default function App() {
       // Every mode is scoped to the active sport so hockey and lacrosse never
       // bleed into each other's Daily 5, Boss, or weakest-spot drills.
       const sport = activeModule.sport;
+      const unlocked = state.perModule[moduleId].unlocked;
       const inSport = (s: Scenario) => sportOf(s) === sport;
       let scenarios: Scenario[] = [];
       if (mode === 'daily5') {
-        scenarios = pickScenarios(state, 5, inSport);
+        scenarios = pickScenarios(state, 5, inSport, unlocked);
       } else if (mode === 'boss') {
-        scenarios = pickScenarios(state, 10, inSport);
+        scenarios = pickScenarios(state, 10, inSport, unlocked);
       } else if (mode === 'weakest') {
         const cat = weakestCategory(state, sport);
         scenarios = pickScenarios(
           state,
           5,
-          (s) => inSport(s) && (cat ? s.category === cat : true)
+          (s) => inSport(s) && (cat ? s.category === cat : true),
+          unlocked
         );
       } else {
-        scenarios = pickScenarios(state, 5, (s) => inSport(s) && s.zone === mode);
+        scenarios = pickScenarios(state, 5, (s) => inSport(s) && s.zone === mode, unlocked);
       }
       if (scenarios.length === 0) {
         alert('No scenarios available yet for this mode. Try Daily 5.');
@@ -97,7 +108,7 @@ export default function App() {
       }
       setScreen({ kind: 'session', mode, scenarios, idx: 0, results: [] });
     },
-    [state, activeModule.sport]
+    [state, activeModule.sport, moduleId]
   );
 
   const handleAnswer = useCallback(
@@ -148,8 +159,16 @@ export default function App() {
   const finishSession = useCallback((mode: SessionMode, results: SessionResult[]) => {
     setState((prev) => {
       const next: SaveState = JSON.parse(JSON.stringify(prev));
+      // Progress belongs to the module the session drew from, not necessarily
+      // whatever is active now. The run is sport-scoped, so the first scenario
+      // decides it.
+      const firstSc = SCENARIOS.find((x) => x.id === results[0]?.scenarioId);
+      const runModuleId: ModuleId =
+        firstSc && sportOf(firstSc) === 'lacrosse' ? 'lacrosse' : 'hockey';
+      const runSport = runModuleId;
+      const mp = next.perModule[runModuleId];
       let xpEarned = 0;
-      let runStreak = next.streak;
+      let runStreak = mp.streak;
       const newBadges: string[] = [];
 
       results.forEach((r) => {
@@ -217,25 +236,23 @@ export default function App() {
         }
       });
 
-      next.streak = runStreak;
-      next.bestStreak = Math.max(next.bestStreak, runStreak);
-      next.xp += xpEarned;
+      mp.streak = runStreak;
+      mp.bestStreak = Math.max(mp.bestStreak, runStreak);
+      mp.xp += xpEarned;
 
-      // Difficulty unlocks
-      if (!next.unlocked.varsity && accuracyForDifficulty(next, 'rookie') >= 0.8) {
-        next.unlocked.varsity = true;
+      // Difficulty unlocks (scoped to this module's own scenarios)
+      if (!mp.unlocked.varsity && accuracyForDifficulty(next, 'rookie', runSport) >= 0.8) {
+        mp.unlocked.varsity = true;
       }
-      if (!next.unlocked.elite && accuracyForDifficulty(next, 'varsity') >= 0.8) {
-        next.unlocked.elite = true;
+      if (!mp.unlocked.elite && accuracyForDifficulty(next, 'varsity', runSport) >= 0.8) {
+        mp.unlocked.elite = true;
       }
 
       // Boss battle badge (sport-aware: lacrosse boss awards lax_boss)
       if (mode === 'boss') {
         const correctCount = results.filter((r) => r.correct).length;
         if (correctCount >= 8) {
-          const firstSc = SCENARIOS.find((x) => x.id === results[0]?.scenarioId);
-          const bossBadge =
-            firstSc && sportOf(firstSc) === 'lacrosse' ? 'lax_boss' : 'blue_line_boss';
+          const bossBadge = runModuleId === 'lacrosse' ? 'lax_boss' : 'blue_line_boss';
           if (!next.badges.includes(bossBadge)) {
             next.badges.push(bossBadge);
             newBadges.push(bossBadge);
@@ -243,14 +260,13 @@ export default function App() {
         }
       }
 
-      // Daily streak
+      // Daily streak (per module)
       if (mode === 'daily5') {
         const today = todayKey();
-        if (next.dailyLastDone !== today) {
-          next.dailyStreakDays =
-            next.dailyLastDone === yesterdayKey() ? next.dailyStreakDays + 1 : 1;
-          next.dailyLastDone = today;
-          if (next.dailyStreakDays >= 5 && !next.badges.includes('daily_grinder')) {
+        if (mp.dailyLastDone !== today) {
+          mp.dailyStreakDays = mp.dailyLastDone === yesterdayKey() ? mp.dailyStreakDays + 1 : 1;
+          mp.dailyLastDone = today;
+          if (mp.dailyStreakDays >= 5 && !next.badges.includes('daily_grinder')) {
             next.badges.push('daily_grinder');
             newBadges.push('daily_grinder');
           }
@@ -258,9 +274,9 @@ export default function App() {
       }
 
       // Level up?
-      const oldLevel = prev.level;
-      const newLevel: LevelKey = levelFromXP(next.xp);
-      next.level = newLevel;
+      const oldLevel = mp.level;
+      const newLevel: LevelKey = levelFromXP(mp.xp, runModuleId);
+      mp.level = newLevel;
       const leveledUp = newLevel !== oldLevel ? newLevel : null;
 
       if (leveledUp) sfx.levelup();
@@ -274,18 +290,8 @@ export default function App() {
   const resetProgress = () => {
     if (confirm('Wipe all progress?')) {
       clearState();
-      setState({
-        xp: 0,
-        streak: 0,
-        bestStreak: 0,
-        level: 'squirts',
-        badges: [],
-        scenarioStats: {},
-        unlocked: { varsity: false, elite: false },
-        dailyLastDone: null,
-        dailyStreakDays: 0,
-        soundOn: state.soundOn,
-      });
+      setState({ ...defaultState(), soundOn: state.soundOn });
+      setModuleId('hockey');
       setScreen({ kind: 'home' });
     }
   };
@@ -293,16 +299,19 @@ export default function App() {
   return (
     <div className="blb-root">
       <Scoreboard
-        state={state}
+        prog={prog}
+        moduleId={moduleId}
+        soundOn={state.soundOn}
         onHome={() => setScreen({ kind: 'home' })}
         onToggleSound={() => setState((s) => ({ ...s, soundOn: !s.soundOn }))}
       />
-      <ProgressStrip xp={state.xp} />
+      <ProgressStrip xp={prog.xp} moduleId={moduleId} />
 
       <main className="blb-main">
         {screen.kind === 'home' && (
           <HomeScreen
             state={state}
+            prog={prog}
             activeModule={activeModule}
             setModule={setModuleId}
             startSession={startSession}
@@ -323,7 +332,11 @@ export default function App() {
           <FeedbackScreen screen={screen} onNext={advanceFromFeedback} />
         )}
         {screen.kind === 'results' && (
-          <ResultsScreen screen={screen} onHome={() => setScreen({ kind: 'home' })} />
+          <ResultsScreen
+            screen={screen}
+            moduleId={moduleId}
+            onHome={() => setScreen({ kind: 'home' })}
+          />
         )}
         {screen.kind === 'coach' && <CoachMode onClose={() => setScreen({ kind: 'home' })} />}
       </main>

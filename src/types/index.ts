@@ -4,6 +4,8 @@
 
 /** Which sport a scenario belongs to. Absent on a scenario means hockey. */
 export type Sport = 'hockey' | 'lacrosse';
+/** Identifies a sport module (see src/data/modules.ts). */
+export type ModuleId = 'hockey' | 'lacrosse';
 /** The four hockey zones (the original `Zone`). */
 export type HockeyZone = 'defensive' | 'neutral' | 'offensive' | 'skills';
 /** The four lacrosse-attack skill tracks. */
@@ -146,19 +148,44 @@ export interface ScenarioStats {
   confidence: number;
 }
 
-export type LevelKey = 'squirts' | 'peewees' | 'bantams' | 'midgets' | 'juniors' | 'pro';
+export type HockeyLevelKey =
+  | 'squirts'
+  | 'peewees'
+  | 'bantams'
+  | 'midgets'
+  | 'juniors'
+  | 'pro';
+export type LacrosseLevelKey =
+  | 'lax_youth'
+  | 'lax_jv'
+  | 'lax_varsity'
+  | 'lax_allconf'
+  | 'lax_allamerican';
+export type LevelKey = HockeyLevelKey | LacrosseLevelKey;
 
-export interface SaveState {
+/** Progression for one sport module. Each module levels independently. */
+export interface ModuleProgress {
   xp: number;
-  streak: number;
-  bestStreak: number;
   level: LevelKey;
-  badges: string[];
-  scenarioStats: Record<string, ScenarioStats>;
   unlocked: { varsity: boolean; elite: boolean };
-  /** YYYY-MM-DD of last completed Daily 5. */
+  /** YYYY-MM-DD of last completed Daily 5 in this module. */
   dailyLastDone: string | null;
   dailyStreakDays: number;
+  streak: number;
+  bestStreak: number;
+}
+
+export interface SaveState {
+  /** Schema version. v2 introduced per-module progression. */
+  version: 2;
+  /** The module the app is currently showing. */
+  activeModule: ModuleId;
+  /** Independent progression per sport module. */
+  perModule: Record<ModuleId, ModuleProgress>;
+  /** Badge ids are globally unique, so badges stay shared across modules. */
+  badges: string[];
+  /** Keyed by scenario id (unique across sports), so stats stay shared. */
+  scenarioStats: Record<string, ScenarioStats>;
   soundOn: boolean;
 }
 

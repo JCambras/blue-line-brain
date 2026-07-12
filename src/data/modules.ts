@@ -1,5 +1,5 @@
-import type { Scenario, SessionMode, Sport } from '@/types';
-import { SCENARIOS } from './scenarios';
+import type { ModuleId, Scenario, SessionMode, Sport } from '@/types';
+import { SCENARIOS } from './scenarios/index.ts';
 
 /**
  * A sport module packages everything the shared pedagogical engine needs to
@@ -8,7 +8,7 @@ import { SCENARIOS } from './scenarios';
  * -> freeze -> decision -> feedback loop, the picker, XP, badges and the PWA
  * are all sport-agnostic and reused verbatim across modules.
  */
-export type ModuleId = 'hockey' | 'lacrosse';
+export type { ModuleId };
 
 export interface ModuleTrack {
   /** The session mode this card starts (a zone/track tag). */

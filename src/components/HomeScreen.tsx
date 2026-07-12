@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
-import type { SaveState, SessionMode } from '@/types';
+import type { ModuleId, ModuleProgress, SaveState, SessionMode } from '@/types';
 import { BADGES } from '@/data/badges';
-import { MODULES, type AppModule, type ModuleId } from '@/data/modules';
+import { MODULES, type AppModule } from '@/data/modules';
 import { weakestCategory } from '@/lib/picker';
 import { todayKey } from '@/lib/storage';
 
 interface HomeScreenProps {
   state: SaveState;
+  prog: ModuleProgress;
   activeModule: AppModule;
   setModule: (id: ModuleId) => void;
   startSession: (m: SessionMode) => void;
@@ -14,8 +15,12 @@ interface HomeScreenProps {
   resetProgress: () => void;
 }
 
+/** Badges earned across any module (streak / daily grind), shown in both. */
+const CROSS_MODULE_BADGES = new Set(['head_up_hero', 'daily_grinder']);
+
 export function HomeScreen({
   state,
+  prog,
   activeModule,
   setModule,
   startSession,
@@ -23,11 +28,16 @@ export function HomeScreen({
   resetProgress,
 }: HomeScreenProps) {
   const today = todayKey();
-  const dailyDone = state.dailyLastDone === today;
+  const dailyDone = prog.dailyLastDone === today;
   const weakest = useMemo(
     () => weakestCategory(state, activeModule.sport),
     [state, activeModule.sport]
   );
+  // Show this module's badges plus the cross-cutting ones in either module.
+  const visibleBadges = state.badges.filter((b) => {
+    if (CROSS_MODULE_BADGES.has(b)) return true;
+    return activeModule.sport === 'lacrosse' ? b.startsWith('lax_') : !b.startsWith('lax_');
+  });
 
   return (
     <div className="blb-home">
@@ -59,12 +69,12 @@ export function HomeScreen({
         <button
           className="blb-cta blb-cta-boss"
           onClick={() => startSession('boss')}
-          disabled={!state.unlocked.varsity}
+          disabled={!prog.unlocked.varsity}
         >
           <span className="blb-cta-tag">BOSS BATTLE</span>
           <span className="blb-cta-title">10 questions · 8 to win</span>
           <span className="blb-cta-sub">
-            {state.unlocked.varsity ? 'Bring your A-game' : 'Unlock at 80% Rookie'}
+            {prog.unlocked.varsity ? 'Bring your A-game' : 'Unlock at 80% Rookie'}
           </span>
         </button>
       </section>
@@ -117,13 +127,13 @@ export function HomeScreen({
 
         <div className="blb-side-card">
           <h3 className="blb-side-h">JERSEY PATCHES</h3>
-          {state.badges.length === 0 ? (
+          {visibleBadges.length === 0 ? (
             <div className="blb-side-body blb-muted">
               Earn badges by mastering categories.
             </div>
           ) : (
             <div className="blb-badges">
-              {state.badges.map((b) => (
+              {visibleBadges.map((b) => (
                 <div key={b} className="blb-badge" title={BADGES[b]?.desc}>
                   <span className="blb-badge-icon">{BADGES[b]?.icon}</span>
                   <span className="blb-badge-name">{BADGES[b]?.name}</span>
