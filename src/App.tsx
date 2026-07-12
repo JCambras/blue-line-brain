@@ -199,6 +199,22 @@ export default function App() {
             newBadges.push('tape_to_tape');
           }
         }
+
+        // Lacrosse category badges (only on correct)
+        if (sc && r.correct && sportOf(sc) === 'lacrosse') {
+          const laxBadge: Record<string, string> = {
+            dodge: 'lax_dodger',
+            feed: 'lax_feeder',
+            offball: 'lax_ghost',
+            shot: 'lax_sniper',
+            ride: 'lax_ride_or_die',
+          };
+          const badge = laxBadge[sc.category];
+          if (badge && !next.badges.includes(badge)) {
+            next.badges.push(badge);
+            newBadges.push(badge);
+          }
+        }
       });
 
       next.streak = runStreak;
@@ -213,12 +229,17 @@ export default function App() {
         next.unlocked.elite = true;
       }
 
-      // Boss battle badge
+      // Boss battle badge (sport-aware: lacrosse boss awards lax_boss)
       if (mode === 'boss') {
         const correctCount = results.filter((r) => r.correct).length;
-        if (correctCount >= 8 && !next.badges.includes('blue_line_boss')) {
-          next.badges.push('blue_line_boss');
-          newBadges.push('blue_line_boss');
+        if (correctCount >= 8) {
+          const firstSc = SCENARIOS.find((x) => x.id === results[0]?.scenarioId);
+          const bossBadge =
+            firstSc && sportOf(firstSc) === 'lacrosse' ? 'lax_boss' : 'blue_line_boss';
+          if (!next.badges.includes(bossBadge)) {
+            next.badges.push(bossBadge);
+            newBadges.push(bossBadge);
+          }
         }
       }
 
