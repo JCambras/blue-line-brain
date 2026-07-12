@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { Screen } from '@/types';
 import { narrationAudio } from '@/lib/narrationAudio';
 import { RinkDiagram } from './RinkDiagram';
+import { FieldDiagram } from './FieldDiagram';
 
 interface FeedbackScreenProps {
   screen: Extract<Screen, { kind: 'feedback' }>;
@@ -10,6 +11,7 @@ interface FeedbackScreenProps {
 
 export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
   const { scenario, correct, optionIdx, tapIdx } = screen;
+  const Diagram = (scenario.sport ?? 'hockey') === 'lacrosse' ? FieldDiagram : RinkDiagram;
 
   // Results beat: the coach speaks the verdict out loud - a rotating generic
   // opener, then this scenario's correct-answer + rationale clip - for both
@@ -51,7 +53,7 @@ export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
       </div>
 
       <div className="blb-rink-wrap blb-rink-feedback">
-        <RinkDiagram
+        <Diagram
           scenario={scenario}
           tapResult={tap ? { targetIdx: tapIdx!, correct: tap.correct } : null}
         />

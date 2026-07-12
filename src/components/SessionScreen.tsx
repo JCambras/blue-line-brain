@@ -5,6 +5,7 @@ import { sfx } from '@/lib/sfx';
 import { narrationAudio } from '@/lib/narrationAudio';
 import { OPTION_GAP_MS, OPTION_LEAD_IN_MS } from '@/lib/narrationTiming';
 import { RinkDiagram } from './RinkDiagram';
+import { FieldDiagram } from './FieldDiagram';
 import { AnimatedRink } from './AnimatedRink';
 
 interface SessionScreenProps {
@@ -36,6 +37,7 @@ export function SessionScreen({
   onQuit,
 }: SessionScreenProps) {
   const cfg = DIFFICULTY_CONFIG[scenario.difficulty];
+  const Diagram = (scenario.sport ?? 'hockey') === 'lacrosse' ? FieldDiagram : RinkDiagram;
   const [phase, setPhase] = useState<Phase>(scenario.animation ? 'anim' : 'reveal');
   const [revealed, setRevealed] = useState(0);
   const [readingIdx, setReadingIdx] = useState(-1);
@@ -186,6 +188,7 @@ export function SessionScreen({
             <AnimatedRink
               scenario={scenario}
               onDone={() => setPhase('reveal')}
+              Diagram={Diagram}
             />
             <button className="blb-skip" onClick={() => setPhase('reveal')}>
               Skip ▸▸
@@ -193,7 +196,7 @@ export function SessionScreen({
           </>
         ) : (
           <>
-            <RinkDiagram
+            <Diagram
               scenario={scenario}
               onTap={scenario.kind === 'tap' ? onTapTarget : undefined}
             />
