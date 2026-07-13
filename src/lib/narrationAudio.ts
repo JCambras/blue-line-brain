@@ -16,12 +16,13 @@
  * that is cut can fade out on its own element while the next clip starts cleanly
  * on the other one.
  *
- * Stale-manifest recovery: across a redeploy the cached manifest can map a
- * scenario key to a content-hashed clip filename that has since been pruned, so
- * the clip 404s and the session would go silent. When a mapped clip fails to
- * load we refetch the manifest from the network (bypassing the service-worker
- * cache) once and, if the key now maps to a different file, retry the clip -
- * so a stale key->filename map can never permanently silence narration.
+ * Stale-manifest recovery: across a redeploy the service worker can keep
+ * serving a cached manifest that either maps a scenario key to a content-hashed
+ * filename since pruned (the clip 404s) or lacks a key added in the new deploy
+ * (the clip is absent) - either way the session would go silent. In both cases
+ * we refetch the manifest from the network (bypassing the service-worker cache)
+ * once and retry with the fresh mapping, so a stale manifest can never
+ * permanently silence narration.
  *
  * The browser bindings (Audio, timers, fetch, base URL) are injected through
  * `NarrationEnv` so the pool/fade/sequencing logic is unit-testable with fakes
@@ -247,8 +248,18 @@ class NarrationAudio {
       // A stop()/play() landed while the manifest was loading — abandon this one.
       if (myToken !== this.token || !this.enabled) return;
       const file = manifest[key];
-      if (!file) return;
-      return this.playFile(key, file, myToken, true);
+      if (file) return this.playFile(key, file, myToken, true);
+      // Key absent from the (possibly stale-cached) manifest: a clip added in a
+      // deploy this session's manifest predates. The service worker can keep
+      // serving the old manifest via StaleWhileRevalidate for the whole
+      // session, so mirror the load-error path and refetch once from the
+      // network before giving up — otherwise a newly added clip stays silent.
+      return this.refreshManifest().then((fresh) => {
+        if (myToken !== this.token || !this.enabled) return;
+        const freshFile = fresh[key];
+        if (!freshFile) return;
+        return this.playFile(key, freshFile, myToken, true);
+      });
     });
   }
 

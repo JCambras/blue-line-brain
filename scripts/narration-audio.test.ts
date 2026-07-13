@@ -230,6 +230,35 @@ test('a 404 with no fresh mapping stays silent and does not retry-loop', async (
   );
 });
 
+test('a key missing from a stale manifest refetches and plays the newly added clip', async () => {
+  // The cached manifest predates this clip; the network manifest has it.
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' }, // no 'b' yet (stale cache)
+    refetch: () => ({ a: 'a.mp3', b: 'b.mp3' }), // deploy added 'b'
+  });
+  narration.play('b');
+  await settle();
+
+  assert.equal(refetchCount(), 1, 'a missing key triggers one network refetch');
+  const clip = created.find((x) => x.src.endsWith('b.mp3'));
+  assert.ok(clip, 'the newly added clip is played after the refetch');
+  assert.ok(!clip!.paused, 'the clip actually plays');
+});
+
+test('a key absent even after refetch stays silent without playing anything', async () => {
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' },
+    refetch: () => ({ a: 'a.mp3' }), // 'z' really does not exist
+  });
+  await narration.playAndWait('z'); // resolves rather than hanging
+  assert.equal(refetchCount(), 1, 'refetched once to check for the key');
+  assert.equal(
+    created.some((x) => x.playCalls > 0),
+    false,
+    'nothing plays for a genuinely unknown key'
+  );
+});
+
 test('a blocked play() stays silent without a manifest refetch', async () => {
   const { narration, created, state, refetchCount } = makeHarness();
   state.failPlays = true; // autoplay policy rejects (pool never unlocked)
