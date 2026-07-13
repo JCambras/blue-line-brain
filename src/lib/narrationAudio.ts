@@ -91,6 +91,14 @@ class NarrationAudio {
   private manifestLoad: Promise<Manifest> | null = null;
   /** Coalesces concurrent network refetches during stale-manifest recovery. */
   private manifestRefresh: Promise<Manifest> | null = null;
+  /**
+   * Keys confirmed absent even after a network refetch. Replays of these
+   * resolve instantly-silent instead of refetching on every play (the reveal
+   * sequence awaits clips serially, so repeated no-store fetches would stall
+   * it on a slow network). Cleared whenever a refetch adopts a changed
+   * manifest - a new deploy may have added the key.
+   */
+  private missingKeys = new Set<string>();
   /** Reusable, pre-unlocked audio elements (see module header). */
   private pool: AudioLike[] = [];
   /** Round-robin cursor so consecutive clips land on alternating elements. */
@@ -214,7 +222,15 @@ class NarrationAudio {
       this.manifestRefresh = this.env
         .refetchManifest(`${this.env.audioBase}manifest.json`)
         .then((m: Manifest) => {
-          if (m && Object.keys(m).length) this.manifest = m;
+          if (m && Object.keys(m).length) {
+            const prev = this.manifest;
+            const changed =
+              !prev ||
+              Object.keys(m).length !== Object.keys(prev).length ||
+              Object.keys(m).some((k) => prev[k] !== m[k]);
+            if (changed) this.missingKeys.clear();
+            this.manifest = m;
+          }
           return this.manifest ?? {};
         })
         .catch(() => this.manifest ?? {})
@@ -254,10 +270,16 @@ class NarrationAudio {
       // serving the old manifest via StaleWhileRevalidate for the whole
       // session, so mirror the load-error path and refetch once from the
       // network before giving up — otherwise a newly added clip stays silent.
+      // A key already confirmed missing over the network stays silent without
+      // another fetch.
+      if (this.missingKeys.has(key)) return;
       return this.refreshManifest().then((fresh) => {
-        if (myToken !== this.token || !this.enabled) return;
         const freshFile = fresh[key];
-        if (!freshFile) return;
+        if (!freshFile) {
+          this.missingKeys.add(key);
+          return;
+        }
+        if (myToken !== this.token || !this.enabled) return;
         return this.playFile(key, freshFile, myToken, true);
       });
     });

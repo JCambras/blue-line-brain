@@ -47,8 +47,9 @@ export default function App() {
   // iOS home-screen PWAs) can sit a version behind for a long time. Reload once
   // when control passes to a new worker so the fresh shell is picked up
   // automatically - no "tap to refresh" a young kid would ignore. Two guards:
-  // only act when this page was already controlled at load (so the very first
-  // install, controller null -> SW, never triggers a reload), and a one-shot
+  // on a page that loaded uncontrolled, skip only the very first
+  // controllerchange (the initial SW claim on a first install - a deploy
+  // activating later in that same session still reloads), and a one-shot
   // flag so we reload at most once per page (no reload loop). The update check
   // runs at load, so this usually lands at startup - but controllerchange can
   // also fire mid-session on a long-lived page (the browser's own SW re-check,
@@ -57,10 +58,14 @@ export default function App() {
   // transient run screen is React state.
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return;
-    const wasControlled = !!navigator.serviceWorker.controller;
+    let wasControlled = !!navigator.serviceWorker.controller;
     let reloading = false;
     const onControllerChange = () => {
-      if (!wasControlled || reloading) return;
+      if (!wasControlled) {
+        wasControlled = true;
+        return;
+      }
+      if (reloading) return;
       reloading = true;
       window.location.reload();
     };

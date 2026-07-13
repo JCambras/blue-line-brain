@@ -259,6 +259,41 @@ test('a key absent even after refetch stays silent without playing anything', as
   );
 });
 
+test('repeated plays of a genuinely absent key refetch only once', async () => {
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' },
+    refetch: () => ({ a: 'a.mp3' }), // 'z' does not exist anywhere
+  });
+  await narration.playAndWait('z');
+  await narration.playAndWait('z');
+  await narration.playAndWait('z');
+  assert.equal(refetchCount(), 1, 'later plays resolve instantly without new fetches');
+  assert.equal(
+    created.some((x) => x.playCalls > 0),
+    false,
+    'nothing plays for the absent key'
+  );
+});
+
+test('adopting a new deploy manifest clears the negative key cache', async () => {
+  let network: Record<string, string> = { a: 'a.mp3' };
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' },
+    refetch: () => network,
+  });
+  await narration.playAndWait('b'); // absent everywhere -> negative-cached
+  assert.equal(refetchCount(), 1);
+  network = { a: 'a.mp3', b: 'b.mp3' }; // a new deploy adds 'b'
+  await narration.playAndWait('c'); // another miss refetches and adopts the new manifest
+  assert.equal(refetchCount(), 2);
+  narration.play('b'); // no longer blocklisted; served from the adopted manifest
+  await settle();
+  assert.equal(refetchCount(), 2, 'the adopted manifest answers without another fetch');
+  const clip = created.find((x) => x.src.endsWith('b.mp3'));
+  assert.ok(clip, 'the newly deployed clip is loaded');
+  assert.ok(!clip!.paused, 'the newly deployed clip plays');
+});
+
 test('a blocked play() stays silent without a manifest refetch', async () => {
   const { narration, created, state, refetchCount } = makeHarness();
   state.failPlays = true; // autoplay policy rejects (pool never unlocked)
