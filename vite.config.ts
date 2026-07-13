@@ -56,7 +56,11 @@ export default defineConfig({
             // users pick up regenerated/added clips instead of being pinned to
             // a stale key->filename map, while offline still serves the cached
             // copy. Must precede the broader /audio/ rule (first match wins).
-            urlPattern: ({ url }) => url.pathname === '/audio/manifest.json',
+            // Matches the bare pathname only: narrationAudio's stale-manifest
+            // recovery refetches `manifest.json?fresh=1`, and that query must
+            // escape this route so it goes straight to the network.
+            urlPattern: ({ url }) =>
+              url.pathname === '/audio/manifest.json' && !url.search,
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'audio-manifest',
@@ -64,7 +68,13 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/audio/'),
+            // Everything under /audio/ except the manifest, which the rule
+            // above owns. Excluding it here also lets the cache-busting
+            // `manifest.json?fresh=1` recovery refetch fall through to the
+            // network instead of being served a cached copy.
+            urlPattern: ({ url }) =>
+              url.pathname.startsWith('/audio/') &&
+              url.pathname !== '/audio/manifest.json',
             handler: 'CacheFirst',
             options: {
               cacheName: 'audio-clips',

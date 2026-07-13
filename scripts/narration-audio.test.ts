@@ -45,11 +45,12 @@ const MANIFEST: Record<string, string> = {
   c: 'c.mp3',
 };
 
-function makeHarness() {
+function makeHarness(opts: { manifest?: Record<string, string>; refetch?: () => Record<string, string> } = {}) {
   const created: FakeAudio[] = [];
   const timers = new Map<number, () => void>();
   const state = { failPlays: false };
   let nextId = 1;
+  let refetchCalls = 0;
   const narration = new NarrationAudio({
     createAudio: () => {
       const a = new FakeAudio();
@@ -58,7 +59,11 @@ function makeHarness() {
       return a;
     },
     audioBase: '/audio/',
-    fetchManifest: () => Promise.resolve(MANIFEST),
+    fetchManifest: () => Promise.resolve(opts.manifest ?? MANIFEST),
+    refetchManifest: () => {
+      refetchCalls++;
+      return Promise.resolve(opts.refetch ? opts.refetch() : opts.manifest ?? MANIFEST);
+    },
     setInterval: (fn) => {
       const id = nextId++;
       timers.set(id, fn);
@@ -72,7 +77,7 @@ function makeHarness() {
   const flushFades = (n: number) => {
     for (let i = 0; i < n; i++) for (const fn of [...timers.values()]) fn();
   };
-  return { narration, created, flushFades, state };
+  return { narration, created, flushFades, state, refetchCount: () => refetchCalls };
 }
 
 /** Let the (fake) manifest promise + the play chain settle. */
@@ -183,6 +188,162 @@ test('a clip that already ended is released without a fade, next clip is clean',
   // No fade timer should have altered the already-ended clip's volume.
   flushFades(5);
   assert.equal(second.volume, 1, 'incoming clip stays audible');
+});
+
+test('a clip that 404s from a stale manifest refetches and retries the fresh file', async () => {
+  // Startup manifest points at a filename the redeploy has since pruned.
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a-old.mp3' },
+    refetch: () => ({ a: 'a-new.mp3' }),
+  });
+  narration.play('a');
+  await settle();
+  const first = created.find((x) => x.src.endsWith('a-old.mp3'));
+  assert.ok(first, 'the stale clip was attempted');
+  // Simulate the pruned file 404ing on load.
+  first!.onerror?.();
+  await settle();
+
+  assert.equal(refetchCount(), 1, 'the manifest was refetched from the network once');
+  const retry = created.find((x) => x.src.endsWith('a-new.mp3'));
+  assert.ok(retry, 'the clip retried with the fresh filename');
+  assert.ok(!retry!.paused, 'the fresh clip actually plays');
+  assert.equal(retry!.volume, 1, 'the fresh clip is audible');
+});
+
+test('a 404 with no fresh mapping stays silent and does not retry-loop', async () => {
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' },
+    refetch: () => ({ a: 'a.mp3' }), // truly gone; refetch offers nothing new
+  });
+  const done = narration.playAndWait('a');
+  await settle();
+  const first = created.find((x) => x.src.endsWith('a.mp3'));
+  first!.onerror?.();
+  await done; // resolves rather than hanging
+
+  assert.equal(refetchCount(), 1, 'refetched exactly once');
+  assert.equal(
+    created.filter((x) => x.src.endsWith('a.mp3')).length,
+    1,
+    'no retry storm: the clip was loaded only once'
+  );
+});
+
+test('a key missing from a stale manifest refetches and plays the newly added clip', async () => {
+  // The cached manifest predates this clip; the network manifest has it.
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' }, // no 'b' yet (stale cache)
+    refetch: () => ({ a: 'a.mp3', b: 'b.mp3' }), // deploy added 'b'
+  });
+  narration.play('b');
+  await settle();
+
+  assert.equal(refetchCount(), 1, 'a missing key triggers one network refetch');
+  const clip = created.find((x) => x.src.endsWith('b.mp3'));
+  assert.ok(clip, 'the newly added clip is played after the refetch');
+  assert.ok(!clip!.paused, 'the clip actually plays');
+});
+
+test('a key absent even after refetch stays silent without playing anything', async () => {
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' },
+    refetch: () => ({ a: 'a.mp3' }), // 'z' really does not exist
+  });
+  await narration.playAndWait('z'); // resolves rather than hanging
+  assert.equal(refetchCount(), 1, 'refetched once to check for the key');
+  assert.equal(
+    created.some((x) => x.playCalls > 0),
+    false,
+    'nothing plays for a genuinely unknown key'
+  );
+});
+
+test('repeated plays of a genuinely absent key refetch only once', async () => {
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' },
+    refetch: () => ({ a: 'a.mp3' }), // 'z' does not exist anywhere
+  });
+  await narration.playAndWait('z');
+  await narration.playAndWait('z');
+  await narration.playAndWait('z');
+  assert.equal(refetchCount(), 1, 'later plays resolve instantly without new fetches');
+  assert.equal(
+    created.some((x) => x.playCalls > 0),
+    false,
+    'nothing plays for the absent key'
+  );
+});
+
+test('a failed refetch does not negative-cache the key; it recovers once online', async () => {
+  // browserEnv maps network errors / non-ok responses to an empty manifest.
+  let network: Record<string, string> = {}; // offline: the refetch fails
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' }, // stale cache without 'b'
+    refetch: () => network,
+  });
+  await narration.playAndWait('b'); // silent for now, but not blocklisted
+  assert.equal(refetchCount(), 1);
+  assert.equal(
+    created.some((x) => x.playCalls > 0),
+    false,
+    'the failed refetch stays silent for this attempt'
+  );
+
+  network = { a: 'a.mp3', b: 'b.mp3' }; // connectivity returns
+  narration.play('b'); // the miss must refetch again, not stay poisoned
+  await settle();
+  assert.equal(refetchCount(), 2, 'a later play retries the refetch');
+  const clip = created.find((x) => x.src.endsWith('b.mp3'));
+  assert.ok(clip, 'the clip is recovered once the network is back');
+  assert.ok(!clip!.paused, 'the recovered clip plays');
+});
+
+test('adopting a new deploy manifest clears the negative key cache', async () => {
+  let network: Record<string, string> = { a: 'a.mp3' };
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' },
+    refetch: () => network,
+  });
+  await narration.playAndWait('b'); // absent everywhere -> negative-cached
+  assert.equal(refetchCount(), 1);
+  network = { a: 'a.mp3', b: 'b.mp3' }; // a new deploy adds 'b'
+  await narration.playAndWait('c'); // another miss refetches and adopts the new manifest
+  assert.equal(refetchCount(), 2);
+  narration.play('b'); // no longer blocklisted; served from the adopted manifest
+  await settle();
+  assert.equal(refetchCount(), 2, 'the adopted manifest answers without another fetch');
+  const clip = created.find((x) => x.src.endsWith('b.mp3'));
+  assert.ok(clip, 'the newly deployed clip is loaded');
+  assert.ok(!clip!.paused, 'the newly deployed clip plays');
+});
+
+test('a blocked play() stays silent without a manifest refetch', async () => {
+  const { narration, created, state, refetchCount } = makeHarness();
+  state.failPlays = true; // autoplay policy rejects (pool never unlocked)
+  await narration.playAndWait('a'); // resolves rather than hanging
+  const el = created.find((x) => x.src.endsWith('a.mp3'));
+  assert.ok(el, 'the clip was attempted');
+  assert.equal(refetchCount(), 0, 'no spurious network refetch for an autoplay block');
+});
+
+test('a load error after stop() is ignored without a manifest refetch', async () => {
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a-old.mp3' },
+    refetch: () => ({ a: 'a-new.mp3' }),
+  });
+  narration.play('a');
+  await settle();
+  const first = created.find((x) => x.src.endsWith('a-old.mp3'))!;
+  narration.stop(); // cancels the attempt before the error lands
+  first.onerror?.();
+  await settle();
+  assert.equal(refetchCount(), 0, 'a cancelled attempt never hits the network');
+  assert.equal(
+    created.some((x) => x.src.endsWith('a-new.mp3')),
+    false,
+    'no retry after stop()'
+  );
 });
 
 test('missing key and disabled sound stay silent without throwing', async () => {

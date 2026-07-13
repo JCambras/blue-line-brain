@@ -128,8 +128,15 @@ The app is an installable PWA that runs offline after the first load. `npm run
 build` emits a Workbox service worker (`dist/sw.js`) and web manifest that
 precache the app shell and runtime-cache the narration MP3s and Google Fonts, so
 the full scenario set plays with no network. Config lives in `vite.config.ts`
-(`vite-plugin-pwa`). The service worker is disabled in dev, so verify
-installability/offline against a production build:
+(`vite-plugin-pwa`). Updates are hands-off: the service worker registers with
+`autoUpdate` and the app silently reloads itself once when a new deploy takes
+control, so returning users (including installed iOS home-screen PWAs) pick up
+the new version on their next visit with no refresh prompt. If a cached audio
+manifest goes stale across a deploy - a clip's filename was pruned (404) or a
+newly added clip's key is missing - narration refetches the manifest from the
+network and retries once, so a redeploy never permanently silences a session.
+The service worker is disabled in dev, so verify installability/offline against
+a production build:
 
 ```bash
 npm run build && npm run preview

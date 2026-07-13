@@ -16,6 +16,14 @@
  * that is cut can fade out on its own element while the next clip starts cleanly
  * on the other one.
  *
+ * Stale-manifest recovery: across a redeploy the service worker can keep
+ * serving a cached manifest that either maps a scenario key to a content-hashed
+ * filename since pruned (the clip 404s) or lacks a key added in the new deploy
+ * (the clip is absent) - either way the session would go silent. In both cases
+ * we refetch the manifest from the network (bypassing the service-worker cache)
+ * once and retry with the fresh mapping, so a stale manifest can never
+ * permanently silence narration.
+ *
  * The browser bindings (Audio, timers, fetch, base URL) are injected through
  * `NarrationEnv` so the pool/fade/sequencing logic is unit-testable with fakes
  * (see scripts/narration-audio.test.ts); production uses `browserEnv()`.
@@ -51,6 +59,12 @@ export interface NarrationEnv {
   createAudio: () => AudioLike;
   audioBase: string;
   fetchManifest: (url: string) => Promise<Manifest>;
+  /**
+   * Refetch the manifest bypassing the service-worker/HTTP cache, for
+   * stale-manifest recovery after a redeploy. Distinct from `fetchManifest`
+   * (which may be served from cache for the fast startup path).
+   */
+  refetchManifest: (url: string) => Promise<Manifest>;
   setInterval: (fn: () => void, ms: number) => number;
   clearInterval: (id: number) => void;
 }
@@ -75,6 +89,16 @@ class NarrationAudio {
   private env: NarrationEnv;
   private manifest: Manifest | null = null;
   private manifestLoad: Promise<Manifest> | null = null;
+  /** Coalesces concurrent network refetches during stale-manifest recovery. */
+  private manifestRefresh: Promise<Manifest | null> | null = null;
+  /**
+   * Keys confirmed absent even after a network refetch. Replays of these
+   * resolve instantly-silent instead of refetching on every play (the reveal
+   * sequence awaits clips serially, so repeated no-store fetches would stall
+   * it on a slow network). Cleared whenever a refetch adopts a changed
+   * manifest - a new deploy may have added the key.
+   */
+  private missingKeys = new Set<string>();
   /** Reusable, pre-unlocked audio elements (see module header). */
   private pool: AudioLike[] = [];
   /** Round-robin cursor so consecutive clips land on alternating elements. */
@@ -188,6 +212,37 @@ class NarrationAudio {
   }
 
   /**
+   * Refetch the manifest from the network (cache-bypassing) and adopt it,
+   * recovering from a stale key->filename map after a redeploy. Concurrent
+   * calls share one in-flight request. Resolves with the freshly fetched
+   * manifest on success, or null when the refetch failed or came back empty -
+   * so callers can tell "confirmed absent" from "couldn't check". A failed or
+   * empty refetch keeps the current mapping rather than blanking narration.
+   */
+  private refreshManifest(): Promise<Manifest | null> {
+    if (!this.manifestRefresh) {
+      this.manifestRefresh = this.env
+        .refetchManifest(`${this.env.audioBase}manifest.json`)
+        .then((m: Manifest) => {
+          if (!m || !Object.keys(m).length) return null;
+          const prev = this.manifest;
+          const changed =
+            !prev ||
+            Object.keys(m).length !== Object.keys(prev).length ||
+            Object.keys(m).some((k) => prev[k] !== m[k]);
+          if (changed) this.missingKeys.clear();
+          this.manifest = m;
+          return m;
+        })
+        .catch(() => null)
+        .finally(() => {
+          this.manifestRefresh = null;
+        });
+    }
+    return this.manifestRefresh;
+  }
+
+  /**
    * Start the clip for a manifest key from the top, fire-and-forget. Stops any
    * current clip first, so replay/scrub/scenario-change never leave overlapping
    * audio. No-op when muted or when the key has no clip.
@@ -210,36 +265,99 @@ class NarrationAudio {
       // A stop()/play() landed while the manifest was loading — abandon this one.
       if (myToken !== this.token || !this.enabled) return;
       const file = manifest[key];
-      if (!file) return;
-      return new Promise<void>((resolve) => {
-        const audio = this.acquire();
-        // Reclaim the element from any prior use: kill a pending fade, drop old
-        // handlers, rewind, and restore full volume so the new clip is audible.
-        this.cancelFade(audio);
+      if (file) return this.playFile(key, file, myToken, true);
+      // Key absent from the (possibly stale-cached) manifest: a clip added in a
+      // deploy this session's manifest predates. The service worker can keep
+      // serving the old manifest via StaleWhileRevalidate for the whole
+      // session, so mirror the load-error path and refetch once from the
+      // network before giving up — otherwise a newly added clip stays silent.
+      // A key already confirmed missing over the network stays silent without
+      // another fetch. Only a SUCCESSFUL refetch that still lacks the key
+      // confirms absence - a failed/empty refetch (offline, flaky network)
+      // stays silent for this attempt but leaves the key retryable.
+      if (this.missingKeys.has(key)) return;
+      return this.refreshManifest().then((fresh) => {
+        const freshFile = fresh?.[key];
+        if (!freshFile) {
+          if (fresh) this.missingKeys.add(key);
+          return;
+        }
+        if (myToken !== this.token || !this.enabled) return;
+        return this.playFile(key, freshFile, myToken, true);
+      });
+    });
+  }
+
+  /**
+   * Load `file` onto a pool element and play it, resolving when it ends, is
+   * stopped, or fails. When `allowRetry` and the clip fails to load (typically a
+   * 404 from a stale manifest after a redeploy), refetch the manifest from the
+   * network once and retry with the fresh filename if the key now maps to a
+   * different file — otherwise resolve silently.
+   */
+  private playFile(
+    key: string,
+    file: string,
+    myToken: number,
+    allowRetry: boolean
+  ): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const audio = this.acquire();
+      // Reclaim the element from any prior use: kill a pending fade, drop old
+      // handlers, rewind, and restore full volume so the new clip is audible.
+      this.cancelFade(audio);
+      audio.onended = null;
+      audio.onerror = null;
+      audio.muted = false;
+      audio.volume = 1;
+      audio.src = `${this.env.audioBase}${file}`;
+      try {
+        audio.currentTime = 0;
+      } catch {
+        // pre-load seek; the fresh src already starts at 0
+      }
+      this.current = audio;
+      this.currentResolve = resolve;
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
         audio.onended = null;
         audio.onerror = null;
-        audio.muted = false;
-        audio.volume = 1;
-        audio.src = `${this.env.audioBase}${file}`;
-        try {
-          audio.currentTime = 0;
-        } catch {
-          // pre-load seek; the fresh src already starts at 0
+        if (this.currentResolve === resolve) this.currentResolve = null;
+        resolve();
+      };
+      // A clip that won't load is usually a stale manifest pointing at a pruned,
+      // content-hashed filename. Refetch the manifest (cache-bypassing) once; if
+      // the key now maps elsewhere, retry so the session doesn't go silent.
+      const onLoadError = () => {
+        if (settled) return;
+        if (myToken !== this.token || !this.enabled || !allowRetry) {
+          finish();
+          return;
         }
-        this.current = audio;
-        this.currentResolve = resolve;
-        const finish = () => {
-          audio.onended = null;
-          audio.onerror = null;
+        settled = true; // this attempt is done; a retry (if any) owns `resolve`
+        audio.onended = null;
+        audio.onerror = null;
+        this.refreshManifest().then((fresh) => {
+          const stale = myToken !== this.token || !this.enabled;
+          const newFile = fresh?.[key];
+          if (!stale && newFile && newFile !== file) {
+            this.playFile(key, newFile, myToken, false).then(resolve);
+            return;
+          }
           if (this.currentResolve === resolve) this.currentResolve = null;
           resolve();
-        };
-        audio.onended = finish;
-        audio.onerror = finish;
-        // Autoplay can reject (element never unlocked) — stay silent, don't throw.
-        const p = audio.play();
-        if (p && typeof p.then === 'function') p.catch(() => finish());
-      });
+        });
+      };
+      audio.onended = finish;
+      audio.onerror = onLoadError;
+      // Autoplay can reject (element never unlocked, or stop() pausing a
+      // still-pending play) - that is never a stale manifest, so stay silent
+      // without a manifest refetch. Real load failures (e.g. a 404 on a pruned
+      // filename) arrive via the onerror event and still recover above.
+      const p = audio.play();
+      if (p && typeof p.then === 'function') p.catch(() => finish());
     });
   }
 
@@ -308,6 +426,14 @@ function browserEnv(): NarrationEnv {
     audioBase: inBrowser ? `${import.meta.env.BASE_URL}audio/` : '/audio/',
     fetchManifest: (url) =>
       fetch(url)
+        .then((r) => (r.ok ? (r.json() as Promise<Manifest>) : {}))
+        .catch(() => ({})),
+    // Bypass the service-worker route and the HTTP cache: the `?fresh` query
+    // dodges the manifest's StaleWhileRevalidate rule (which matches the bare
+    // pathname only), and `cache: 'no-store'` forces a network hit. Used only
+    // for stale-manifest recovery, so the extra round-trip is rare.
+    refetchManifest: (url) =>
+      fetch(`${url}?fresh=1`, { cache: 'no-store' })
         .then((r) => (r.ok ? (r.json() as Promise<Manifest>) : {}))
         .catch(() => ({})),
     setInterval: (fn, ms) => window.setInterval(fn, ms),
