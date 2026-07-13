@@ -50,7 +50,11 @@ export default function App() {
   // only act when this page was already controlled at load (so the very first
   // install, controller null -> SW, never triggers a reload), and a one-shot
   // flag so we reload at most once per page (no reload loop). The update check
-  // runs at load, so this lands at startup, before a quiz run begins.
+  // runs at load, so this usually lands at startup - but controllerchange can
+  // also fire mid-session on a long-lived page (the browser's own SW re-check,
+  // or a deploy activating while the app is open), which drops the in-flight
+  // run. Accepted tradeoff: durable progress lives in localStorage; only the
+  // transient run screen is React state.
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return;
     const wasControlled = !!navigator.serviceWorker.controller;

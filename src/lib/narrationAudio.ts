@@ -296,7 +296,7 @@ class NarrationAudio {
       // the key now maps elsewhere, retry so the session doesn't go silent.
       const onLoadError = () => {
         if (settled) return;
-        if (!allowRetry) {
+        if (myToken !== this.token || !this.enabled || !allowRetry) {
           finish();
           return;
         }
@@ -316,9 +316,12 @@ class NarrationAudio {
       };
       audio.onended = finish;
       audio.onerror = onLoadError;
-      // Autoplay can reject (element never unlocked) — stay silent, don't throw.
+      // Autoplay can reject (element never unlocked, or stop() pausing a
+      // still-pending play) - that is never a stale manifest, so stay silent
+      // without a manifest refetch. Real load failures (e.g. a 404 on a pruned
+      // filename) arrive via the onerror event and still recover above.
       const p = audio.play();
-      if (p && typeof p.then === 'function') p.catch(() => onLoadError());
+      if (p && typeof p.then === 'function') p.catch(() => finish());
     });
   }
 

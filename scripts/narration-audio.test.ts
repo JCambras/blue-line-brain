@@ -230,6 +230,34 @@ test('a 404 with no fresh mapping stays silent and does not retry-loop', async (
   );
 });
 
+test('a blocked play() stays silent without a manifest refetch', async () => {
+  const { narration, created, state, refetchCount } = makeHarness();
+  state.failPlays = true; // autoplay policy rejects (pool never unlocked)
+  await narration.playAndWait('a'); // resolves rather than hanging
+  const el = created.find((x) => x.src.endsWith('a.mp3'));
+  assert.ok(el, 'the clip was attempted');
+  assert.equal(refetchCount(), 0, 'no spurious network refetch for an autoplay block');
+});
+
+test('a load error after stop() is ignored without a manifest refetch', async () => {
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a-old.mp3' },
+    refetch: () => ({ a: 'a-new.mp3' }),
+  });
+  narration.play('a');
+  await settle();
+  const first = created.find((x) => x.src.endsWith('a-old.mp3'))!;
+  narration.stop(); // cancels the attempt before the error lands
+  first.onerror?.();
+  await settle();
+  assert.equal(refetchCount(), 0, 'a cancelled attempt never hits the network');
+  assert.equal(
+    created.some((x) => x.src.endsWith('a-new.mp3')),
+    false,
+    'no retry after stop()'
+  );
+});
+
 test('missing key and disabled sound stay silent without throwing', async () => {
   const { narration, created } = makeHarness();
   narration.enabled = false;
