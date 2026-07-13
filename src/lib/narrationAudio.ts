@@ -90,7 +90,7 @@ class NarrationAudio {
   private manifest: Manifest | null = null;
   private manifestLoad: Promise<Manifest> | null = null;
   /** Coalesces concurrent network refetches during stale-manifest recovery. */
-  private manifestRefresh: Promise<Manifest> | null = null;
+  private manifestRefresh: Promise<Manifest | null> | null = null;
   /**
    * Keys confirmed absent even after a network refetch. Replays of these
    * resolve instantly-silent instead of refetching on every play (the reveal
@@ -214,26 +214,27 @@ class NarrationAudio {
   /**
    * Refetch the manifest from the network (cache-bypassing) and adopt it,
    * recovering from a stale key->filename map after a redeploy. Concurrent
-   * calls share one in-flight request. A failed or empty refetch keeps the
-   * current mapping rather than blanking narration.
+   * calls share one in-flight request. Resolves with the freshly fetched
+   * manifest on success, or null when the refetch failed or came back empty -
+   * so callers can tell "confirmed absent" from "couldn't check". A failed or
+   * empty refetch keeps the current mapping rather than blanking narration.
    */
-  private refreshManifest(): Promise<Manifest> {
+  private refreshManifest(): Promise<Manifest | null> {
     if (!this.manifestRefresh) {
       this.manifestRefresh = this.env
         .refetchManifest(`${this.env.audioBase}manifest.json`)
         .then((m: Manifest) => {
-          if (m && Object.keys(m).length) {
-            const prev = this.manifest;
-            const changed =
-              !prev ||
-              Object.keys(m).length !== Object.keys(prev).length ||
-              Object.keys(m).some((k) => prev[k] !== m[k]);
-            if (changed) this.missingKeys.clear();
-            this.manifest = m;
-          }
-          return this.manifest ?? {};
+          if (!m || !Object.keys(m).length) return null;
+          const prev = this.manifest;
+          const changed =
+            !prev ||
+            Object.keys(m).length !== Object.keys(prev).length ||
+            Object.keys(m).some((k) => prev[k] !== m[k]);
+          if (changed) this.missingKeys.clear();
+          this.manifest = m;
+          return m;
         })
-        .catch(() => this.manifest ?? {})
+        .catch(() => null)
         .finally(() => {
           this.manifestRefresh = null;
         });
@@ -271,12 +272,14 @@ class NarrationAudio {
       // session, so mirror the load-error path and refetch once from the
       // network before giving up — otherwise a newly added clip stays silent.
       // A key already confirmed missing over the network stays silent without
-      // another fetch.
+      // another fetch. Only a SUCCESSFUL refetch that still lacks the key
+      // confirms absence - a failed/empty refetch (offline, flaky network)
+      // stays silent for this attempt but leaves the key retryable.
       if (this.missingKeys.has(key)) return;
       return this.refreshManifest().then((fresh) => {
-        const freshFile = fresh[key];
+        const freshFile = fresh?.[key];
         if (!freshFile) {
-          this.missingKeys.add(key);
+          if (fresh) this.missingKeys.add(key);
           return;
         }
         if (myToken !== this.token || !this.enabled) return;
@@ -338,7 +341,7 @@ class NarrationAudio {
         audio.onerror = null;
         this.refreshManifest().then((fresh) => {
           const stale = myToken !== this.token || !this.enabled;
-          const newFile = fresh[key];
+          const newFile = fresh?.[key];
           if (!stale && newFile && newFile !== file) {
             this.playFile(key, newFile, myToken, false).then(resolve);
             return;

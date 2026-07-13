@@ -275,6 +275,30 @@ test('repeated plays of a genuinely absent key refetch only once', async () => {
   );
 });
 
+test('a failed refetch does not negative-cache the key; it recovers once online', async () => {
+  // browserEnv maps network errors / non-ok responses to an empty manifest.
+  let network: Record<string, string> = {}; // offline: the refetch fails
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' }, // stale cache without 'b'
+    refetch: () => network,
+  });
+  await narration.playAndWait('b'); // silent for now, but not blocklisted
+  assert.equal(refetchCount(), 1);
+  assert.equal(
+    created.some((x) => x.playCalls > 0),
+    false,
+    'the failed refetch stays silent for this attempt'
+  );
+
+  network = { a: 'a.mp3', b: 'b.mp3' }; // connectivity returns
+  narration.play('b'); // the miss must refetch again, not stay poisoned
+  await settle();
+  assert.equal(refetchCount(), 2, 'a later play retries the refetch');
+  const clip = created.find((x) => x.src.endsWith('b.mp3'));
+  assert.ok(clip, 'the clip is recovered once the network is back');
+  assert.ok(!clip!.paused, 'the recovered clip plays');
+});
+
 test('adopting a new deploy manifest clears the negative key cache', async () => {
   let network: Record<string, string> = { a: 'a.mp3' };
   const { narration, created, refetchCount } = makeHarness({
