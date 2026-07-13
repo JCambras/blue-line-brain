@@ -45,11 +45,12 @@ const MANIFEST: Record<string, string> = {
   c: 'c.mp3',
 };
 
-function makeHarness() {
+function makeHarness(opts: { manifest?: Record<string, string>; refetch?: () => Record<string, string> } = {}) {
   const created: FakeAudio[] = [];
   const timers = new Map<number, () => void>();
   const state = { failPlays: false };
   let nextId = 1;
+  let refetchCalls = 0;
   const narration = new NarrationAudio({
     createAudio: () => {
       const a = new FakeAudio();
@@ -58,7 +59,11 @@ function makeHarness() {
       return a;
     },
     audioBase: '/audio/',
-    fetchManifest: () => Promise.resolve(MANIFEST),
+    fetchManifest: () => Promise.resolve(opts.manifest ?? MANIFEST),
+    refetchManifest: () => {
+      refetchCalls++;
+      return Promise.resolve(opts.refetch ? opts.refetch() : opts.manifest ?? MANIFEST);
+    },
     setInterval: (fn) => {
       const id = nextId++;
       timers.set(id, fn);
@@ -72,7 +77,7 @@ function makeHarness() {
   const flushFades = (n: number) => {
     for (let i = 0; i < n; i++) for (const fn of [...timers.values()]) fn();
   };
-  return { narration, created, flushFades, state };
+  return { narration, created, flushFades, state, refetchCount: () => refetchCalls };
 }
 
 /** Let the (fake) manifest promise + the play chain settle. */
@@ -183,6 +188,46 @@ test('a clip that already ended is released without a fade, next clip is clean',
   // No fade timer should have altered the already-ended clip's volume.
   flushFades(5);
   assert.equal(second.volume, 1, 'incoming clip stays audible');
+});
+
+test('a clip that 404s from a stale manifest refetches and retries the fresh file', async () => {
+  // Startup manifest points at a filename the redeploy has since pruned.
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a-old.mp3' },
+    refetch: () => ({ a: 'a-new.mp3' }),
+  });
+  narration.play('a');
+  await settle();
+  const first = created.find((x) => x.src.endsWith('a-old.mp3'));
+  assert.ok(first, 'the stale clip was attempted');
+  // Simulate the pruned file 404ing on load.
+  first!.onerror?.();
+  await settle();
+
+  assert.equal(refetchCount(), 1, 'the manifest was refetched from the network once');
+  const retry = created.find((x) => x.src.endsWith('a-new.mp3'));
+  assert.ok(retry, 'the clip retried with the fresh filename');
+  assert.ok(!retry!.paused, 'the fresh clip actually plays');
+  assert.equal(retry!.volume, 1, 'the fresh clip is audible');
+});
+
+test('a 404 with no fresh mapping stays silent and does not retry-loop', async () => {
+  const { narration, created, refetchCount } = makeHarness({
+    manifest: { a: 'a.mp3' },
+    refetch: () => ({ a: 'a.mp3' }), // truly gone; refetch offers nothing new
+  });
+  const done = narration.playAndWait('a');
+  await settle();
+  const first = created.find((x) => x.src.endsWith('a.mp3'));
+  first!.onerror?.();
+  await done; // resolves rather than hanging
+
+  assert.equal(refetchCount(), 1, 'refetched exactly once');
+  assert.equal(
+    created.filter((x) => x.src.endsWith('a.mp3')).length,
+    1,
+    'no retry storm: the clip was loaded only once'
+  );
 });
 
 test('missing key and disabled sound stay silent without throwing', async () => {

@@ -40,6 +40,31 @@ export default function App() {
   const activeModule = moduleById(moduleId);
   const prog = state.perModule[moduleId];
 
+  // Deliver new deploys on the next visit. The PWA registers with
+  // `autoUpdate`, so a new service worker skips waiting and claims this page as
+  // soon as it activates - but the already-loaded shell (JS/CSS/HTML) stays in
+  // memory until a reload, which is why returning users (especially installed
+  // iOS home-screen PWAs) can sit a version behind for a long time. Reload once
+  // when control passes to a new worker so the fresh shell is picked up
+  // automatically - no "tap to refresh" a young kid would ignore. Two guards:
+  // only act when this page was already controlled at load (so the very first
+  // install, controller null -> SW, never triggers a reload), and a one-shot
+  // flag so we reload at most once per page (no reload loop). The update check
+  // runs at load, so this lands at startup, before a quiz run begins.
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+    const wasControlled = !!navigator.serviceWorker.controller;
+    let reloading = false;
+    const onControllerChange = () => {
+      if (!wasControlled || reloading) return;
+      reloading = true;
+      window.location.reload();
+    };
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+    return () =>
+      navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+  }, []);
+
   // Prefetch the coach-voice audio manifest once at startup, and prime the
   // audio pool on the first user gesture. Narration starts from timers/effects,
   // never synchronously inside a click, so without this priming the browser's
