@@ -165,7 +165,9 @@ export function SessionScreen({
           <span className="blb-pip" style={{ color: cfg.cssVar }}>
             {cfg.label}
           </span>
-          <span className="blb-pip">{scenario.zone.toUpperCase()}</span>
+          <span className="blb-pip">
+            {scenario.realGame ? 'YOUR GAME' : scenario.zone.toUpperCase()}
+          </span>
           <span className="blb-pip">
             {idx + 1}/{total}
           </span>
@@ -181,6 +183,16 @@ export function SessionScreen({
           style={{ width: `${timerPct}%` }}
         />
       </div>
+
+      {scenario.realGame && (
+        <div className="blb-real-banner blb-real-banner-session">
+          <span className="blb-real-banner-tag">📼 THIS HAPPENED IN YOUR GAME</span>
+          <span className="blb-real-banner-text">
+            {scenario.realGame.context ??
+              "A real moment from one of your games - what's the smarter play next time?"}
+          </span>
+        </div>
+      )}
 
       <div className="blb-rink-wrap">
         {animating ? (

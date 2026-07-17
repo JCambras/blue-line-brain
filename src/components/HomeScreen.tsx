@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { ModuleId, ModuleProgress, SaveState, SessionMode } from '@/types';
 import { BADGES } from '@/data/badges';
-import { MODULES, type AppModule } from '@/data/modules';
+import { MODULES, scenariosForModule, type AppModule } from '@/data/modules';
 import { weakestCategory } from '@/lib/picker';
 import { todayKey } from '@/lib/storage';
 
@@ -32,6 +32,14 @@ export function HomeScreen({
   const weakest = useMemo(
     () => weakestCategory(state, activeModule.sport),
     [state, activeModule.sport]
+  );
+  // Real Examples: moments from the player's own games. The section only shows
+  // when the active module actually has some (hockey seeds them; lacrosse has
+  // none, so it stays untouched). Adding a future example is a single data
+  // entry - see src/data/scenarios/real-examples.ts.
+  const realExamples = useMemo(
+    () => scenariosForModule(activeModule.id).filter((s) => s.realGame),
+    [activeModule.id]
   );
   // Show this module's badges plus the cross-cutting ones in either module.
   const visibleBadges = state.badges.filter((b) => {
@@ -93,6 +101,21 @@ export function HomeScreen({
           ))}
         </div>
       </section>
+
+      {realExamples.length > 0 && (
+        <section className="blb-real">
+          <h2 className="blb-section-h">REAL EXAMPLES</h2>
+          <button className="blb-real-card" onClick={() => startSession('real')}>
+            <span className="blb-real-tag">📼 FROM YOUR OWN GAMES</span>
+            <span className="blb-real-title">Learn from your game moments</span>
+            <span className="blb-real-sub">
+              {realExamples.length}{' '}
+              {realExamples.length === 1 ? 'moment' : 'moments'} · this actually
+              happened to you
+            </span>
+          </button>
+        </section>
+      )}
 
       <section className="blb-side-row">
         <div className="blb-side-card">

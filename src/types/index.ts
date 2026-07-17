@@ -118,6 +118,23 @@ export interface TapTarget {
   label?: string;
 }
 
+// ---------- Real game example ----------
+/**
+ * Marks a scenario as a real moment from one of the player's own games (as
+ * opposed to a generic drill). Its presence routes the scenario into the
+ * hockey module's "Real Examples" section and makes the UI frame it as
+ * "this actually happened in one of your games". Adding a new real example is a
+ * single `Scenario` data entry (see `src/data/scenarios/real-examples.ts`) - no
+ * UI work required.
+ */
+export interface RealGameExample {
+  /**
+   * Short, encouraging framing line shown under the "this happened in your
+   * game" banner (e.g. "You were on a rush and both lanes closed"). Optional.
+   */
+  context?: string;
+}
+
 // ---------- Scenario ----------
 export interface Scenario {
   id: string;
@@ -136,6 +153,12 @@ export interface Scenario {
   visual: RinkVisual;
   /** Optional animated play sequence that runs before the question. */
   animation?: PlayAnimation;
+  /**
+   * Present when this scenario is a real moment from one of the player's own
+   * games. Marks it for the "Real Examples" section and the "this happened in
+   * your game" framing; absent for generic drills.
+   */
+  realGame?: RealGameExample;
 }
 
 // ---------- Persistent state ----------
@@ -190,7 +213,7 @@ export interface SaveState {
 }
 
 // ---------- Session ----------
-export type SessionMode = 'daily5' | 'boss' | 'weakest' | Zone;
+export type SessionMode = 'daily5' | 'boss' | 'weakest' | 'real' | Zone;
 
 export interface SessionResult {
   scenarioId: string;

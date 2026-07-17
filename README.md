@@ -35,7 +35,7 @@ hockey-brain/
     ├── types/
     │   └── index.ts              # Scenario, SaveState, etc.
     ├── data/
-    │   ├── scenarios/            # scenario bank (per-zone files) + AUTHORING.md
+    │   ├── scenarios/            # scenario bank (per-zone files + real-game examples) + AUTHORING.md
     │   ├── levels.ts             # Squirts → Pro
     │   └── badges.ts             # jersey patches
     ├── lib/
@@ -70,7 +70,11 @@ hockey-brain/
 
 Add to the matching zone file in `src/data/scenarios/` and follow
 `src/data/scenarios/AUTHORING.md` (animation beats, puck placement, voice).
-`npm run validate` enforces the mechanical rules. Every scenario needs:
+Real-game examples (moments from the player's own games) go in
+`real-examples.ts` instead: one `Scenario` entry with the optional `realGame`
+field routes it into the home screen's opt-in Real Examples section - no UI
+work needed. `npm run validate` enforces the mechanical rules. Every scenario
+needs:
 
 - `id` — unique slug
 - `zone` — `defensive | neutral | offensive | skills`

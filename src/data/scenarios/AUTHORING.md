@@ -31,6 +31,17 @@ scenario's `zone` tag, e.g. skills scenarios).
 - The correct option's `feedback` is the rationale spoken on the results beat
   (after the stated answer), so give it a clear one-line "why".
 - Options are read aloud by TTS, so keep each under ~12 words.
+- **Safe-play rule (hockey):** the taught/correct play must **never** be a pass
+  across the middle of the ice in your own end - cross-ice through the slot,
+  through the middle of the defensive zone, or across the front of your own net.
+  Coach the safer out instead (up the boards, off the glass, reverse behind the
+  net, D-to-D when safe, chip it deep, perimeter rim to the weak side). A
+  cross-middle pass is fine and encouraged as a **wrong** distractor. Offensive-
+  zone scoring passes (seam / backdoor one-timers in front of the opponent's
+  net) are the exception - those stay. Neutral-zone up-ice passes are also
+  fine: a north-south pass up the middle seam in the neutral zone (for example
+  a tempo play to beat a trap before it sets) is not an own-end cross-ice pass
+  and stays.
 
 ## Decision (tap)
 
@@ -127,3 +138,11 @@ content. Everything is spoken by TTS - write for the ear.
 - `elite`: the right answer hinges on a detail of the freeze frame (partner
   caught up ice, goalie set, shot lane blocked). 11s timer. Wrong options
   should be defensible-sounding.
+
+## Real-game examples
+
+Scenarios with the optional `realGame` field (`RealGameExample` in
+`src/types/index.ts`) are real moments from the player's own games. They live
+in `real-examples.ts`, not the zone files, and follow every rule above plus an
+encouraging, never-shaming tone - the lesson is always "make the smarter play
+next time". See the header comment in `real-examples.ts`.
