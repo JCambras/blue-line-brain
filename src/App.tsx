@@ -119,7 +119,10 @@ export default function App() {
       // bleed into each other's Daily 5, Boss, or weakest-spot drills.
       const sport = activeModule.sport;
       const unlocked = state.perModule[moduleId].unlocked;
-      const inSport = (s: Scenario) => sportOf(s) === sport;
+      // Real Examples are their own opt-in section, so keep them out of every
+      // generic pool (Daily 5, Boss, Weakest, zone tracks) - the `real` mode
+      // below is the only way in.
+      const inSport = (s: Scenario) => sportOf(s) === sport && !s.realGame;
       let scenarios: Scenario[] = [];
       if (mode === 'daily5') {
         scenarios = pickScenarios(state, 5, inSport, unlocked);
@@ -132,6 +135,15 @@ export default function App() {
           5,
           (s) => inSport(s) && (cat ? s.category === cat : true),
           unlocked
+        );
+      } else if (mode === 'real') {
+        // Personal coaching moments from the player's own games - always
+        // reviewable, never gated behind difficulty unlocks.
+        scenarios = pickScenarios(
+          state,
+          5,
+          (s) => sportOf(s) === sport && !!s.realGame,
+          { varsity: true, elite: true }
         );
       } else {
         scenarios = pickScenarios(state, 5, (s) => inSport(s) && s.zone === mode, unlocked);

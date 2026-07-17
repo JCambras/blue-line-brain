@@ -31,6 +31,14 @@ scenario's `zone` tag, e.g. skills scenarios).
 - The correct option's `feedback` is the rationale spoken on the results beat
   (after the stated answer), so give it a clear one-line "why".
 - Options are read aloud by TTS, so keep each under ~12 words.
+- **Safe-play rule (hockey):** the taught/correct play must **never** be a pass
+  across the middle of the ice in your own end - cross-ice through the slot,
+  through the middle of the defensive zone, or across the front of your own net.
+  Coach the safer out instead (up the boards, off the glass, reverse behind the
+  net, D-to-D when safe, chip it deep, perimeter rim to the weak side). A
+  cross-middle pass is fine and encouraged as a **wrong** distractor. Offensive-
+  zone scoring passes (seam / backdoor one-timers in front of the opponent's
+  net) are the exception - those stay.
 
 ## Decision (tap)
 

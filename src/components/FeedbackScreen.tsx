@@ -52,6 +52,17 @@ export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
         <div className="blb-verdict-text">{verdictText}</div>
       </div>
 
+      {scenario.realGame && (
+        <div className="blb-real-banner blb-real-banner-feedback">
+          <span className="blb-real-banner-tag">📼 YOUR GAME</span>
+          <span className="blb-real-banner-text">
+            {correct
+              ? 'That is the smarter play. Now you have got it for next game.'
+              : 'No worries - this is exactly how you learn from your own games.'}
+          </span>
+        </div>
+      )}
+
       <div className="blb-rink-wrap blb-rink-feedback">
         <Diagram
           scenario={scenario}

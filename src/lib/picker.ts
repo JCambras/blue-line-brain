@@ -46,6 +46,10 @@ export function weakestCategory(state: SaveState, sport?: Sport): string | null 
     const sc = SCENARIOS.find((x) => x.id === id);
     if (!sc) return;
     if (sport && sportOf(sc) !== sport) return;
+    // Real Examples live in their own opt-in section and their categories have
+    // no generic drills to fall back on, so never surface one as the "weakest"
+    // category (a Practice Weakest drill would then find an empty pool).
+    if (sc.realGame) return;
     if (!catAcc[sc.category]) catAcc[sc.category] = { c: 0, a: 0 };
     catAcc[sc.category].c += s.correct;
     catAcc[sc.category].a += s.attempts;

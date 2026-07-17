@@ -340,17 +340,17 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     kind: 'mcq',
     options: [
       {
-        text: 'Short pass to your center swinging low',
+        text: 'Chip it hard off the glass and out',
         correct: true,
         feedback:
-          'The low center is your release valve. He takes it with speed, facing up ice, and the zone opens.',
+          'Covered on the wall and pressured in the middle - get it out clean. No turnover in your own end, and you get to change your legs.',
       },
       {
-        text: 'Force it up to the covered winger',
+        text: 'Bump it to your center in the middle',
         correct: false,
         feedback:
-          'A pass into coverage is a turnover at your own blue line - the worst spot on the ice.',
-        trap: 'The winger is the drilled breakout target, but covered is covered.',
+          'A pass through your own slot is the one that ends up behind your goalie. Never put it there.',
+        trap: 'He is calling for it and looks open, but a pick in the middle is a goal against.',
       },
       {
         text: 'Retreat behind your net with it',
@@ -360,7 +360,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         trap: 'Buying time feels safe, but you skate away from your own support.',
       },
     ],
-    coachCue: 'Center swings low. Use the middle.',
+    coachCue: 'Covered and pressured? Glass and out.',
     visual: {
       rinkZone: 'defensive',
       youId: 'd',
@@ -872,27 +872,27 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         trap: 'The strong-side quick-up is the drilled play. The pinch is exactly why it is off.',
       },
       {
-        text: 'Rim it hard around the strong side',
+        text: 'Rim it around the boards to your weak-side winger',
+        correct: true,
+        feedback:
+          'Everything is stacked on the right, so send it the safe way - around the boards to your open winger, never flat across your own slot.',
+      },
+      {
+        text: 'Fire it flat across to your weak-side winger',
         correct: false,
         feedback:
-          'Their D is already low on the boards. The rim goes straight into his skates and stays in.',
-        trap: 'A hard rim usually beats a pinch - not when he has already finished pinching.',
+          'Right winger, deadly execution. A flat pass across your own slot is the one their forward jumps for a breakaway.',
+        trap: 'He is wide open, but a puck across your own net is how a clean break becomes a goal against.',
       },
       {
         text: 'Skate it out through the middle',
         correct: false,
         feedback:
-          "The forechecker curling in cuts off the middle before your second stride. You carry into the fence.",
+          'The forechecker curling in cuts off the middle before your second stride. You carry into the fence.',
         trap: 'The ice in front of you looks open - for exactly one more second.',
       },
-      {
-        text: 'Hit the weak-side winger on the far wall',
-        correct: true,
-        feedback:
-          'Everything they have is stacked on the right. One crisp pass and your left winger walks out into a vacated point.',
-      },
     ],
-    coachCue: 'They overload one side? Break out the other.',
+    coachCue: 'Overloaded one side? Rim out the other.',
     visual: {
       rinkZone: 'defensive',
       youId: 'd',
@@ -1084,12 +1084,21 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
     kind: 'tap',
     tapTargets: [
       {
-        x: 46,
-        y: 76,
+        x: 16,
+        y: 72,
         radius: 8,
         correct: true,
         feedback:
-          'Both their forwards are below the puck. The bump to your center in the middle beats the whole forecheck.',
+          'Both their forwards are jammed on the strong side. Rim it around the boards to your center on the open weak wall.',
+        label: 'Weak wall',
+      },
+      {
+        x: 48,
+        y: 74,
+        radius: 8,
+        correct: false,
+        feedback:
+          'A blind bump up your own slot with two men bearing down is how it ends up in your net. Never there.',
         label: 'Middle',
       },
       {
@@ -1110,24 +1119,15 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
           'On a 2-1-2 their winger locks that wall. The rim dies on his stick every time.',
         label: 'Strong wall',
       },
-      {
-        x: 14,
-        y: 64,
-        radius: 8,
-        correct: false,
-        feedback:
-          'A long backhand heave across the zone - their weak-side D reads it all the way.',
-        label: 'Far wall',
-      },
     ],
-    coachCue: 'Two men deep? The middle is yours.',
+    coachCue: 'Two men deep? Rim it to the weak side.',
     visual: {
       rinkZone: 'defensive',
       youId: 'd',
       players: [
         { id: 'd', team: 'home', x: 54, y: 96, label: 'D' },
         { id: 'd2', team: 'home', x: 78, y: 88, label: 'D' },
-        { id: 'c', team: 'home', x: 46, y: 76, label: 'C' },
+        { id: 'c', team: 'home', x: 16, y: 72, label: 'C' },
         { id: 'f1', team: 'away', x: 60, y: 90, label: 'F' },
         { id: 'f2', team: 'away', x: 72, y: 84, label: 'F' },
       ],
@@ -1156,7 +1156,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
           players: {
             d: { x: 58, y: 78 },
             d2: { x: 68, y: 74 },
-            c: { x: 48, y: 58 },
+            c: { x: 40, y: 54 },
             f1: { x: 60, y: 56 },
             f2: { x: 68, y: 58 },
           },
@@ -1168,7 +1168,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
           players: {
             d: { x: 66, y: 90 },
             d2: { x: 74, y: 82 },
-            c: { x: 47, y: 66 },
+            c: { x: 26, y: 64 },
             f1: { x: 61, y: 72 },
             f2: { x: 70, y: 70 },
           },
@@ -1180,18 +1180,18 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
           players: {
             d: { x: 54, y: 96 },
             d2: { x: 78, y: 88 },
-            c: { x: 46, y: 76 },
+            c: { x: 16, y: 72 },
             f1: { x: 60, y: 90 },
             f2: { x: 72, y: 84 },
           },
           puck: { x: 54, y: 96 },
-          narration: 'The second man peels onto your partner, and your center bumps into the middle...',
+          narration: 'The second man peels onto your partner, and your center swings to the open weak wall...',
         },
         { t: 13 },
       ],
       freezeLine: 'Two men deep on you. Tap where this puck goes.',
       narration:
-        "It's a two-man forecheck, sent in hard behind the dump. The first man hunts you and the second one's coming too. You get to it first and tuck behind the net, but both keep coming. The second peels onto your partner, and your center bumps into the middle.",
+        "It's a two-man forecheck, sent in hard behind the dump. The first man hunts you and the second one's coming too. You get to it first and tuck behind the net, but both keep coming. The second peels onto your partner, and your center swings to the open weak wall.",
     },
   },
 ];
