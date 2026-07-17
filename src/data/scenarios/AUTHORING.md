@@ -138,3 +138,11 @@ content. Everything is spoken by TTS - write for the ear.
 - `elite`: the right answer hinges on a detail of the freeze frame (partner
   caught up ice, goalie set, shot lane blocked). 11s timer. Wrong options
   should be defensible-sounding.
+
+## Real-game examples
+
+Scenarios with the optional `realGame` field (`RealGameExample` in
+`src/types/index.ts`) are real moments from the player's own games. They live
+in `real-examples.ts`, not the zone files, and follow every rule above plus an
+encouraging, never-shaming tone - the lesson is always "make the smarter play
+next time". See the header comment in `real-examples.ts`.
