@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run validate && tsc -b && vite build",
+    "build": "npm run validate && tsc -b && tsc --noEmit -p tsconfig.worker.json && vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit",
+    "lint": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json",
     "validate": "node --experimental-strip-types scripts/validate-scenarios.ts",
     "narrate": "node --experimental-strip-types scripts/generate-narration.ts",
     "test": "node --experimental-strip-types --test scripts/*.test.ts"

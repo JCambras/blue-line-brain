@@ -1,0 +1,16 @@
+{
+  "// note": "Service worker (src/sw.ts) is type-checked here, not by the main tsconfig: it needs the WebWorker lib (ServiceWorkerGlobalScope, self.skipWaiting, ...) which conflicts with the app's DOM lib. Excluded from tsconfig.json; checked via `npm run lint` and the build.",
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "WebWorker"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": [],
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true
+  },
+  "include": ["src/sw.ts"]
+}

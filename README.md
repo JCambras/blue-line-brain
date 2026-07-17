@@ -129,10 +129,16 @@ Everything saves to `localStorage` under `blb-save-v1`. Reset from the home scre
 ## Install & offline (PWA)
 
 The app is an installable PWA that runs offline after the first load. `npm run
-build` emits a Workbox service worker (`dist/sw.js`) and web manifest that
-precache the app shell and runtime-cache the narration MP3s and Google Fonts, so
-the full scenario set plays with no network. Config lives in `vite.config.ts`
-(`vite-plugin-pwa`). Updates are hands-off: the service worker registers with
+build` bundles the hand-written Workbox service worker (`src/sw.ts`, via
+`vite-plugin-pwa` in `injectManifest` mode) into `dist/sw.js` plus a web
+manifest. It precaches the app shell and runtime-caches the narration MP3s and
+Google Fonts, so any clip you have heard once online replays with no network
+(clips cache lazily as they play - the ~18 MB set is not force-precached). The
+SW strips the `Range` header on clip fetches so they cache as full responses;
+without that the Cache API rejects the `206` partial that `<audio>` range
+requests produce, which is what previously left the installed app silent
+offline. Config lives in `vite.config.ts` (`vite-plugin-pwa`). Updates are
+hands-off: the service worker registers with
 `autoUpdate` and the app silently reloads itself once when a new deploy takes
 control, so returning users (including installed iOS home-screen PWAs) pick up
 the new version on their next visit with no refresh prompt. If a cached audio
