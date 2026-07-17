@@ -881,7 +881,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         text: 'Fire it flat across to your weak-side winger',
         correct: false,
         feedback:
-          'Right winger, deadly execution. A flat pass across your own slot is the one their forward jumps for a breakaway.',
+          'Right target, deadly way to get it there. A flat pass across your own slot is the one their forward jumps for a breakaway.',
         trap: 'He is wide open, but a puck across your own net is how a clean break becomes a goal against.',
       },
       {

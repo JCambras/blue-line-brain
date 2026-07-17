@@ -38,7 +38,10 @@ scenario's `zone` tag, e.g. skills scenarios).
   net, D-to-D when safe, chip it deep, perimeter rim to the weak side). A
   cross-middle pass is fine and encouraged as a **wrong** distractor. Offensive-
   zone scoring passes (seam / backdoor one-timers in front of the opponent's
-  net) are the exception - those stay.
+  net) are the exception - those stay. Neutral-zone up-ice passes are also
+  fine: a north-south pass up the middle seam in the neutral zone (for example
+  a tempo play to beat a trap before it sets) is not an own-end cross-ice pass
+  and stays.
 
 ## Decision (tap)
 

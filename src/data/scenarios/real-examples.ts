@@ -24,7 +24,7 @@ export const REAL_EXAMPLE_SCENARIOS: Scenario[] = [
       'You jumped up into the rush with the puck. You went to cut outside - the D took it away. You cut back inside - that lane is gone too. Your winger is driving the far side.',
     realGame: {
       context:
-        'You had it on a rush and both lanes closed up. This one is straight from your own game - let us learn from it.',
+        "You had it on a rush and both lanes closed up. This one's straight from your own game - let's learn from it.",
     },
     kind: 'mcq',
     options: [

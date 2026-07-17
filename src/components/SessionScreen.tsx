@@ -189,7 +189,7 @@ export function SessionScreen({
           <span className="blb-real-banner-tag">📼 THIS HAPPENED IN YOUR GAME</span>
           <span className="blb-real-banner-text">
             {scenario.realGame.context ??
-              'A real moment from one of your games - what is the smarter play next time?'}
+              "A real moment from one of your games - what's the smarter play next time?"}
           </span>
         </div>
       )}

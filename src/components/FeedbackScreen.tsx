@@ -57,7 +57,7 @@ export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
           <span className="blb-real-banner-tag">📼 YOUR GAME</span>
           <span className="blb-real-banner-text">
             {correct
-              ? 'That is the smarter play. Now you have got it for next game.'
+              ? "That's the smarter play. Now you've got it for next game."
               : 'No worries - this is exactly how you learn from your own games.'}
           </span>
         </div>

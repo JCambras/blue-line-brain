@@ -78,8 +78,11 @@ export function accuracyForDifficulty(
   diff: Scenario['difficulty'],
   sport?: Sport
 ): number {
+  // Real Examples sit outside progression: their session is opt-in and always
+  // available, so replaying a memorized one must not nudge the unlock gate.
   const ids = SCENARIOS.filter(
-    (s) => s.difficulty === diff && (!sport || sportOf(s) === sport)
+    (s) =>
+      s.difficulty === diff && (!sport || sportOf(s) === sport) && !s.realGame
   ).map((s) => s.id);
   let attempts = 0;
   let correct = 0;
