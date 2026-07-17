@@ -137,7 +137,9 @@ Google Fonts, so any clip you have heard once online replays with no network
 SW strips the `Range` header on clip fetches so they cache as full responses;
 without that the Cache API rejects the `206` partial that `<audio>` range
 requests produce, which is what previously left the installed app silent
-offline. Config lives in `vite.config.ts` (`vite-plugin-pwa`). Updates are
+offline. The audio element's range request is still answered with a genuine
+`206` carved from the full body - on cache hits and misses alike - since
+iOS Safari's media loader requires one. Config lives in `vite.config.ts` (`vite-plugin-pwa`). Updates are
 hands-off: the service worker registers with
 `autoUpdate` and the app silently reloads itself once when a new deploy takes
 control, so returning users (including installed iOS home-screen PWAs) pick up

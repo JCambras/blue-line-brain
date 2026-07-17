@@ -14,8 +14,11 @@
  *
  * Fix: for the audio-clip route, strip the `Range` header before the network
  * fetch (`stripRangeHeaderPlugin`) so the SW receives - and can cache - a full
- * `200` response. `RangeRequestsPlugin` then serves the exact byte range the
- * audio element asked for out of that cached full body, both online and offline.
+ * `200` response. The audio element still gets the genuine `206` it asked for
+ * on every path: `RangeRequestsPlugin` carves the byte range out of the cached
+ * full body on hits, and `partialContentPlugin` carves it out of the network's
+ * full 200 on the first (cache-miss) play - WebKit's media loader (iOS Safari,
+ * the primary installed platform) refuses a 200 answer to a range request.
  * Clips are cached lazily as they first play online, so nothing is precached
  * (the full set is ~18 MB) yet every clip a kid has heard once replays offline.
  *
@@ -39,9 +42,9 @@ import { registerRoute, NavigationRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { RangeRequestsPlugin } from 'workbox-range-requests';
+import { RangeRequestsPlugin, createPartialResponse } from 'workbox-range-requests';
 import type { WorkboxPlugin } from 'workbox-core/types';
-import { stripRangeHeader } from './lib/swRangeStrip.ts';
+import { stripRangeHeader, ensurePartialResponse } from './lib/swRangeStrip.ts';
 
 declare const self: ServiceWorkerGlobalScope & {
   __WB_MANIFEST: Array<string | PrecacheEntry>;
@@ -67,6 +70,20 @@ registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html')));
  */
 const stripRangeHeaderPlugin: WorkboxPlugin = {
   requestWillFetch: async ({ request }) => stripRangeHeader(request),
+};
+
+/**
+ * On a cache miss `CacheFirst` returns the network response - the stripped full
+ * `200` - directly, but WebKit's media loader requires a genuine `206` for a
+ * range request, so without this the FIRST online play of each clip is silent
+ * on iOS. Converts that 200 into the requested 206; cache hits (already 206 via
+ * `RangeRequestsPlugin`) and non-200s (a stale-manifest 404 must stay an error
+ * so narrationAudio's recovery fires) pass through untouched. The cache write
+ * is unaffected: it uses a clone taken before this callback runs.
+ */
+const partialContentPlugin: WorkboxPlugin = {
+  handlerWillRespond: async ({ request, response }) =>
+    ensurePartialResponse(request, response, createPartialResponse),
 };
 
 // The audio manifest keeps a fixed URL across redeploys (its values are the
@@ -97,6 +114,7 @@ registerRoute(
       stripRangeHeaderPlugin,
       new CacheableResponsePlugin({ statuses: [0, 200] }),
       new RangeRequestsPlugin(),
+      partialContentPlugin,
       new ExpirationPlugin({
         // Cover the full committed narration set (~948 clips) so every clip can
         // persist offline, with headroom for future scenarios.
