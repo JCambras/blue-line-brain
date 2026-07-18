@@ -13,9 +13,10 @@ interface CoachModeProps {
 }
 
 /**
- * Per-sport wording for the data-model doc. The schema is shared, but its
- * surface ("rink" vs "field"), zone enum and category examples differ by sport
- * so a lacrosse coach never reads hockey terms.
+ * Per-sport wording for the whole Coach Mode screen (kid-facing note, coach
+ * explainer, data-model doc). The schema is shared, but the emoji, surface
+ * ("rink" vs "field"), game piece ("puck" vs "ball"), zone enum and category
+ * examples differ by sport so a lacrosse coach never reads hockey terms.
  */
 const COACH_COPY: Record<
   Sport,

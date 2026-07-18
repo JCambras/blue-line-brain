@@ -64,7 +64,10 @@ export function readableOptionCount(s: Scenario): number {
 /**
  * The exact spoken line for option `i` of `n`, kept identical to how
  * SessionScreen used to read it aloud so the coach voice preserves the cadence.
- * Only used at build time to render the clip text.
+ * `i` is the option's ORIGINAL data index: SessionScreen shuffles display order
+ * and plays each clip by `origIdx`, so the baked letter/lead can lag the
+ * on-screen slot (see AGENTS.md - only fixable by re-rendering
+ * position-independent clips). Only used at build time to render the clip text.
  */
 export function optionSpeech(i: number, n: number, text: string): string {
   const letter = String.fromCharCode(65 + i);
