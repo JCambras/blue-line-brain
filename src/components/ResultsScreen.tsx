@@ -1,7 +1,7 @@
 import type { ModuleId, Screen } from '@/types';
 import { ladderFor } from '@/data/levels';
 import { BADGES } from '@/data/badges';
-import { SCENARIOS } from '@/data/scenarios';
+import { BOSS_RULES, SCENARIOS } from '@/data/scenarios';
 
 interface ResultsScreenProps {
   screen: Extract<Screen, { kind: 'results' }>;
@@ -25,13 +25,24 @@ export function ResultsScreen({ screen, moduleId, onHome }: ResultsScreenProps) 
     SCENARIOS.find((s) => s.id === sampleId)?.coachCue ??
     'Scan early. Move feet. Stick first.';
 
-  const bossWin = mode === 'boss' && correctCount >= 8;
+  const bossWin = mode === 'boss' && correctCount >= BOSS_RULES.toWin;
 
   return (
     <div className="blb-results">
       <h1 className="blb-results-h">
-        {bossWin ? '🏆 BOSS BEATEN' : mode === 'boss' ? 'BOSS HELD' : 'SHIFT COMPLETE'}
+        {bossWin
+          ? '🏆 BOSS BEATEN'
+          : mode === 'boss'
+            ? 'BOSS WINS THIS ONE'
+            : 'SHIFT COMPLETE'}
       </h1>
+      {mode === 'boss' && (
+        <p className="blb-results-sub">
+          {bossWin
+            ? `You went ${correctCount}/${results.length}. That's a win - nice.`
+            : `You went ${correctCount}/${results.length} - you need ${BOSS_RULES.toWin} to beat the boss. Run it back.`}
+        </p>
+      )}
 
       <div className="blb-results-stats">
         <div className="blb-rstat">

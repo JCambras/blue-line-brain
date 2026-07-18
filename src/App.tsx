@@ -8,7 +8,7 @@ import type {
   LevelKey,
   ModuleId,
 } from '@/types';
-import { SCENARIOS } from '@/data/scenarios';
+import { BOSS_RULES, SCENARIOS } from '@/data/scenarios';
 import { moduleById, sportOf } from '@/data/modules';
 import { levelFromXP } from '@/data/levels';
 import {
@@ -127,7 +127,7 @@ export default function App() {
       if (mode === 'daily5') {
         scenarios = pickScenarios(state, 5, inSport, unlocked);
       } else if (mode === 'boss') {
-        scenarios = pickScenarios(state, 10, inSport, unlocked);
+        scenarios = pickScenarios(state, BOSS_RULES.questions, inSport, unlocked);
       } else if (mode === 'weakest') {
         const cat = weakestCategory(state, sport);
         scenarios = pickScenarios(
@@ -297,7 +297,7 @@ export default function App() {
       // Boss battle badge (sport-aware: lacrosse boss awards lax_boss)
       if (mode === 'boss') {
         const correctCount = results.filter((r) => r.correct).length;
-        if (correctCount >= 8) {
+        if (correctCount >= BOSS_RULES.toWin) {
           const bossBadge = runModuleId === 'lacrosse' ? 'lax_boss' : 'blue_line_boss';
           if (!next.badges.includes(bossBadge)) {
             next.badges.push(bossBadge);

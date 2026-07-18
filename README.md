@@ -82,7 +82,9 @@ needs:
 - `zone` — hockey: `defensive | neutral | offensive | skills`; lacrosse:
   `dodge | offball | finish | ride`
 - `category` — used for weakness detection (hockey: retrieval, gap, coverage;
-  lacrosse: dodge, feed, shot, ride; etc.)
+  lacrosse: dodge, feed, shot, ride; etc.); the UI shows the kid-friendly names
+  from `CATEGORY_LABELS` in `src/data/scenarios/index.ts`, so add a label there
+  for any new category
 - `difficulty` — `rookie | varsity | elite`
 - `kind` — `mcq | tap`
 - `options[]` (for mcq) with `feedback` and `trap` (the "I see why you'd pick this" insight)
@@ -125,6 +127,13 @@ guidance.
 
 - 80% accuracy on Rookie → unlocks Varsity
 - 80% accuracy on Varsity → unlocks Elite
+
+## Boss Battle
+
+Unlocks with Varsity. 10 questions, 8 correct to win - both numbers come from
+the shared `BOSS_RULES` constant in `src/data/scenarios/index.ts`, which every
+screen references. Winning earns the Blue Line Boss badge (Field General in
+the lacrosse module).
 
 ## Persistence
 

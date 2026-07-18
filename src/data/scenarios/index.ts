@@ -19,6 +19,99 @@ import { LACROSSE_FINISH_SCENARIOS } from './lacrosse-finish.ts';
 import { LACROSSE_RIDE_SCENARIOS } from './lacrosse-ride.ts';
 import { LACROSSE_TAP_SCENARIOS } from './lacrosse-taps.ts';
 
+/** Boss Battle rules - single source of truth for question count and win line. */
+export const BOSS_RULES = { questions: 10, toWin: 8 };
+
+/**
+ * Player-facing names for scenario categories (never show raw slugs in the UI).
+ * Covers every category the "Practice Weakest" card can surface (any non-real
+ * scenario's `category`, both sports). Slugs are disjoint across sports, so a
+ * lacrosse player never sees a hockey label. New categories fall back to a
+ * title-cased slug via `categoryLabel`, but add a name here so the card reads
+ * cleanly.
+ */
+export const CATEGORY_LABELS: Record<string, string> = {
+  // Hockey
+  retrieval: 'Puck Retrievals',
+  coverage: 'D-Zone Coverage',
+  breakout: 'Breakouts',
+  regroup: 'Regroups',
+  clear: 'Clearing the Zone',
+  reverse: 'Reverses',
+  'rim-read': 'Reading the Rim',
+  wheel: 'Wheeling the Net',
+  escape: 'Escaping Pressure',
+  gap: 'Gap Control',
+  'rush-defense': 'Defending the Rush',
+  'rush-offense': 'Attacking off the Rush',
+  rush: 'Reading the Rush',
+  angling: 'Angling',
+  'stick-position': 'Stick Position',
+  'defending-stick': 'Stick Defense',
+  'step-up': 'Stepping Up',
+  'pivot-timing': 'Pivot Timing',
+  transition: 'Transition',
+  tempo: 'Controlling Tempo',
+  'stretch-pass': 'Stretch Passes',
+  entry: 'Zone Entries',
+  'entry-sort': 'Sorting the Rush',
+  'middle-lane': 'Middle-Lane Drive',
+  'dump-in': 'Dump-Ins',
+  'chip-chase': 'Chip and Chase',
+  offense: 'Offensive Blue Line',
+  'point-play': 'Playing the Point',
+  activation: 'Joining the Attack',
+  pinch: 'Pinching',
+  cycle: 'Cycling',
+  'net-front': 'Net-Front Play',
+  screen: 'Screens',
+  'one-timer': 'One-Timers',
+  rebound: 'Rebounds',
+  backdoor: 'Backdoor Plays',
+  attack: 'Attacking',
+  deception: 'Deception',
+  'wall-play': 'Wall Play',
+  battle: 'Puck Battles',
+  'box-out': 'Boxing Out',
+  passing: 'Passing',
+  support: 'Puck Support',
+  'drop-pass': 'Drop Passes',
+  'd-to-d': 'D-to-D Passes',
+  'puck-handling': 'Puck Handling',
+  'puck-protection': 'Protecting the Puck',
+  'puck-management': 'Puck Management',
+  forecheck: 'Forechecking',
+  pressure: 'Applying Pressure',
+  closing: 'Closing the Gap',
+  positioning: 'Positioning',
+  'shot-blocking': 'Shot Blocking',
+  faceoff: 'Faceoffs',
+  powerplay: 'Power Play',
+  'penalty-kill': 'Penalty Kill',
+  'delayed-penalty': 'Delayed Penalty',
+  'late-game': 'Late-Game Situations',
+  'empty-net': 'Empty-Net Play',
+  overtime: 'Overtime',
+  skills: 'Skills',
+  // Lacrosse
+  dodge: 'Dodging',
+  offball: 'Off-Ball Play',
+  feed: 'Feeding',
+  shot: 'Shooting',
+  ride: 'The Ride',
+};
+
+/** Look up a category's display name, falling back to a cleaned-up slug. */
+export function categoryLabel(category: string): string {
+  return (
+    CATEGORY_LABELS[category] ??
+    category
+      .split('-')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ')
+  );
+}
+
 /**
  * Difficulty config: timer (seconds) and number of MCQ choices.
  * Timer is mandatory at every level — speed is the skill.

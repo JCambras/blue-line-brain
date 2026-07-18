@@ -777,6 +777,12 @@ body {
   line-height: 1;
   text-align: center;
 }
+.blb-results-sub {
+  margin: -8px 0 0;
+  text-align: center;
+  font-size: 15px;
+  color: rgba(8, 17, 31, 0.65);
+}
 .blb-results-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -888,6 +894,17 @@ body {
   line-height: 1.55;
   max-width: 640px;
 }
+.blb-coach-note {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  max-width: 640px;
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--ice);
+  border-left: 3px solid var(--rink-blue);
+  border-radius: 6px;
+}
 .blb-coach-actions {
   display: flex;
   gap: 10px;
@@ -902,6 +919,12 @@ body {
   font-size: 13px;
 }
 .blb-coach-btn.blb-cta-primary {
+  /* Base .blb-coach-btn sets a white background at equal specificity, so the
+     primary variant must restate the dark ink fill or its white label lands on
+     white and vanishes. Mirrors the home-screen primary CTA look. */
+  background: var(--ink);
+  background-image: radial-gradient(circle at 90% -20%, rgba(245, 180, 31, 0.25), transparent 50%);
+  border-color: var(--ink);
   color: white;
 }
 .blb-coach-json {

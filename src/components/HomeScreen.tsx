@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { ModuleId, ModuleProgress, SaveState, SessionMode } from '@/types';
 import { BADGES } from '@/data/badges';
 import { MODULES, scenariosForModule, type AppModule } from '@/data/modules';
+import { BOSS_RULES, categoryLabel } from '@/data/scenarios';
 import { weakestCategory } from '@/lib/picker';
 import { todayKey } from '@/lib/storage';
 
@@ -80,7 +81,9 @@ export function HomeScreen({
           disabled={!prog.unlocked.varsity}
         >
           <span className="blb-cta-tag">BOSS BATTLE</span>
-          <span className="blb-cta-title">10 questions · 8 to win</span>
+          <span className="blb-cta-title">
+            {BOSS_RULES.questions} questions · {BOSS_RULES.toWin} to win
+          </span>
           <span className="blb-cta-sub">
             {prog.unlocked.varsity ? 'Bring your A-game' : 'Unlock at 80% Rookie'}
           </span>
@@ -123,7 +126,7 @@ export function HomeScreen({
           {weakest ? (
             <>
               <div className="blb-side-body">
-                Your softest category: <strong>{weakest}</strong>
+                You miss the most on: <strong>{categoryLabel(weakest)}</strong>
               </div>
               <button
                 className="blb-side-btn"
