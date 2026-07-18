@@ -4,7 +4,10 @@ import { SCENARIOS } from '@/data/scenarios';
 import { sportOf } from '@/data/modules';
 
 interface CoachModeProps {
-  /** Active sport, so the schema doc names the right surface and tracks. */
+  /**
+   * Active sport, so the export ships that sport's scenarios and the schema
+   * doc names the right surface and tracks.
+   */
   sport: Sport;
   onClose: () => void;
 }

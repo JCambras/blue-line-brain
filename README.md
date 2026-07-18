@@ -55,7 +55,7 @@ hockey-brain/
     │   ├── SessionScreen.tsx     # active scenario
     │   ├── FeedbackScreen.tsx    # post-answer
     │   ├── ResultsScreen.tsx     # session summary
-    │   ├── CoachMode.tsx         # JSON export + spec
+    │   ├── CoachMode.tsx         # JSON export (active sport) + spec
     │   └── Onboard.tsx           # first-run modal
     └── styles/
         └── index.css             # Tailwind + custom CSS
@@ -79,13 +79,15 @@ work needed. `npm run validate` enforces the mechanical rules. Every scenario
 needs:
 
 - `id` — unique slug
-- `zone` — `defensive | neutral | offensive | skills`
-- `category` — used for weakness detection (retrieval, gap, coverage, etc.)
+- `zone` — hockey: `defensive | neutral | offensive | skills`; lacrosse:
+  `dodge | offball | finish | ride`
+- `category` — used for weakness detection (hockey: retrieval, gap, coverage;
+  lacrosse: dodge, feed, shot, ride; etc.)
 - `difficulty` — `rookie | varsity | elite`
 - `kind` — `mcq | tap`
 - `options[]` (for mcq) with `feedback` and `trap` (the "I see why you'd pick this" insight)
 - `coachCue` — the ONE thing to remember
-- `visual` — normalized 0–100 coordinates (full rink, defensive zone is high-y)
+- `visual` — normalized 0–100 coordinates (full rink or field, defensive end is high-y)
 
 ## Narration audio
 
