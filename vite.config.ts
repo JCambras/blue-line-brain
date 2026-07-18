@@ -7,10 +7,24 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      // injectManifest (hand-written src/sw.ts) rather than generateSW: the
+      // narration MP3s are played via `new Audio()`, whose Range request yields a
+      // 206 that the Cache API refuses to store, so a declarative CacheFirst
+      // could never cache a clip and the PWA had no offline audio. src/sw.ts
+      // strips the Range header so clips cache as full 200s. See its header.
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       registerType: 'autoUpdate',
       // Icons + favicon live in public/ and ship as-is; list them so the
-      // generated service worker precaches them alongside the built app shell.
+      // service worker precaches them alongside the built app shell.
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      injectManifest: {
+        // Precache the built app shell. The audio clips are large committed
+        // artifacts (~18 MB), so they are runtime-cached lazily by src/sw.ts
+        // instead of bloating the precache / stalling install on flaky wifi.
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
+      },
       manifest: {
         name: 'Blue Line Brain',
         short_name: 'Blue Line Brain',
@@ -39,77 +53,6 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
-          },
-        ],
-      },
-      workbox: {
-        // Precache the built app shell so the app opens offline after first
-        // load. The audio clips are large committed artifacts, so cache them
-        // lazily at runtime instead of bloating the precache.
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
-        navigateFallback: '/index.html',
-        runtimeCaching: [
-          {
-            // The manifest maps scenario keys to content-hashed clip filenames
-            // and, unlike the immutable MP3s, keeps a fixed URL across
-            // redeploys. Revalidate it in the background so returning online
-            // users pick up regenerated/added clips instead of being pinned to
-            // a stale key->filename map, while offline still serves the cached
-            // copy. Must precede the broader /audio/ rule (first match wins).
-            // Matches the bare pathname only: narrationAudio's stale-manifest
-            // recovery refetches `manifest.json?fresh=1`, and that query must
-            // escape this route so it goes straight to the network.
-            urlPattern: ({ url }) =>
-              url.pathname === '/audio/manifest.json' && !url.search,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'audio-manifest',
-              cacheableResponse: { statuses: [0, 200] },
-            },
-          },
-          {
-            // Everything under /audio/ except the manifest, which the rule
-            // above owns. Excluding it here also lets the cache-busting
-            // `manifest.json?fresh=1` recovery refetch fall through to the
-            // network instead of being served a cached copy.
-            urlPattern: ({ url }) =>
-              url.pathname.startsWith('/audio/') &&
-              url.pathname !== '/audio/manifest.json',
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'audio-clips',
-              // Narration MP3s play via `new Audio()`, which fetches with a
-              // `Range` header; range-supporting hosts answer 206 Partial
-              // Content. `rangeRequests` adds Workbox's RangeRequestsPlugin
-              // (caching the full body, serving partials from it) and 206 must
-              // be an allowed status, or the clips would never cache offline.
-              rangeRequests: true,
-              expiration: {
-                // Cover the full committed narration set (~706 MP3s under
-                // /audio/ + manifest.json) so all clips can persist offline,
-                // with headroom for future scenarios/feedback clips.
-                maxEntries: 800,
-                maxAgeSeconds: 60 * 60 * 24 * 30,
-              },
-              cacheableResponse: { statuses: [0, 200, 206] },
-            },
-          },
-          {
-            urlPattern: ({ url }) => url.origin === 'https://fonts.googleapis.com',
-            handler: 'StaleWhileRevalidate',
-            options: { cacheName: 'google-fonts-stylesheets' },
-          },
-          {
-            urlPattern: ({ url }) => url.origin === 'https://fonts.gstatic.com',
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-webfonts',
-              expiration: {
-                maxEntries: 20,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
-              cacheableResponse: { statuses: [0, 200] },
-            },
           },
         ],
       },
