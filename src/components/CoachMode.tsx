@@ -1,13 +1,37 @@
 import { useState } from 'react';
+import type { Sport } from '@/types';
 import { SCENARIOS } from '@/data/scenarios';
 
 interface CoachModeProps {
+  /** Active sport, so the schema doc names the right surface and tracks. */
+  sport: Sport;
   onClose: () => void;
 }
 
-export function CoachMode({ onClose }: CoachModeProps) {
+/**
+ * Per-sport wording for the data-model doc. The schema is shared, but its
+ * surface ("rink" vs "field"), zone enum and category examples differ by sport
+ * so a lacrosse coach never reads hockey terms.
+ */
+const COACH_COPY: Record<Sport, { surface: string; zones: string; categories: string; coords: string }> = {
+  hockey: {
+    surface: 'rink',
+    zones: 'defensive | neutral | offensive | skills',
+    categories: 'retrieval, gap, coverage',
+    coords: 'full rink, defensive zone is high-y',
+  },
+  lacrosse: {
+    surface: 'field',
+    zones: 'dodge | offball | finish | ride',
+    categories: 'dodge, feed, shot, ride',
+    coords: 'full field, defensive end is high-y',
+  },
+};
+
+export function CoachMode({ sport, onClose }: CoachModeProps) {
   const [exported, setExported] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const copy = COACH_COPY[sport];
 
   const exportJSON = () => {
     setExported(JSON.stringify(SCENARIOS, null, 2));
@@ -29,8 +53,8 @@ export function CoachMode({ onClose }: CoachModeProps) {
         Custom scenario authoring is the highest-leverage feature for getting
         team-specific reps in. This v1 ships with a JSON export so you can hand
         the data model to a developer or use it as a starting template. Full
-        in-app authoring (drag players onto the rink, write options, set the
-        correct answer, validate) is the next milestone.
+        in-app authoring (drag players onto the {copy.surface}, write options,
+        set the correct answer, validate) is the next milestone.
       </p>
       <div className="blb-coach-actions">
         <button
@@ -60,10 +84,10 @@ export function CoachMode({ onClose }: CoachModeProps) {
             <code>id</code> · unique slug
           </li>
           <li>
-            <code>zone</code> · defensive | neutral | offensive | skills
+            <code>zone</code> · {copy.zones}
           </li>
           <li>
-            <code>category</code> · for weakness detection (retrieval, gap, coverage,
+            <code>category</code> · for weakness detection ({copy.categories},
             etc.)
           </li>
           <li>
@@ -80,8 +104,7 @@ export function CoachMode({ onClose }: CoachModeProps) {
             <code>coachCue</code> · ONE thing to remember
           </li>
           <li>
-            <code>visual</code> · normalized 0–100 coordinates (full rink, defensive
-            zone is high-y)
+            <code>visual</code> · normalized 0–100 coordinates ({copy.coords})
           </li>
         </ul>
       </div>

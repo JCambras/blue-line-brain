@@ -384,10 +384,14 @@ export default function App() {
             onHome={() => setScreen({ kind: 'home' })}
           />
         )}
-        {screen.kind === 'coach' && <CoachMode onClose={() => setScreen({ kind: 'home' })} />}
+        {screen.kind === 'coach' && (
+          <CoachMode sport={activeModule.sport} onClose={() => setScreen({ kind: 'home' })} />
+        )}
       </main>
 
-      {showOnboard && <Onboard onClose={() => setShowOnboard(false)} />}
+      {showOnboard && (
+        <Onboard sport={activeModule.sport} onClose={() => setShowOnboard(false)} />
+      )}
     </div>
   );
 }
