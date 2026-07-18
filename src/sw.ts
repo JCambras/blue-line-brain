@@ -116,10 +116,16 @@ registerRoute(
       new RangeRequestsPlugin(),
       partialContentPlugin,
       new ExpirationPlugin({
-        // Cover the full committed narration set (~948 clips) so every clip can
-        // persist offline, with headroom for future scenarios.
+        // Bound storage by entry count ONLY - no maxAgeSeconds. Clips must
+        // survive a full season offline at rinks with no wifi, and an age cap
+        // would silently break that: CacheFirst never refreshes the cached
+        // response's Date header, so ExpirationPlugin would treat any clip
+        // first cached beyond the cap as expired -> cache miss -> silent
+        // offline. maxEntries alone is a safe bound: the committed set is
+        // ~948 content-hashed clips (changed content = new URL, so no
+        // stale-content risk), well under the cap, and orphaned old-filename
+        // entries are evicted by the same count limit.
         maxEntries: 1100,
-        maxAgeSeconds: 60 * 60 * 24 * 30,
       }),
     ],
   }),
