@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Sport } from '@/types';
 import { SCENARIOS } from '@/data/scenarios';
+import { sportOf } from '@/data/modules';
 
 interface CoachModeProps {
   /** Active sport, so the schema doc names the right surface and tracks. */
@@ -34,7 +35,8 @@ export function CoachMode({ sport, onClose }: CoachModeProps) {
   const copy = COACH_COPY[sport];
 
   const exportJSON = () => {
-    setExported(JSON.stringify(SCENARIOS, null, 2));
+    const scenarios = SCENARIOS.filter((s) => sportOf(s) === sport);
+    setExported(JSON.stringify(scenarios, null, 2));
   };
   const copyJSON = () => {
     if (!exported) return;
