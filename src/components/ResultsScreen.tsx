@@ -17,6 +17,13 @@ export function ResultsScreen({ screen, moduleId, onHome }: ResultsScreenProps) 
   const avgTime = (
     results.reduce((a, r) => a + r.timeMs, 0) / results.length / 1000
   ).toFixed(1);
+  const bestStreak = results.reduce(
+    (acc, r) => {
+      const run = r.correct ? acc.run + 1 : 0;
+      return { run, best: Math.max(acc.best, run) };
+    },
+    { run: 0, best: 0 },
+  ).best;
 
   // Pick a takeaway: prefer a missed scenario's coach cue
   const wrongRes = results.find((r) => !r.correct);
@@ -56,6 +63,10 @@ export function ResultsScreen({ screen, moduleId, onHome }: ResultsScreenProps) 
         <div className="blb-rstat">
           <div className="blb-rstat-v">{avgTime}s</div>
           <div className="blb-rstat-l">AVG TIME</div>
+        </div>
+        <div className="blb-rstat">
+          <div className="blb-rstat-v">{bestStreak}</div>
+          <div className="blb-rstat-l">BEST STREAK</div>
         </div>
       </div>
 
