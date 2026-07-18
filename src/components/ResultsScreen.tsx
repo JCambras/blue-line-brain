@@ -39,8 +39,8 @@ export function ResultsScreen({ screen, moduleId, onHome }: ResultsScreenProps) 
       {mode === 'boss' && (
         <p className="blb-results-sub">
           {bossWin
-            ? `You went ${correctCount}/${results.length}. That's a win — nice.`
-            : `You went ${correctCount}/${results.length} — you need ${BOSS_RULES.toWin} to beat the boss. Run it back.`}
+            ? `You went ${correctCount}/${results.length}. That's a win - nice.`
+            : `You went ${correctCount}/${results.length} - you need ${BOSS_RULES.toWin} to beat the boss. Run it back.`}
         </p>
       )}
 

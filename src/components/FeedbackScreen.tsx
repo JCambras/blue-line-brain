@@ -79,7 +79,7 @@ export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
             )}
             {!correct && correctOption && (
               <div className="blb-feedback-correct">
-                <strong>Right read:</strong> {correctOption.text} —{' '}
+                <strong>Right read:</strong> {correctOption.text} -{' '}
                 {correctOption.feedback}
               </div>
             )}
@@ -93,7 +93,7 @@ export function FeedbackScreen({ screen, onNext }: FeedbackScreenProps) {
             <div className="blb-feedback-explain">{tap.feedback}</div>
             {!correct && correctTap && (
               <div className="blb-feedback-correct">
-                <strong>Right spot:</strong> {correctTap.label ?? 'the highlighted area'} —{' '}
+                <strong>Right spot:</strong> {correctTap.label ?? 'the highlighted area'} -{' '}
                 {correctTap.feedback}
               </div>
             )}
