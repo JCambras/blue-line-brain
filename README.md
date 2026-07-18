@@ -32,6 +32,7 @@ hockey-brain/
 └── src/
     ├── main.tsx                  # app entry
     ├── App.tsx                   # top-level state machine
+    ├── sw.ts                     # hand-written Workbox service worker (offline caching)
     ├── types/
     │   └── index.ts              # Scenario, SaveState, etc.
     ├── data/
@@ -44,7 +45,8 @@ hockey-brain/
     │   ├── scenarioOrdering.ts   # spaced-repetition bias + strong shuffle
     │   ├── sfx.ts                # Web Audio sound effects
     │   ├── narrationAudio.ts     # plays pre-rendered coach voice-over MP3s
-    │   └── narrationTiming.ts    # pure playback timing constants + fade helper
+    │   ├── narrationTiming.ts    # pure playback timing constants + fade helper
+    │   └── swRangeStrip.ts       # pure Range-strip/206-restore helpers for sw.ts
     ├── components/
     │   ├── RinkDiagram.tsx       # SVG rink + players + tap targets
     │   ├── Scoreboard.tsx        # top header
@@ -139,14 +141,17 @@ without that the Cache API rejects the `206` partial that `<audio>` range
 requests produce, which is what previously left the installed app silent
 offline. The audio element's range request is still answered with a genuine
 `206` carved from the full body - on cache hits and misses alike - since
-iOS Safari's media loader requires one. Config lives in `vite.config.ts` (`vite-plugin-pwa`). Updates are
-hands-off: the service worker registers with
-`autoUpdate` and the app silently reloads itself once when a new deploy takes
-control, so returning users (including installed iOS home-screen PWAs) pick up
-the new version on their next visit with no refresh prompt. If a cached audio
-manifest goes stale across a deploy - a clip's filename was pruned (404) or a
-newly added clip's key is missing - narration refetches the manifest from the
-network and retries once, so a redeploy never permanently silences a session.
+iOS Safari's media loader requires one. Cached clips never age out (the cache
+is bounded by entry count alone), so audio keeps playing at offline rinks all
+season. Plugin config lives in `vite.config.ts` (`vite-plugin-pwa`); the
+caching routes live in `src/sw.ts`. Updates are hands-off: the service worker
+registers with `autoUpdate` and the app silently reloads itself once when a
+new deploy takes control, so returning users (including installed iOS
+home-screen PWAs) pick up the new version on their next visit with no refresh
+prompt. If a cached audio manifest goes stale across a deploy - a clip's
+filename was pruned (404) or a newly added clip's key is missing - narration
+refetches the manifest from the network and retries once, so a redeploy never
+permanently silences a session.
 The service worker is disabled in dev, so verify installability/offline against
 a production build:
 
