@@ -66,7 +66,7 @@ export const NEUTRAL_SCENARIOS: Scenario[] = [
           t: 8,
           players: { f: { x: 38, y: 30 }, d1: { x: 40, y: 55 }, d2: { x: 60, y: 55 } },
           puck: { x: 38, y: 30 },
-          narration: "You're backing up — your partner is even with you.",
+          narration: "You're backing up - your partner is even with you.",
         },
         {
           t: 11.5,
@@ -133,7 +133,7 @@ export const NEUTRAL_SCENARIOS: Scenario[] = [
           t: 0,
           players: { a1: { x: 30, y: 12 }, a2: { x: 70, y: 15 }, d: { x: 50, y: 42 } },
           puck: { x: 30, y: 12 },
-          narration: "Turnover at their blue line — they're off the other way!",
+          narration: "Turnover at their blue line - they're off the other way!",
         },
         {
           t: 4,
@@ -145,7 +145,7 @@ export const NEUTRAL_SCENARIOS: Scenario[] = [
           t: 8,
           players: { a1: { x: 34, y: 36 }, a2: { x: 66, y: 37 }, d: { x: 50, y: 58 } },
           puck: { x: 34, y: 36 },
-          narration: 'They cross center with speed — carrier left, trailer wide right.',
+          narration: 'They cross center with speed - carrier left, trailer wide right.',
         },
         {
           t: 11.5,

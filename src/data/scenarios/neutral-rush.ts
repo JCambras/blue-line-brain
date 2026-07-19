@@ -595,107 +595,6 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     },
   },
   {
-    id: 'nz-red-line-step',
-    zone: 'neutral',
-    category: 'step-up',
-    difficulty: 'varsity',
-    title: 'Step Up or Retreat?',
-    setup:
-      'The carrier fumbles the puck into his skates at the red line. Your center is chasing him hard.',
-    kind: 'mcq',
-    options: [
-      {
-        text: 'Step up now and kill it at the red line',
-        correct: true,
-        feedback:
-          'Head down, puck in his feet, help right behind him. Even if he slips you, your center cleans it up.',
-      },
-      {
-        text: 'Retreat to the blue line and set your gap',
-        correct: false,
-        feedback: 'You gave him two free seconds to recover the puck and his head. Chance gone.',
-        trap: 'Backing off is the safe habit - but safe against a bobbled puck is a gift.',
-      },
-      {
-        text: 'Wait and stand him up at the blue line',
-        correct: false,
-        feedback: 'By the blue line the puck is back on his blade and his wingers have caught up.',
-        trap: 'Standing guys up at the line is a real play - just not while he is vulnerable now.',
-      },
-      {
-        text: 'Back off and cover the pass behind you',
-        correct: false,
-        feedback: 'There is no pass. The puck is in his skates and his eyes are on the ice.',
-        trap: 'Respecting the seam sounds smart - but read what is actually happening.',
-      },
-    ],
-    coachCue: 'Bobbled puck plus backup equals attack.',
-    visual: {
-      rinkZone: 'neutral',
-      youId: 'd',
-      players: [
-        { id: 'f1', team: 'away', x: 45, y: 48, label: 'F' },
-        { id: 'c', team: 'home', x: 40, y: 38, label: 'C' },
-        { id: 'd', team: 'home', x: 48, y: 60, label: 'D' },
-        { id: 'd2', team: 'home', x: 65, y: 60, label: 'D' },
-      ],
-      puck: { x: 44, y: 47 },
-      highlights: [{ x: 44, y: 47, radius: 7 }],
-    },
-    animation: {
-      beats: [
-        {
-          t: 0,
-          players: {
-            f1: { x: 50, y: 14 },
-            c: { x: 45, y: 6 },
-            d: { x: 50, y: 40 },
-            d2: { x: 66, y: 42 },
-          },
-          puck: { x: 50, y: 14 },
-          narration: 'Their winger escapes the zone with your center chasing him.',
-        },
-        {
-          t: 4,
-          players: {
-            f1: { x: 48, y: 26 },
-            c: { x: 43, y: 17 },
-            d: { x: 49, y: 47 },
-            d2: { x: 66, y: 48 },
-          },
-          puck: { x: 48, y: 26 },
-          narration: 'He carries through center ice - your center is closing from behind.',
-        },
-        {
-          t: 8,
-          players: {
-            f1: { x: 46, y: 38 },
-            c: { x: 41, y: 28 },
-            d: { x: 48, y: 54 },
-            d2: { x: 65, y: 54 },
-          },
-          puck: { x: 45, y: 37 },
-          narration: 'The puck starts rolling on him - it rattles into his feet.',
-        },
-        {
-          t: 11.5,
-          players: {
-            f1: { x: 45, y: 48 },
-            c: { x: 40, y: 38 },
-            d: { x: 48, y: 60 },
-            d2: { x: 65, y: 60 },
-          },
-          puck: { x: 44, y: 47 },
-          narration: 'Head down at the red line, kicking at the puck, your center a stride away...',
-        },
-        { t: 13 },
-      ],
-      freezeLine: "His head is down and you've got backup. What's your move?",
-      narration:
-        "Their winger escapes the zone with your center chasing him. He carries through center ice as your center closes from behind. Then the puck starts rolling and rattles into his feet. His head is down at the red line, kicking at it, your center a stride away.",
-    },
-  },
-  {
     id: 'nz-drop-pass',
     zone: 'neutral',
     category: 'drop-pass',
@@ -797,6 +696,107 @@ export const NEUTRAL_RUSH_SCENARIOS: Scenario[] = [
     },
   },
   // ----------------------------------------------------------------- elite
+  {
+    id: 'nz-red-line-step',
+    zone: 'neutral',
+    category: 'step-up',
+    difficulty: 'elite',
+    title: 'Step Up or Retreat?',
+    setup:
+      'The carrier fumbles the puck into his skates at the red line. Your center is chasing him hard.',
+    kind: 'mcq',
+    options: [
+      {
+        text: 'Step up now and kill it at the red line',
+        correct: true,
+        feedback:
+          'Head down, puck in his feet, help right behind him. Even if he slips you, your center cleans it up.',
+      },
+      {
+        text: 'Retreat to the blue line and set your gap',
+        correct: false,
+        feedback: 'You gave him two free seconds to recover the puck and his head. Chance gone.',
+        trap: 'Backing off is the safe habit - but safe against a bobbled puck is a gift.',
+      },
+      {
+        text: 'Wait and stand him up at the blue line',
+        correct: false,
+        feedback: 'By the blue line the puck is back on his blade and his wingers have caught up.',
+        trap: 'Standing guys up at the line is a real play - just not while he is vulnerable now.',
+      },
+      {
+        text: 'Back off and cover the pass behind you',
+        correct: false,
+        feedback: 'There is no pass. The puck is in his skates and his eyes are on the ice.',
+        trap: 'Respecting the seam sounds smart - but read what is actually happening.',
+      },
+    ],
+    coachCue: 'Bobbled puck plus backup equals attack.',
+    visual: {
+      rinkZone: 'neutral',
+      youId: 'd',
+      players: [
+        { id: 'f1', team: 'away', x: 45, y: 48, label: 'F' },
+        { id: 'c', team: 'home', x: 40, y: 38, label: 'C' },
+        { id: 'd', team: 'home', x: 48, y: 60, label: 'D' },
+        { id: 'd2', team: 'home', x: 65, y: 60, label: 'D' },
+      ],
+      puck: { x: 44, y: 47 },
+      highlights: [{ x: 44, y: 47, radius: 7 }],
+    },
+    animation: {
+      beats: [
+        {
+          t: 0,
+          players: {
+            f1: { x: 50, y: 14 },
+            c: { x: 45, y: 6 },
+            d: { x: 50, y: 40 },
+            d2: { x: 66, y: 42 },
+          },
+          puck: { x: 50, y: 14 },
+          narration: 'Their winger escapes the zone with your center chasing him.',
+        },
+        {
+          t: 4,
+          players: {
+            f1: { x: 48, y: 26 },
+            c: { x: 43, y: 17 },
+            d: { x: 49, y: 47 },
+            d2: { x: 66, y: 48 },
+          },
+          puck: { x: 48, y: 26 },
+          narration: 'He carries through center ice - your center is closing from behind.',
+        },
+        {
+          t: 8,
+          players: {
+            f1: { x: 46, y: 38 },
+            c: { x: 41, y: 28 },
+            d: { x: 48, y: 54 },
+            d2: { x: 65, y: 54 },
+          },
+          puck: { x: 45, y: 37 },
+          narration: 'The puck starts rolling on him - it rattles into his feet.',
+        },
+        {
+          t: 11.5,
+          players: {
+            f1: { x: 45, y: 48 },
+            c: { x: 40, y: 38 },
+            d: { x: 48, y: 60 },
+            d2: { x: 65, y: 60 },
+          },
+          puck: { x: 44, y: 47 },
+          narration: 'Head down at the red line, kicking at the puck, your center a stride away...',
+        },
+        { t: 13 },
+      ],
+      freezeLine: "His head is down and you've got backup. What's your move?",
+      narration:
+        "Their winger escapes the zone with your center chasing him. He carries through center ice as your center closes from behind. Then the puck starts rolling and rattles into his feet. His head is down at the red line, kicking at it, your center a stride away.",
+    },
+  },
   {
     id: 'nz-crisscross-sort',
     zone: 'neutral',

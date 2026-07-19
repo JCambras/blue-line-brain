@@ -470,7 +470,7 @@ export const DEFENSIVE_BREAKOUT_SCENARIOS: Scenario[] = [
         trap: 'The net feels like a shield - right up until they seal both sides of it.',
       },
     ],
-    coachCue: 'Chased hard? Reverse against the grain.',
+    coachCue: 'Chased behind the net? Reverse to your partner.',
     visual: {
       rinkZone: 'defensive',
       youId: 'd',

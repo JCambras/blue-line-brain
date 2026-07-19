@@ -13,7 +13,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { SaveState, Scenario, ScenarioStats } from '../src/types/index.ts';
-import { orderPool, spacedRepetitionBias } from '../src/lib/scenarioOrdering.ts';
+import {
+  orderPool,
+  spacedRepetitionBias,
+  BOSS_HARDNESS_BIAS,
+} from '../src/lib/scenarioOrdering.ts';
 
 /** Deterministic PRNG (mulberry32) so the statistical assertions are stable. */
 function mulberry32(seed: number): () => number {
@@ -151,6 +155,42 @@ test('(b) unseen and low-confidence scenarios tend to surface before mastered on
   assert.ok(
     masteredAvgIdx / RUNS > 1.3,
     `mastered should trend last, avg idx ${masteredAvgIdx / RUNS}`
+  );
+});
+
+test('boss hardness bias orders strictly by difficulty band, beating any mastery gap', () => {
+  // Worst case for a "harder" Boss: a fully mastered elite (weakest bias) against
+  // an unseen rookie and unseen varsity (strongest bias). Without the bias the
+  // unseen rookie would routinely lead; with BOSS_HARDNESS_BIAS the harder tier
+  // must always win, so a Boss surfaces the hardest unlocked tier - never rookie.
+  const elite = scn('elite-mastered', 'coverage', 'elite');
+  const varsityS = scn('varsity-unseen', 'coverage', 'varsity');
+  const rookie = scn('rookie-unseen', 'coverage', 'rookie');
+  const pool = [rookie, varsityS, elite]; // input order must not matter
+  const state = makeState({ [elite.id]: stat(5, 0) }); // elite mastered; others unseen
+  const rand = mulberry32(99);
+
+  for (let i = 0; i < RUNS; i++) {
+    const order = orderPool(pool, state, NOW, rand, BOSS_HARDNESS_BIAS);
+    assert.deepEqual(
+      order.map((s) => s.difficulty),
+      ['elite', 'varsity', 'rookie'],
+      'hardness bias must order elite > varsity > rookie on every run'
+    );
+  }
+
+  // Sanity: with no bias, the unseen rookie routinely leads the mastered elite,
+  // which is exactly the mixed-tier behavior a plain Daily 5 keeps.
+  let rookieBeatsElite = 0;
+  for (let i = 0; i < RUNS; i++) {
+    const order = orderPool(pool, state, NOW, rand); // no hardness bias
+    const iRookie = order.findIndex((s) => s.id === rookie.id);
+    const iElite = order.findIndex((s) => s.id === elite.id);
+    if (iRookie < iElite) rookieBeatsElite++;
+  }
+  assert.ok(
+    rookieBeatsElite / RUNS > 0.5,
+    `without bias the unseen rookie should often lead a mastered elite, got ${rookieBeatsElite / RUNS}`
   );
 });
 

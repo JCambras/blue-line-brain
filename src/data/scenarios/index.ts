@@ -114,7 +114,7 @@ export function categoryLabel(category: string): string {
 
 /**
  * Difficulty config: timer (seconds) and number of MCQ choices.
- * Timer is mandatory at every level — speed is the skill.
+ * Timer is mandatory at every level - speed is the skill.
  */
 export const DIFFICULTY_CONFIG: Record<
   Difficulty,

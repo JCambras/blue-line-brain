@@ -325,7 +325,7 @@ export const EVEN_STRENGTH_SCENARIOS: Scenario[] = [
         trap: 'The winger is the outlet - not when he is stopped and covered.',
       },
     ],
-    coachCue: 'Chased hard? Reverse against the grain.',
+    coachCue: 'Beat to the wall? Reverse off the boards.',
     visual: {
       rinkZone: 'defensive',
       youId: 'd',
@@ -582,7 +582,7 @@ export const EVEN_STRENGTH_SCENARIOS: Scenario[] = [
     difficulty: 'elite',
     title: 'Read the Trailer',
     setup:
-      "A 2-on-2 rush - but a late trailer is driving behind. Your partner has the carrier. You're the weak-side D.",
+      "A 2-on-2 rush: the front winger races wide to the net while a late trailer drives the middle behind. Your partner has the carrier - you're the weak-side D.",
     kind: 'mcq',
     options: [
       {
@@ -610,7 +610,7 @@ export const EVEN_STRENGTH_SCENARIOS: Scenario[] = [
           'The delay means someone is coming late. Your partner has the puck - you own the trailer.',
       },
     ],
-    coachCue: 'A delayed rush means find the trailer.',
+    coachCue: 'Partner has the carrier. Take the trailer.',
     visual: {
       rinkZone: 'neutral',
       youId: 'd',

@@ -22,10 +22,10 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
         feedback: 'One step sideways changes everything. Now you have a clear lane or a pass option.',
       },
       {
-        text: 'Pass it back to your partner immediately',
+        text: 'Try to beat the defender one-on-one',
         correct: false,
-        feedback: 'Sometimes right — but here you give up your own chance without trying.',
-        trap: 'Not wrong, just not the best read.',
+        feedback: 'He pokes it off you at the line and it is a rush the other way with you caught up ice.',
+        trap: 'Dangling at the offensive blue line feels bold - for a D it is how breakaways start.',
       },
       {
         text: 'Dump it deep',
@@ -59,7 +59,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
           t: 4,
           players: { d: { x: 50, y: 34 }, w: { x: 21, y: 15 }, opp: { x: 45, y: 18 } },
           puck: { x: 22, y: 16 },
-          narration: 'The winger gets pinned — he looks up for a release valve.',
+          narration: 'The winger gets pinned - he looks up for a release valve.',
         },
         {
           t: 7.5,
@@ -71,7 +71,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
           t: 11,
           players: { d: { x: 50, y: 32 }, partner: { x: 28, y: 32 }, w: { x: 20, y: 13 }, opp: { x: 50, y: 22 } },
           puck: { x: 50, y: 32 },
-          narration: 'You catch it — but their forward steps right into your shooting lane...',
+          narration: 'You catch it - but their forward steps right into your shooting lane...',
         },
         { t: 12.5 },
       ],
@@ -89,10 +89,10 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
     kind: 'mcq',
     options: [
       {
-        text: 'Pinch hard — keep the puck in',
+        text: 'Pinch hard - keep the puck in',
         correct: false,
         feedback: "You missed. Now it's a 2-on-1 the other way and your partner isn't there.",
-        trap: 'Aggression rewards itself most of the time — but support is the price of admission.',
+        trap: 'Aggression rewards itself most of the time - but support is the price of admission.',
       },
       {
         text: 'Hold the line, no pinch',
@@ -102,7 +102,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
       {
         text: 'Pinch but only halfway',
         correct: false,
-        feedback: '"Halfway" pinches are the worst — you\'re neither in the play nor defending.',
+        feedback: '"Halfway" pinches are the worst - you\'re neither in the play nor defending.',
         trap: "Commit or don't. Halfway = caught in between.",
       },
       {
@@ -142,13 +142,13 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
           t: 8,
           players: { d: { x: 80, y: 34 }, opp: { x: 79, y: 33 }, partner: { x: 54, y: 10 } },
           puck: { x: 81, y: 34 },
-          narration: "It's squirting up your wall — you could step up and pinch.",
+          narration: "It's squirting up your wall - you could step up and pinch.",
         },
         {
           t: 11.5,
           players: { d: { x: 80, y: 32 }, opp: { x: 78, y: 38 }, partner: { x: 50, y: 12 } },
           puck: { x: 78, y: 38 },
-          narration: "But look up ice — your partner is caught deep and isn't set...",
+          narration: "But look up ice - your partner is caught deep and isn't set...",
         },
         { t: 13 },
       ],
@@ -169,7 +169,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
         text: 'Slap shot high glove side',
         correct: false,
         feedback: 'High shots get caught or fly out of zone. No rebound.',
-        trap: 'Highlight reel — but bad for rebounds and bad for traffic.',
+        trap: 'Highlight reel - but bad for rebounds and bad for traffic.',
       },
       {
         text: 'Low wrist shot for a tip or rebound',
@@ -185,8 +185,8 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
       {
         text: 'Pass to your partner instead',
         correct: false,
-        feedback: "You had traffic and a lane. Don't outsmart the play.",
-        trap: 'Sometimes the simple shot is the play.',
+        feedback: 'You pass up the screen your traffic just built. Bodies at the net were the chance.',
+        trap: 'Moving the puck feels safe, but the shot into that traffic was the play.',
       },
     ],
     coachCue: 'Low and on net. Shots create chaos.',
@@ -225,7 +225,7 @@ export const OFFENSIVE_SCENARIOS: Scenario[] = [
           t: 7.5,
           players: { d: { x: 51, y: 33 }, f1: { x: 85, y: 22 }, opp1: { x: 80, y: 19 } },
           puck: { x: 86, y: 23 },
-          narration: 'He spots you at the point — the puck is coming up top.',
+          narration: 'He spots you at the point - the puck is coming up top.',
         },
         {
           t: 11,

@@ -494,7 +494,7 @@ export const NEUTRAL_TRANSITION_SCENARIOS: Scenario[] = [
     category: 'transition',
     difficulty: 'varsity',
     title: 'Stretch or Regroup?',
-    setup: 'You retrieve the puck. Their D pinched deep and your stretch man slips out behind him.',
+    setup: 'You retrieve up top. Their D pinched deep and is caught below you - your stretch man is already behind him with open ice.',
     kind: 'mcq',
     options: [
       {

@@ -19,7 +19,12 @@ import {
   todayKey,
   yesterdayKey,
 } from '@/lib/storage';
-import { pickScenarios, weakestCategory, accuracyForDifficulty } from '@/lib/picker';
+import {
+  pickScenarios,
+  pickBossScenarios,
+  weakestCategory,
+  accuracyForDifficulty,
+} from '@/lib/picker';
 import { sfx } from '@/lib/sfx';
 import { narrationAudio } from '@/lib/narrationAudio';
 
@@ -127,7 +132,9 @@ export default function App() {
       if (mode === 'daily5') {
         scenarios = pickScenarios(state, 5, inSport, unlocked);
       } else if (mode === 'boss') {
-        scenarios = pickScenarios(state, BOSS_RULES.questions, inSport, unlocked);
+        // Boss draws the hardest unlocked tier (see pickBossScenarios), so it is
+        // genuinely tougher than a mixed-tier Daily 5 - not just longer.
+        scenarios = pickBossScenarios(state, BOSS_RULES.questions, inSport, unlocked);
       } else if (mode === 'weakest') {
         const cat = weakestCategory(state, sport);
         scenarios = pickScenarios(

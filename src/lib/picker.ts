@@ -1,7 +1,7 @@
 import type { SaveState, Scenario, Sport } from '@/types';
 import { SCENARIOS } from '../data/scenarios/index.ts';
 import { sportOf } from '../data/modules.ts';
-import { orderPool } from './scenarioOrdering.ts';
+import { orderPool, BOSS_HARDNESS_BIAS } from './scenarioOrdering.ts';
 
 /**
  * Pick `count` scenarios, ordered by spaced repetition with a strong shuffle.
@@ -20,7 +20,8 @@ export function pickScenarios(
   state: SaveState,
   count: number,
   filter?: (s: Scenario) => boolean,
-  unlocked: { varsity: boolean; elite: boolean } = { varsity: true, elite: true }
+  unlocked: { varsity: boolean; elite: boolean } = { varsity: true, elite: true },
+  hardnessBias = 0
 ): Scenario[] {
   const pool = SCENARIOS.filter((s) => {
     if (filter && !filter(s)) return false;
@@ -31,7 +32,24 @@ export function pickScenarios(
 
   if (pool.length === 0) return [];
 
-  return orderPool(pool, state).slice(0, count);
+  return orderPool(pool, state, undefined, undefined, hardnessBias).slice(0, count);
+}
+
+/**
+ * Pick Boss Battle scenarios: the same unlocked pool as Daily 5, but ordered
+ * with {@link BOSS_HARDNESS_BIAS} so the hardest unlocked tier fills the battle
+ * (elite when unlocked, otherwise varsity - never a rookie rep, since Boss is
+ * gated behind the varsity unlock). This is what makes a Boss genuinely harder
+ * than a mixed-tier Daily 5. Within a tier, the spaced-repetition shuffle still
+ * varies which scenarios appear run to run.
+ */
+export function pickBossScenarios(
+  state: SaveState,
+  count: number,
+  filter?: (s: Scenario) => boolean,
+  unlocked: { varsity: boolean; elite: boolean } = { varsity: true, elite: true }
+): Scenario[] {
+  return pickScenarios(state, count, filter, unlocked, BOSS_HARDNESS_BIAS);
 }
 
 /**

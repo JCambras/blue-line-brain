@@ -1,4 +1,4 @@
-import type { SaveState, Scenario } from '@/types';
+import type { Difficulty, SaveState, Scenario } from '@/types';
 
 /**
  * Spaced-repetition ordering with a strong per-(category, difficulty) shuffle.
@@ -47,6 +47,26 @@ export const ORDERING = {
   UNSEEN_BIAS: 700,
 } as const;
 
+/** Difficulty ordering rank (higher = harder), used by the Boss hardness bias. */
+export const DIFFICULTY_RANK: Record<Difficulty, number> = {
+  rookie: 0,
+  varsity: 1,
+  elite: 2,
+};
+
+/**
+ * Hardness bias for Boss battles. Added to the score as `rank * this`, it is
+ * larger than the maximum possible spaced-repetition-plus-random score
+ * (`UNSEEN_BIAS + RANDOM_WEIGHT` = 1300) so a full difficulty rank (2000) always
+ * outweighs any mastery/recency/shuffle gap. That makes a biased pool sort
+ * *strictly* by difficulty band - elite before varsity before rookie - while the
+ * random term still shuffles peers *within* a band. Boss is gated behind the
+ * varsity unlock, so this surfaces the player's hardest unlocked tier (elite
+ * when unlocked, else varsity) and never a rookie rep, making Boss genuinely
+ * harder than a mixed-tier Daily 5. Daily 5 and zone drills pass `0` (no bias).
+ */
+export const BOSS_HARDNESS_BIAS = 2000;
+
 /**
  * Deterministic spaced-repetition bias for one scenario (no randomness).
  * Higher = surface sooner. Bounded on a single scale across every scenario so
@@ -74,12 +94,16 @@ export function orderPool(
   pool: Scenario[],
   state: SaveState,
   now: number = Date.now(),
-  rand: () => number = Math.random
+  rand: () => number = Math.random,
+  hardnessBias = 0
 ): Scenario[] {
   return pool
     .map((s) => ({
       s,
-      score: spacedRepetitionBias(state, s, now) + rand() * ORDERING.RANDOM_WEIGHT,
+      score:
+        spacedRepetitionBias(state, s, now) +
+        rand() * ORDERING.RANDOM_WEIGHT +
+        DIFFICULTY_RANK[s.difficulty] * hardnessBias,
     }))
     .sort((a, b) => b.score - a.score)
     .map((x) => x.s);
