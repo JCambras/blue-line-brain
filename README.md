@@ -78,18 +78,18 @@ field routes it into the home screen's opt-in Real Examples section - no UI
 work needed. `npm run validate` enforces the mechanical rules. Every scenario
 needs:
 
-- `id` — unique slug
-- `zone` — hockey: `defensive | neutral | offensive | skills`; lacrosse:
+- `id` - unique slug
+- `zone` - hockey: `defensive | neutral | offensive | skills`; lacrosse:
   `dodge | offball | finish | ride`
-- `category` — used for weakness detection (hockey: retrieval, gap, coverage;
+- `category` - used for weakness detection (hockey: retrieval, gap, coverage;
   lacrosse: dodge, feed, shot, ride; etc.); the UI shows the kid-friendly names
   from `CATEGORY_LABELS` in `src/data/scenarios/index.ts`, so add a label there
   for any new category
-- `difficulty` — `rookie | varsity | elite`
-- `kind` — `mcq | tap`
+- `difficulty` - `rookie | varsity | elite`
+- `kind` - `mcq | tap`
 - `options[]` (for mcq) with `feedback` and `trap` (the "I see why you'd pick this" insight)
-- `coachCue` — the ONE thing to remember
-- `visual` — normalized 0–100 coordinates (full rink or field, defensive end is high-y)
+- `coachCue` - the ONE thing to remember
+- `visual` - normalized 0–100 coordinates (full rink or field, defensive end is high-y)
 
 ## Narration audio
 
