@@ -55,17 +55,20 @@ export const DIFFICULTY_RANK: Record<Difficulty, number> = {
 };
 
 /**
- * Hardness bias for Boss battles. Added to the score as `rank * this`, it is
- * larger than the maximum possible spaced-repetition-plus-random score
- * (`UNSEEN_BIAS + RANDOM_WEIGHT` = 1300) so a full difficulty rank (2000) always
- * outweighs any mastery/recency/shuffle gap. That makes a biased pool sort
- * *strictly* by difficulty band - elite before varsity before rookie - while the
- * random term still shuffles peers *within* a band. Boss is gated behind the
- * varsity unlock, so this surfaces the player's hardest unlocked tier (elite
- * when unlocked, else varsity) and never a rookie rep, making Boss genuinely
- * harder than a mixed-tier Daily 5. Daily 5 and zone drills pass `0` (no bias).
+ * Hardness bias for Boss battles. Added to the score as `rank * this`, it is a
+ * *moderate* lean (not a hard override): one difficulty rank is smaller than the
+ * maximum spaced-repetition-plus-random score (`UNSEEN_BIAS + RANDOM_WEIGHT` =
+ * 1300), so elite *tends* to lead varsity within the Boss pool, but the random
+ * term still routinely floats a varsity scenario up so the draw stays varied
+ * run to run. Paired with the picker's rookie exclusion
+ * ({@link pickBossScenarios}), this makes a Boss genuinely harder than a
+ * mixed-tier Daily 5 - elite-heavy, never a rookie rep - while never collapsing
+ * a small module's Boss to a single fixed set (lacrosse has exactly
+ * `BOSS_RULES.questions` elite scenarios, so a strict elite-only Boss would be
+ * the same 10 every time; the varsity blend keeps it fresh). Daily 5 and zone
+ * drills pass `0` (no bias).
  */
-export const BOSS_HARDNESS_BIAS = 2000;
+export const BOSS_HARDNESS_BIAS = 400;
 
 /**
  * Deterministic spaced-repetition bias for one scenario (no randomness).
