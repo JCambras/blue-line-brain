@@ -132,8 +132,10 @@ export default function App() {
       if (mode === 'daily5') {
         scenarios = pickScenarios(state, 5, inSport, unlocked);
       } else if (mode === 'boss') {
-        // Boss draws the hardest unlocked tier (see pickBossScenarios), so it is
-        // genuinely tougher than a mixed-tier Daily 5 - not just longer.
+        // Boss draws a rookie-excluded, elite-leaning blend (see
+        // pickBossScenarios) - elite-heavy but varsity still mixes in for
+        // variety - so it is genuinely tougher than a mixed-tier Daily 5, not
+        // just longer.
         scenarios = pickBossScenarios(state, BOSS_RULES.questions, inSport, unlocked);
       } else if (mode === 'weakest') {
         const cat = weakestCategory(state, sport);
