@@ -22,6 +22,9 @@ import type { Difficulty, SaveState, Scenario } from '@/types';
  * Because the bias is on one bounded scale shared by every bucket, sorting the
  * whole pool by `score` reproduces this shuffle inside each (category,
  * difficulty) grouping while still favoring due/unseen scenarios globally.
+ *
+ * Boss battles add a third term - a moderate per-difficulty hardness lean; see
+ * {@link BOSS_HARDNESS_BIAS}.
  */
 
 /** Tunable weights for the ordering score. Exported for unit testing. */
@@ -89,9 +92,12 @@ export function spacedRepetitionBias(
 }
 
 /**
- * Order a pool by `bias + strong random` (see the module doc). `now` and `rand`
- * are injectable so the ordering is deterministic under test; production callers
- * take the `Date.now()` / `Math.random()` defaults.
+ * Order a pool by `bias + strong random` (see the module doc), plus
+ * `DIFFICULTY_RANK * hardnessBias` when a caller passes a nonzero
+ * `hardnessBias` (Boss battles pass {@link BOSS_HARDNESS_BIAS}; everything else
+ * leaves the default 0). `now` and `rand` are injectable so the ordering is
+ * deterministic under test; production callers take the `Date.now()` /
+ * `Math.random()` defaults.
  */
 export function orderPool(
   pool: Scenario[],

@@ -132,8 +132,11 @@ guidance.
 
 Unlocks with Varsity. 10 questions, 8 correct to win - both numbers come from
 the shared `BOSS_RULES` constant in `src/data/scenarios/index.ts`, which every
-screen references. Winning earns the Blue Line Boss badge (Field General in
-the lacrosse module).
+screen references. The draw is genuinely harder than a Daily 5: rookie
+scenarios are excluded and elite ones lean toward the front
+(`pickBossScenarios` in `src/lib/picker.ts`), while varsity still mixes in so
+the battle stays varied run to run. Winning earns the Blue Line Boss badge
+(Field General in the lacrosse module).
 
 ## Persistence
 

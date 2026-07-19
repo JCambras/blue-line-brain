@@ -14,7 +14,9 @@ import { orderPool, BOSS_HARDNESS_BIAS } from './scenarioOrdering.ts';
  * to surface first. See {@link orderPool} for the exact weighting.
  *
  * `filter` and the varsity/elite unlock gating select the pool; the top `count`
- * scored scenarios are returned.
+ * scored scenarios are returned. `hardnessBias` adds a per-difficulty lean to
+ * each score (see {@link BOSS_HARDNESS_BIAS}) - only {@link pickBossScenarios}
+ * passes a nonzero value; every other mode leaves it 0.
  */
 export function pickScenarios(
   state: SaveState,
