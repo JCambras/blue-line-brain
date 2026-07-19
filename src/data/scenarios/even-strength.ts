@@ -582,7 +582,7 @@ export const EVEN_STRENGTH_SCENARIOS: Scenario[] = [
     difficulty: 'elite',
     title: 'Read the Trailer',
     setup:
-      "A 2-on-2 rush: the front winger races wide to the net while a late trailer drives the middle behind. Your partner has the carrier - you're the weak-side D.",
+      "A 2-on-2 rush with a late trailer driving the middle behind the play. Your partner steps up on the carrier - you're the weak-side D.",
     kind: 'mcq',
     options: [
       {
