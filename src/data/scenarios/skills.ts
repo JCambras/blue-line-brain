@@ -25,7 +25,7 @@ export const SKILLS_SCENARIOS: Scenario[] = [
         text: 'Hold it on backhand and survey',
         correct: false,
         feedback: "You're vulnerable on backhand. Forecheck arrives, puck dies.",
-        trap: 'Survey is good — but not from a weak position.',
+        trap: 'Survey is good - but not from a weak position.',
       },
     ],
     coachCue: 'Get to your forehand fast.',
@@ -57,7 +57,7 @@ export const SKILLS_SCENARIOS: Scenario[] = [
           t: 7.5,
           players: { d: { x: 60, y: 31 }, partner: { x: 30, y: 32 } },
           puck: { x: 45, y: 31 },
-          narration: 'Here comes the pass — and it drifts to your backhand side.',
+          narration: 'Here comes the pass - and it drifts to your backhand side.',
         },
         {
           t: 10.5,

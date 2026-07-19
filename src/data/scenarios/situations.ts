@@ -459,7 +459,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         text: 'Drop into the seam to block the next pass',
         correct: false,
         feedback: 'There is no next pass yet - the puck is loose. You defended a ghost.',
-        trap: 'Taking away the royal road sounds smart at any moment.',
+        trap: 'Taking away the middle sounds smart at any moment.',
       },
       {
         text: "Jump him now while it's in his skates",
@@ -554,7 +554,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         y: 84,
         radius: 7,
         correct: true,
-        feedback: 'Royal road covered, back door in reach. The cross-ice one-timer dies on your stick.',
+        feedback: 'Middle seam covered, back door in reach. The cross-ice one-timer dies on your stick.',
         label: 'Low seam',
       },
       {
@@ -574,7 +574,7 @@ export const SITUATION_SCENARIOS: Scenario[] = [
         label: 'High slot',
       },
     ],
-    coachCue: 'Two down: own the royal road.',
+    coachCue: 'Two down: own the low seam.',
     visual: {
       rinkZone: 'defensive',
       youId: 'd2',
@@ -624,12 +624,12 @@ export const SITUATION_SCENARIOS: Scenario[] = [
             g: { x: 48, y: 93 },
           },
           puck: { x: 80, y: 70 },
-          narration: "He's staring across the royal road, ready to feather it through...",
+          narration: "He's staring across the middle, ready to feather it through...",
         },
         { t: 13 },
       ],
       freezeLine: "You're the low D on the kill. Tap the spot where you need to be.",
-      narration: "Two of yours are in the box, so it's a five-on-three and they smell blood. Their flank shooter slides down the wall, cocked for the one-timer. Their winger is parked on the far post tapping his stick, and the shooter is staring across the royal road ready to feather it through.",
+      narration: "Two of yours are in the box, so it's a five-on-three and they smell blood. Their flank shooter slides down the wall, cocked for the one-timer. Their winger is parked on the far post tapping his stick, and the shooter is staring across the middle ready to feather it through.",
     },
   },
   {

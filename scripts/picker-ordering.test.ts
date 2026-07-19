@@ -13,7 +13,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { SaveState, Scenario, ScenarioStats } from '../src/types/index.ts';
-import { orderPool, spacedRepetitionBias } from '../src/lib/scenarioOrdering.ts';
+import {
+  orderPool,
+  spacedRepetitionBias,
+  BOSS_HARDNESS_BIAS,
+} from '../src/lib/scenarioOrdering.ts';
+import { pickBossScenarios } from '../src/lib/picker.ts';
 
 /** Deterministic PRNG (mulberry32) so the statistical assertions are stable. */
 function mulberry32(seed: number): () => number {
@@ -151,6 +156,55 @@ test('(b) unseen and low-confidence scenarios tend to surface before mastered on
   assert.ok(
     masteredAvgIdx / RUNS > 1.3,
     `mastered should trend last, avg idx ${masteredAvgIdx / RUNS}`
+  );
+});
+
+test('boss hardness bias leans elite over varsity but still mixes in varsity (variety)', () => {
+  // Equal-mastery elite vs varsity peers. The moderate BOSS_HARDNESS_BIAS makes
+  // elite lead most of the time (a Boss is elite-heavy = genuinely harder), but
+  // the random term still floats varsity to the front often enough that the draw
+  // stays varied - so a shallow module (lacrosse: exactly 10 elite) never
+  // repeats the same all-elite set every battle.
+  const elite = scn('elite-x', 'coverage', 'elite');
+  const varsityS = scn('varsity-x', 'coverage', 'varsity');
+  const pool = [varsityS, elite]; // input order must not matter
+  const state = makeState({}); // both unseen -> identical spaced-rep bias
+  const rand = mulberry32(123);
+
+  const RUNS2 = 4000;
+  let eliteFirst = 0;
+  for (let i = 0; i < RUNS2; i++) {
+    const order = orderPool(pool, state, NOW, rand, BOSS_HARDNESS_BIAS);
+    if (order[0].id === elite.id) eliteFirst++;
+  }
+  const frac = eliteFirst / RUNS2;
+  assert.ok(frac > 0.8, `elite should lead most of the time (harder Boss), got ${frac}`);
+  assert.ok(frac < 0.99, `varsity must still surface sometimes (variety), got ${frac}`);
+
+  // Without the bias, equal-mastery peers are a coin flip (Daily 5 behavior).
+  const rand2 = mulberry32(123);
+  let eliteFirstNoBias = 0;
+  for (let i = 0; i < RUNS2; i++) {
+    const order = orderPool(pool, state, NOW, rand2); // no hardness bias
+    if (order[0].id === elite.id) eliteFirstNoBias++;
+  }
+  const fracNoBias = eliteFirstNoBias / RUNS2;
+  assert.ok(
+    fracNoBias > 0.4 && fracNoBias < 0.6,
+    `with no bias elite/varsity should be ~50/50, got ${fracNoBias}`
+  );
+});
+
+test('pickBossScenarios never returns a rookie rep, so a Boss beats a mixed Daily 5', () => {
+  // Rookie exclusion is a deterministic filter, independent of the shuffle: no
+  // matter the random order, a Boss draw contains zero rookie scenarios (Daily 5
+  // still includes them). This is the floor that guarantees "harder than Daily 5".
+  const state = makeState({});
+  const boss = pickBossScenarios(state, 40, undefined, { varsity: true, elite: true });
+  assert.ok(boss.length > 0, 'expected a non-empty Boss pool');
+  assert.ok(
+    boss.every((s) => s.difficulty !== 'rookie'),
+    'Boss must not include any rookie scenarios'
   );
 });
 

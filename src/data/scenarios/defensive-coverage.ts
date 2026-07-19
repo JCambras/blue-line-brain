@@ -552,7 +552,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
       players: [
         { id: 'bc', team: 'away', x: 58, y: 96, label: 'F' },
         { id: 'f2', team: 'away', x: 40, y: 78, label: 'F' },
-        { id: 'd', team: 'home', x: 48, y: 87, label: 'D' },
+        { id: 'd', team: 'home', x: 48, y: 82, label: 'D' },
         { id: 'g', team: 'home', x: 50, y: 92, label: 'G' },
       ],
       puck: { x: 58, y: 96 },
@@ -587,7 +587,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
           players: {
             bc: { x: 58, y: 96 },
             f2: { x: 40, y: 78 },
-            d: { x: 48, y: 87 },
+            d: { x: 48, y: 82 },
             g: { x: 50, y: 92 },
           },
           puck: { x: 58, y: 96 },
@@ -632,7 +632,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
         trap: 'Splitting two threats feels balanced - it just means losing both.',
       },
     ],
-    coachCue: 'A delayed rush means find the trailer.',
+    coachCue: 'A delay signals the trailer. Meet him high.',
     visual: {
       rinkZone: 'defensive',
       youId: 'd',
@@ -706,7 +706,7 @@ export const DEFENSIVE_COVERAGE_SCENARIOS: Scenario[] = [
     category: 'screen',
     difficulty: 'varsity',
     title: 'Front or Battle the Screen',
-    setup: 'Point shot loading up. The net-front winger has fifty pounds on you and will not move.',
+    setup: 'Point shot loading up. The net-front winger has fifty pounds on you - you tried to move him off the paint and cannot.',
     kind: 'mcq',
     options: [
       {

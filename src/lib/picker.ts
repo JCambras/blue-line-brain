@@ -1,7 +1,7 @@
 import type { SaveState, Scenario, Sport } from '@/types';
 import { SCENARIOS } from '../data/scenarios/index.ts';
 import { sportOf } from '../data/modules.ts';
-import { orderPool } from './scenarioOrdering.ts';
+import { orderPool, BOSS_HARDNESS_BIAS } from './scenarioOrdering.ts';
 
 /**
  * Pick `count` scenarios, ordered by spaced repetition with a strong shuffle.
@@ -14,13 +14,16 @@ import { orderPool } from './scenarioOrdering.ts';
  * to surface first. See {@link orderPool} for the exact weighting.
  *
  * `filter` and the varsity/elite unlock gating select the pool; the top `count`
- * scored scenarios are returned.
+ * scored scenarios are returned. `hardnessBias` adds a per-difficulty lean to
+ * each score (see {@link BOSS_HARDNESS_BIAS}) - only {@link pickBossScenarios}
+ * passes a nonzero value; every other mode leaves it 0.
  */
 export function pickScenarios(
   state: SaveState,
   count: number,
   filter?: (s: Scenario) => boolean,
-  unlocked: { varsity: boolean; elite: boolean } = { varsity: true, elite: true }
+  unlocked: { varsity: boolean; elite: boolean } = { varsity: true, elite: true },
+  hardnessBias = 0
 ): Scenario[] {
   const pool = SCENARIOS.filter((s) => {
     if (filter && !filter(s)) return false;
@@ -31,7 +34,29 @@ export function pickScenarios(
 
   if (pool.length === 0) return [];
 
-  return orderPool(pool, state).slice(0, count);
+  return orderPool(pool, state, undefined, undefined, hardnessBias).slice(0, count);
+}
+
+/**
+ * Pick Boss Battle scenarios: the unlocked pool with **rookie excluded**,
+ * ordered with a moderate {@link BOSS_HARDNESS_BIAS} so elite leans to the front
+ * while varsity still mixes in. The result is genuinely harder than a mixed-tier
+ * Daily 5 (no rookie, elite-heavy) yet stays varied run to run in every module -
+ * including small ones like lacrosse, whose elite pool is exactly
+ * `BOSS_RULES.questions` deep and would otherwise repeat the same set every
+ * battle. Boss is gated behind the varsity unlock, so dropping rookie always
+ * leaves a full pool. Within a tier, the spaced-repetition shuffle still varies
+ * which scenarios appear.
+ */
+export function pickBossScenarios(
+  state: SaveState,
+  count: number,
+  filter?: (s: Scenario) => boolean,
+  unlocked: { varsity: boolean; elite: boolean } = { varsity: true, elite: true }
+): Scenario[] {
+  const nonRookie = (s: Scenario) =>
+    s.difficulty !== 'rookie' && (!filter || filter(s));
+  return pickScenarios(state, count, nonRookie, unlocked, BOSS_HARDNESS_BIAS);
 }
 
 /**
